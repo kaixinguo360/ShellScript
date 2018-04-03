@@ -7,7 +7,7 @@ set lnmp_url "https://raw.githubusercontent.com/kaixinguo360/BashScript/master/l
 set wp_url "https://raw.githubusercontent.com/kaixinguo360/BashScript/master/wp/wp.sh"
 set rewrite_url "https://raw.githubusercontent.com/kaixinguo360/BashScript/master/rewrite/rewrite.sh"
 set v2ray_url "https://raw.githubusercontent.com/kaixinguo360/BashScript/master/v2ray/v2ray.sh"
-set bbr_url "https://raw.githubusercontent.com/kaixinguo360/BashScript/master/brr/bbr.sh"
+set bbr_url "https://raw.githubusercontent.com/kaixinguo360/BashScript/master/bbr/bbr.sh"
 
 set host [lindex $argv 0]
 set sql_root_pw [lindex $argv 1]
