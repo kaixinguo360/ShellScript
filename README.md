@@ -27,3 +27,11 @@ wp.sh
 ```bash
 wget -O wp.sh https://raw.githubusercontent.com/kaixinguo360/BashScript/master/wp/wp.sh && chmod +x wp.sh && sudo ./wp.sh
 ```
+
+rewrite.sh
+=======
+
+- Description: Rewrite unbound domain request
+```bash
+wget -O rewrite.sh https://raw.githubusercontent.com/kaixinguo360/BashScript/master/rewrite/rewrite.sh && chmod +x rewrite.sh && sudo ./rewrite.sh
+```
