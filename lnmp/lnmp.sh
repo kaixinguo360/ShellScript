@@ -107,7 +107,8 @@ wget -O "${NGINX_CONF}default" "${NGINX_CONF_URL}${SITE_CONF}"
 sed "s/TMP_SERVER_NAME/${SERVER_NAME}/g" "${NGINX_CONF}default" -i
 if [ -n "${REWRITE}" ]; then
 wget -O "${NGINX_CONF}rewrite" "${NGINX_CONF_URL}${SITE_REWRITE_CONF}"
-sed "s/ default_server//g" "${NGINX_CONF}rewrite" -i
+sed "s/TMP_SERVER_NAME/${SERVER_NAME}/g" "${NGINX_CONF}rewrite" -i
+sed "s/ default_server//g" "${NGINX_CONF}default" -i
 fi
 systemctl restart nginx
 
