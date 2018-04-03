@@ -33,6 +33,7 @@ do
 
 	case $input in
 	    [yY][eE][sS]|[yY])
+	    		ENSURE_MYSQL='0'
 			break
             		;;
 
@@ -64,21 +65,21 @@ debconf-set-selections <<< "mysql-server mysql-server/root_password password $MY
 debconf-set-selections <<< "mysql-server mysql-server/root_password_again password $MYSQL_PASSWORD"
 apt-get install mysql-server -y
 # 可选，配置MySQL(提升安全性)
-if [ "$ENSURE_MYSQL"="1" ]; then
+if [ "${ENSURE_MYSQL}"="1" ]; then
 mysql_secure_installation
 fi
 
 # 安装PHP
 apt-get install php-fpm php-mysql -y
 #修改php配置文件(提升安全性)
-if [ "$ENSURE_PHP"="1" ]; then
+if [ "${ENSURE_PHP}"="1" ]; then
 sed 's/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/g' ${PHP_CONF} -i
 fi
 # 重启php
 systemctl restart php7.0-fpm
 
 # 配置Nginx以使用PHP
-if [ "$ENSURE_NGINX"="1" ]; then
+if [ "${ENSURE_NGINX}"="1" ]; then
 wget -O ${NGINX_CONF} ${NGINX_CONF_URL}
 sed "s/TMP_SERVER_NAME/${SERVER_NAME}/g" ${NGINX_CONF} -i
 systemctl restart nginx
