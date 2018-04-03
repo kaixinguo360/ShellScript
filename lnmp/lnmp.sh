@@ -34,7 +34,7 @@ do
         MYSQL_PASSWORD=${MYSQL_PASSWORD_1}
         break
     else
-        echo "两次输入密码不一致!\n"
+        echo -e "两次输入密码不一致!\n"
     fi
 done
 
