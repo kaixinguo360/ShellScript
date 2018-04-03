@@ -102,16 +102,16 @@ if [ -n "$ENSURE_MYSQL" ]; then
 mysql_secure_installation
 fi
 
-#安装PHP
+# 安装PHP
 apt-get install php-fpm php-mysql -y
 #修改php配置文件(提升安全性)
 if [ -n "$ENSURE_PHP" ]; then
 sed 's/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/g' ${PHP_CONF} -i
 fi
-#重启php
+# 重启php
 systemctl restart php7.0-fpm
 
-#配置Nginx以使用PHP
+# 配置Nginx以使用PHP
 if [ -n "$ENSURE_NGINX" ]; then
 wget -O ${NGINX_CONF} ${NGINX_CONF_URL}
 sed "s/TMP_SERVER_NAME/${SERVER_NAME}/g" ${NGINX_CONF} -i
@@ -124,4 +124,10 @@ echo '    2. server_name'
 echo '    3. php loaction'
 echo '    4. ht location'
 fi
+
+# 测试安装结果
+echo '<?php phpinfo();' > /var/www/html/info.php
+echo '安装完成!'
+echo "您可以打开http://${SERVER_NAME}/info.php来检查安装结果"
+echo "(建议检查完后删除info.php以增强安全性)"
 
