@@ -24,8 +24,19 @@ NGINX_CONF_URL='https://raw.githubusercontent.com/kaixinguo360/BashScript/master
 # 读取参数
 
 read -p '您的网站域名: ' SERVER_NAME
-read -s -p '请设置MySQL根密码: ' MYSQL_PASSWORD
-echo ''
+while true :
+do
+    read -s -p '请设置MySQL根密码: ' MYSQL_PASSWORD_1
+    echo ''
+    read -s -p '再输一遍: ' MYSQL_PASSWORD_2
+    echo ''
+    if [ "${MYSQL_PASSWORD_1}"="${MYSQL_PASSWORD_2}" ]; then
+        MYSQL_PASSWORD=${MYSQL_PASSWORD_1}
+        break
+    else
+        echo "两次输入密码不一致!"
+    fi
+done
 
 while true :
 do
