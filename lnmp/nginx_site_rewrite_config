@@ -1,0 +1,8 @@
+server {
+    listen 80 default_server;
+    listen [::]:80 default_server;
+    
+    server_name  _;
+    
+    rewrite ^(.*) http://TMP_SERVER_NAME/$1 permanent;
+}
