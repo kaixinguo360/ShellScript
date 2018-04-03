@@ -23,7 +23,10 @@ WP_CONF='/var/www/html/wp-config.php'
 WP_URL='https://cn.wordpress.org/wordpress-4.9.4-zh_CN.tar.gz'
 
 # 读取参数
-read -p '您的网站域名: ' SERVER_NAME
+read -p '请输入您的网站域名: ' SERVER_NAME
+
+read -s -p "请输入MySQL根密码: " MYSQL_PW
+echo ''
 
 read -p "请设置WP数据库用户名: " WP_USER
 
@@ -40,9 +43,6 @@ do
         echo -e "两次输入密码不一致!\n"
     fi
 done
-
-read -s -p "请输入MySQL根密码: " MYSQL_PW
-echo ''
 
 
 # 数据库操作
