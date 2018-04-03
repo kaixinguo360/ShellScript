@@ -167,9 +167,10 @@ expect eof
 puts "\n所有安装已完成!"
 if {$is_bbr} {
     puts "因为安装了BBR,需要重启系统."
-    set is_reboot [readin "立即重启? [y/n]: "]
+    set is_reboot [readin "立即重启? \[Y/n\]: "]
     if {$is_reboot} {
-        reboot
+        spawn reboot
+        expect eof
     } else {
         puts "重启已取消..."
     }
