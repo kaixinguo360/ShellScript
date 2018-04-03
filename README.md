@@ -1,5 +1,6 @@
 # BashScript
 Some useful script for linux
+(All of them need wget)
 
 lnmp.sh
 =======
