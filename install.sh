@@ -7,6 +7,7 @@ set lnmp_url "https://raw.githubusercontent.com/kaixinguo360/BashScript/master/l
 set wp_url "https://raw.githubusercontent.com/kaixinguo360/BashScript/master/wp/wp.sh"
 set rewrite_url "https://raw.githubusercontent.com/kaixinguo360/BashScript/master/rewrite/rewrite.sh"
 set v2ray_url "https://raw.githubusercontent.com/kaixinguo360/BashScript/master/v2ray/v2ray.sh"
+set bbr_url "https://raw.githubusercontent.com/kaixinguo360/BashScript/master/brr/bbr.sh"
 
 set host [lindex $argv 0]
 set sql_root_pw [lindex $argv 1]
@@ -59,16 +60,18 @@ if {$is_lnmp} {
 
 set is_v2ray [readin "安装V2Ray.fun? \[Y/n\]: "]
 
+set is_bbr [readin "安装BBR? \[Y/n\]: "]
+
 
 # 安装程序正式开始
 
 if {$is_lnmp} {
-    # 下载lnmp.sh
+    # 下载.sh
     spawn wget -O lnmp.sh $lnmp_url
     expect eof
     spawn chmod +x lnmp.sh
     expect eof
-    # 运行lnmp.sh
+    # 运行.sh
     spawn ./lnmp.sh
     expect "*网站域名*"
     send "$host\r"
@@ -85,12 +88,12 @@ if {$is_lnmp} {
 }
 
 if {$is_wp} {
-    # 下载wp.sh
+    # 下载.sh
     spawn wget -O wp.sh $wp_url
     expect eof
     spawn chmod +x wp.sh
     expect eof
-    # 运行wp.sh
+    # 运行.sh
     spawn ./wp.sh
     expect "*网站域名*"
     send "$host\r"
@@ -114,7 +117,7 @@ if {$is_rewrite} {
     expect eof
     spawn chmod +x rewrite.sh
     expect eof
-    # 运行rewrite.sh
+    # 运行.sh
     spawn ./rewrite.sh
     expect "*网站域名*"
     send "$host\r"
@@ -125,7 +128,7 @@ if {$is_rewrite} {
 }
 
 if {$is_v2ray} {
-    # 下载v2ray.sh
+    # 下载.sh
     spawn wget -O v2ray.sh $v2ray_url
     expect eof
     spawn chmod +x v2ray.sh
@@ -140,8 +143,34 @@ if {$is_v2ray} {
     expect eof
 }
 
+if {$is_bbr} {
+    # 下载.sh
+    spawn wget -O bbr.sh $bbr_url
+    expect eof
+    spawn chmod +x bbr.sh
+    expect eof
+    # 运行.sh
+    spawn ./bbr.sh
+    expect "*restart system*"
+    send "n\r"
+    expect eof
+    # 删除脚本
+    spawn rm -f bbr.sh
+    expect eof
+}
+
 # 删除wget-log
 spawn rm -f wget-log*
 expect eof
 
+# 安装完成
 puts "\n所有安装已完成!"
+if {$is_bbr} {
+    puts "因为安装了BBR,需要重启系统."
+    set is_reboot [readin "立即重启? [y/n]: "]
+    if {$is_reboot} {
+        reboot
+    } else {
+        puts "重启已取消..."
+    }
+}
