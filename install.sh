@@ -13,6 +13,7 @@ set timeout -1
 
 set lnmp_url "https://raw.githubusercontent.com/kaixinguo360/BashScript/master/lnmp/lnmp.sh"
 set wp_url "https://raw.githubusercontent.com/kaixinguo360/BashScript/master/wp/wp.sh"
+set rewrite_url "https://raw.githubusercontent.com/kaixinguo360/BashScript/master/rewrite/rewrite.sh"
 
 set host [lindex $argv 0]
 set sql_root_pw [lindex $argv 1]
@@ -22,15 +23,8 @@ set sql_wp_pw [lindex $argv 3]
 # 下载lnmp.sh
 spawn wget -O lnmp.sh $lnmp_url
 expect eof
-
-# 下载wp.sh
-spawn wget -O wp.sh $wp_url
+spawn chmod +x lnmp.sh
 expect eof
-
-# 增加执行权限
-spawn chmod +x wp.sh lnmp.sh
-expect eof
-
 # 运行lnmp.sh
 spawn ./lnmp.sh
 expect "*网站域名*"
@@ -43,6 +37,12 @@ expect "*跳过MySQL*"
 send "y\r"
 expect eof
 
+
+# 下载wp.sh
+spawn wget -O wp.sh $wp_url
+expect eof
+spawn chmod +x wp.sh
+expect eof
 # 运行wp.sh
 spawn ./wp.sh
 expect "*网站域名*"
@@ -57,3 +57,14 @@ expect "*再输*"
 send "$sql_wp_pw\r"
 expect eof
 
+
+# 下载rewrite.sh
+spawn wget -O rewrite.sh $rewrite_url
+expect eof
+spawn chmod +x rewrite.sh
+expect eof
+# 运行wp.sh
+spawn ./rewrite.sh
+expect "*网站域名*"
+send "$host\r"
+expect eof
