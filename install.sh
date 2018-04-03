@@ -36,7 +36,9 @@ send "$sql_root_pw\r"
 expect "*跳过MySQL*"
 send "y\r"
 expect eof
-
+# 删除脚本
+spawn rm -f lnmp.sh
+expect eof
 
 # 下载wp.sh
 spawn wget -O wp.sh $wp_url
@@ -56,7 +58,9 @@ send "$sql_wp_pw\r"
 expect "*再输*"
 send "$sql_wp_pw\r"
 expect eof
-
+# 删除脚本
+spawn rm -f wp.sh
+expect eof
 
 # 下载rewrite.sh
 spawn wget -O rewrite.sh $rewrite_url
@@ -67,4 +71,7 @@ expect eof
 spawn ./rewrite.sh
 expect "*网站域名*"
 send "$host\r"
+expect eof
+# 删除脚本
+spawn rm -f rewrite.sh
 expect eof
