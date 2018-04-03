@@ -21,63 +21,43 @@ if { $argc < 4 } {
     exit
 }
 
-# 读取用户输入
-
-while {true} {
-    puts "安装LNMP? \[Y/n\]: "
-    gets stdin input
-    switch -regexp $input {
-        [yY][eE][sS]|[yY] {
-            set is_lnmp true
-            break;
-        }
-        [nN][oO]|[nN] {
-            set is_lnmp false
-            break;
-        }
-        default {}
-    }
-}
-
-if {$is_lnmp} {
+# 工具函数
+proc readin {text} {
     while {true} {
-        puts "安装WordPress? \[Y/n\]: "
+        puts $text
         gets stdin input
         switch -regexp $input {
             [yY][eE][sS]|[yY] {
-                set is_wp true
+                set read_in true
                 break;
             }
             [nN][oO]|[nN] {
-                set is_wp false
+                set read_in false
                 break;
             }
             default {}
         }
     }
+    return $read_in
+}
+
+# 读取用户输入
+set is_lnmp [readin "安装LNMP? \[Y/n\]: "]
+
+if {$is_lnmp} {
+    set is_wp [readin "安装WordPress? \[Y/n\]: "]
 } else {
     set is_wp false
 }
 
 if {$is_lnmp} {
-    while {true} {
-        puts "重定向未绑定的域名访问? \[Y/n\]: "
-        gets stdin input
-        switch -regexp $input {
-            [yY][eE][sS]|[yY] {
-                set is_rewrite true
-                break;
-            }
-            [nN][oO]|[nN] {
-                set is_rewrite false
-                break;
-            }
-            default {}
-        }
-    }
+    set is_rewrite [readin "重定向未绑定的域名访问? \[Y/n\]: "]
 } else {
     set is_rewrite false
 }
+
+
+# 安装程序正式开始
 
 if {$is_lnmp} {
     # 下载lnmp.sh
@@ -140,3 +120,8 @@ if {$is_rewrite} {
     spawn rm -f rewrite.sh
     expect eof
 }
+
+# 删除wget-log
+spawn rm -f wget-log*
+expect eof
+
