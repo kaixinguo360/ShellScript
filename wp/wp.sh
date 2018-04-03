@@ -39,7 +39,7 @@ do
         WP_PW=${WP_PW_1}
         break
     else
-        echo "两次输入密码不一致!\n"
+        echo -e "两次输入密码不一致!\n"
     fi
 done
 
@@ -84,7 +84,7 @@ chmod -R g+w /var/www/html/wp-content/plugins
 sed "s/database_name_here/wordpress/g" ${WP_CONF} -i
 sed "s/username_here/${WP_USER}/g" ${WP_CONF} -i
 sed "s/password_here/${WP_PW}/g" ${WP_CONF} -i
-echo "\n/** 设置写入文件系统的方法 */\ndefine('FS_METHOD', 'direct');" >> ${WP_CONF}
+echo -e "\n/** 设置写入文件系统的方法 */\ndefine('FS_METHOD', 'direct');" >> ${WP_CONF}
 
 # 不知为何加上这句才能用...
 chown -R www-data /var/www/html
