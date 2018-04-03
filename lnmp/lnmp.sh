@@ -19,7 +19,7 @@ fi
 # 设置变量
 PHP_CONF='/etc/php/7.0/fpm/php.ini'
 NGINX_CONF='/etc/nginx/sites-available/default'
-NGINX_CONF_URL='https://raw.githubusercontent.com/kaixinguo360/BashScript/master/nginx_site_config'
+NGINX_CONF_URL='https://raw.githubusercontent.com/kaixinguo360/BashScript/master/lnmp/nginx_site_config'
 
 # 读取设置
 
