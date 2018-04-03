@@ -48,11 +48,6 @@ do
 done
 
 
-# 自动配置PHP以增强安全性?(默认)
-ENSURE_PHP='1'
-# 自动配置Nginx以使用PHP?(默认)
-ENSURE_NGINX='1'
-
 # 更新apt
 apt-get update
 
