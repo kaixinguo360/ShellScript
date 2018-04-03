@@ -48,7 +48,7 @@ echo ''
 
 
 # 数据库操作
-MYSQL_SHORTCUT="mysql -u root -p ${MYSQL_PW} -e"
+MYSQL_SHORTCUT="mysql -u root -p${MYSQL_PW} -e"
 # 创建数据库
 ${MYSQL_SHORTCUT} "CREATE DATABASE wordpress DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;"
 # 创建WP用户
