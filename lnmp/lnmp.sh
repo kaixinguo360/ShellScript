@@ -115,6 +115,7 @@ systemctl restart php7.0-fpm
 if [ -n "$ENSURE_NGINX" ]; then
 wget -O ${NGINX_CONF} ${NGINX_CONF_URL}
 sed "s/TMP_SERVER_NAME/${SERVER_NAME}/g" ${NGINX_CONF} -i
+systemctl restart nginx
 else
 echo '请手动配置Nginx以使用PHP'
 echo '提示：'
