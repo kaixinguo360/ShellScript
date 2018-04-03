@@ -6,6 +6,7 @@ set timeout -1
 set lnmp_url "https://raw.githubusercontent.com/kaixinguo360/BashScript/master/lnmp/lnmp.sh"
 set wp_url "https://raw.githubusercontent.com/kaixinguo360/BashScript/master/wp/wp.sh"
 set rewrite_url "https://raw.githubusercontent.com/kaixinguo360/BashScript/master/rewrite/rewrite.sh"
+set v2ray_url "https://raw.githubusercontent.com/kaixinguo360/BashScript/master/v2ray/v2ray.sh"
 
 set host [lindex $argv 0]
 set sql_root_pw [lindex $argv 1]
@@ -55,6 +56,8 @@ if {$is_lnmp} {
 } else {
     set is_rewrite false
 }
+
+set is_lnmp [readin "安装V2Ray.fun? \[Y/n\]: "]
 
 
 # 安装程序正式开始
@@ -111,13 +114,29 @@ if {$is_rewrite} {
     expect eof
     spawn chmod +x rewrite.sh
     expect eof
-    # 运行wp.sh
+    # 运行rewrite.sh
     spawn ./rewrite.sh
     expect "*网站域名*"
     send "$host\r"
     expect eof
     # 删除脚本
     spawn rm -f rewrite.sh
+    expect eof
+}
+
+if {$is_v2ray} {
+    # 下载v2ray.sh
+    spawn wget -O v2ray.sh $v2ray_url
+    expect eof
+    spawn chmod +x v2ray.sh
+    expect eof
+    # 运行v2ray.sh
+    spawn ./v2ray.sh
+    expect eof
+    # 配置v2ray
+    v2ray 
+    # 删除脚本
+    spawn rm -f v2ray.sh
     expect eof
 }
 
