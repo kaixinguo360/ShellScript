@@ -151,6 +151,8 @@ if {$is_bbr} {
     expect eof
     # 运行.sh
     spawn ./bbr.sh
+    expect "*any key to start*"
+    send "\r"
     expect "*restart system*"
     send "n\r"
     expect eof
