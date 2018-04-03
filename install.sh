@@ -144,3 +144,4 @@ if {$is_v2ray} {
 spawn rm -f wget-log*
 expect eof
 
+puts "\n所有安装已完成!"
