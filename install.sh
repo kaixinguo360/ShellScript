@@ -134,7 +134,7 @@ if {$is_v2ray} {
     spawn ./v2ray.sh
     expect eof
     # 配置v2ray
-    v2ray 
+    #先不配置了
     # 删除脚本
     spawn rm -f v2ray.sh
     expect eof
