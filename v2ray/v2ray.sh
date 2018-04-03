@@ -32,10 +32,9 @@ else
 fi
 
 #安装 acme.sh 以自动获取SSL证书
-curl  https://get.acme.sh | sh
-chmod a+rw /home/user/.acme.sh/
-chmod a+x /home/user/.acme.sh/acme.sh.env
-
+if [ ! -a '~/.acme.sh/acme.sh' ]; then
+    su - $USER -c "curl  https://get.acme.sh | sh"
+fi
 
 #克隆V2ray.fun项目
 cd /usr/local/
