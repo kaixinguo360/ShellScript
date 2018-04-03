@@ -128,6 +128,6 @@ fi
 # 测试安装结果
 echo '<?php phpinfo();' > /var/www/html/info.php
 echo '安装完成!'
-echo "您可以打开http://${SERVER_NAME}/info.php来检查安装结果"
+echo "您可以打开 http://${SERVER_NAME}/info.php 来检查安装结果"
 echo "(建议检查完后删除info.php以增强安全性)"
 
