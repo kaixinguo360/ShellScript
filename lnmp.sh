@@ -25,6 +25,7 @@ NGINX_CONF_URL='https://raw.githubusercontent.com/kaixinguo360/BashScript/master
 
 read -p '您的网站域名: ' SERVER_NAME
 read -s -p '请设置MySQL根密码: ' MYSQL_PASSWORD
+echo ''
 
 while true :
 do
