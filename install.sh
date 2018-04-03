@@ -41,8 +41,6 @@ expect "*再输*"
 send "$sql_root_pw\r"
 expect "*跳过MySQL*"
 send "y\r"
-expect "*重定向*"
-send "y\r"
 expect eof
 
 # 运行wp.sh
