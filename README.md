@@ -28,6 +28,24 @@ wp.sh
 wget -O wp.sh https://raw.githubusercontent.com/kaixinguo360/BashScript/master/wp/wp.sh && chmod +x wp.sh && sudo ./wp.sh
 ```
 
+v2ray.sh
+=======
+
+- Description: Auto install V2Ray for Ubuntu 16
+- Author: Not Me
+```bash
+wget -O v2ray.sh https://raw.githubusercontent.com/kaixinguo360/BashScript/master/v2ray/v2ray.sh && chmod +x v2ray.sh && sudo ./v2ray.sh
+```
+
+bbr.sh
+=======
+
+- Description: Auto install BBR for Ubuntu 16
+- Author: Not Me
+```bash
+wget -O bbr.sh https://raw.githubusercontent.com/kaixinguo360/BashScript/master/bbr/bbr.sh && chmod +x bbr.sh && sudo ./bbr.sh
+```
+
 rewrite.sh
 =======
 
