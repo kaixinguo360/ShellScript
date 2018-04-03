@@ -24,6 +24,7 @@ NGINX_CONF_URL='https://raw.githubusercontent.com/kaixinguo360/BashScript/master
 # 读取设置
 
 read -p '您的网站域名: ' SERVER_NAME
+read -p '请设置MySQL根密码: ' MYSQL_PASSWORD
 
 while true :
 do
@@ -92,6 +93,8 @@ apt-get update
 apt-get install nginx -y
 
 # 安装MySQL
+debconf-set-selections <<< "mysql-server mysql-server/root_password password $MYSQL_PASSWORD"
+debconf-set-selections <<< "mysql-server mysql-server/root_password_again password $MYSQL_PASSWORD"
 apt-get install mysql-server -y
 # 可选，配置MySQL(提升安全性)
 if [ -n "$ENSURE_MYSQL" ]; then
