@@ -23,8 +23,6 @@ WP_CONF='/var/www/html/wp-config.php'
 WP_URL='https://cn.wordpress.org/wordpress-4.9.4-zh_CN.tar.gz'
 
 # 读取参数
-read -p '当前用户名: ' USER_NAME
-
 read -p '您的网站域名: ' SERVER_NAME
 
 read -p "请设置WP数据库用户名: " WP_USER
@@ -74,7 +72,7 @@ mkdir /tmp/wordpress/wp-content/upgrade
 cp -a /tmp/wordpress/. /var/www/html
 
 # 配置WordPress文件夹权限
-chown -R ${USER_NAME}:www-data /var/www/html
+chown -R www-data:www-data /var/www/html
 find /var/www/html -type d -exec chmod g+s {} \;
 chmod g+w /var/www/html/wp-content
 chmod -R g+w /var/www/html/wp-content/themes
@@ -85,6 +83,3 @@ sed "s/database_name_here/wordpress/g" ${WP_CONF} -i
 sed "s/username_here/${WP_USER}/g" ${WP_CONF} -i
 sed "s/password_here/${WP_PW}/g" ${WP_CONF} -i
 echo -e "\n/** 设置写入文件系统的方法 */\ndefine('FS_METHOD', 'direct');" >> ${WP_CONF}
-
-# 不知为何加上这句才能用...
-chown -R www-data /var/www/html
