@@ -103,7 +103,7 @@ sed 's/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/g' ${PHP_CONF} -i
 systemctl restart php7.0-fpm
 
 # 配置Nginx以使用PHP
-rm "${NGINX_CONF}*" -rf
+rm -rf ${NGINX_CONF}*
 wget -O "${NGINX_CONF}default" "${NGINX_CONF_URL}${SITE_CONF}"
 sed "s/TMP_SERVER_NAME/${SERVER_NAME}/g" "${NGINX_CONF}default" -i
 if [ -n "${REWRITE}" ]; then
