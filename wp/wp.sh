@@ -84,3 +84,7 @@ sed "s/database_name_here/wordpress/g" ${WP_CONF} -i
 sed "s/username_here/${WP_USER}/g" ${WP_CONF} -i
 sed "s/password_here/${WP_PW}/g" ${WP_CONF} -i
 echo -e "\n/** 设置写入文件系统的方法 */\ndefine('FS_METHOD', 'direct');" >> ${WP_CONF}
+
+# 测试安装结果
+echo -e '\n安装完成!'
+echo "您可以打开 http://${SERVER_NAME}/ 来检查安装结果"
