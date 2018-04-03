@@ -113,7 +113,6 @@ systemctl restart php7.0-fpm
 
 #配置Nginx以使用PHP
 if [ -n "$ENSURE_NGINX" ]; then
-apt-get install wget -y
 wget -O ${NGINX_CONF} ${NGINX_CONF_URL}
 sed "s/TMP_SERVER_NAME/${SERVER_NAME}/g" ${NGINX_CONF} -i
 else
