@@ -34,7 +34,7 @@ do
     read -s -p "请设置WP数据库密码: " WP_PW_1
     read -s -p "请再输入一遍: " WP_PW_2
     if [ "${WP_PW_1}"="${WP_PW_2}" ]; then
-        WP_PW = ${WP_PW_1}
+        WP_PW=${WP_PW_1}
         break
     else
         echo "两次输入密码不一致!"
