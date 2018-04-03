@@ -29,17 +29,17 @@ echo ''
 
 while true :
 do
-	read -r -p "运行MySQL安全性增强脚本? [Y/n] " input
+	read -r -p "跳过MySQL安全性增强脚本? [Y/n] " input
 
 	case $input in
 	    [yY][eE][sS]|[yY])
-			ENSURE_MYSQL='1'
 			break
-            ;;
+            		;;
 
 	    [nN][oO]|[nN])
-            break
-            ;;
+	    		ENSURE_MYSQL='1'
+            		break
+            		;;
 
 	    *)
 		echo "Invalid input..."
