@@ -18,10 +18,8 @@ fi
 
 # 设置变量
 PHP_CONF='/etc/php/7.0/fpm/php.ini'
-NGINX_CONF='/etc/nginx/sites-enabled/'
-NGINX_CONF_URL='https://raw.githubusercontent.com/kaixinguo360/BashScript/master/lnmp/'
-SITE_CONF='nginx_site_config'
-SITE_REWRITE_CONF='nginx_site_rewrite_config'
+NGINX_CONF='/etc/nginx/sites-available/default'
+NGINX_CONF_URL='https://raw.githubusercontent.com/kaixinguo360/BashScript/master/lnmp/nginx_site_config'
 
 # 读取参数
 
@@ -60,25 +58,6 @@ do
 	esac
 done
 
-while true :
-do
-	read -r -p "重定向未绑定域名? [Y/n] " input
-
-	case $input in
-	    [yY][eE][sS]|[yY])
-	    		REWRITE='1'
-			break
-            		;;
-
-	    [nN][oO]|[nN])
-            		break
-            		;;
-
-	    *)
-		echo "Invalid input..."
-		;;
-	esac
-done
 
 # 更新apt
 apt-get update
@@ -103,14 +82,8 @@ sed 's/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/g' ${PHP_CONF} -i
 systemctl restart php7.0-fpm
 
 # 配置Nginx以使用PHP
-rm -rf ${NGINX_CONF}*
-wget -O "${NGINX_CONF}default" "${NGINX_CONF_URL}${SITE_CONF}"
-sed "s/TMP_SERVER_NAME/${SERVER_NAME}/g" "${NGINX_CONF}default" -i
-if [ -n "${REWRITE}" ]; then
-wget -O "${NGINX_CONF}rewrite" "${NGINX_CONF_URL}${SITE_REWRITE_CONF}"
-sed "s/TMP_SERVER_NAME/${SERVER_NAME}/g" "${NGINX_CONF}rewrite" -i
-sed "s/ default_server//g" "${NGINX_CONF}default" -i
-fi
+wget -O ${NGINX_CONF} ${NGINX_CONF_URL}
+sed "s/TMP_SERVER_NAME/${SERVER_NAME}/g" ${NGINX_CONF} -i
 systemctl restart nginx
 
 # 测试安装结果
@@ -118,4 +91,3 @@ echo '<?php phpinfo();' > /var/www/html/info.php
 echo -e '\n安装完成!'
 echo "您可以打开 http://${SERVER_NAME}/info.php 来检查安装结果"
 echo "(建议检查完后删除info.php以增强安全性)"
-
