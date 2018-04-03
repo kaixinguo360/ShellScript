@@ -30,7 +30,7 @@ do
     echo ''
     read -s -p '再输一遍: ' MYSQL_PASSWORD_2
     echo ''
-    if [ "${MYSQL_PASSWORD_1}"="${MYSQL_PASSWORD_2}" ]; then
+    if [ "${MYSQL_PASSWORD_1}" = "${MYSQL_PASSWORD_2}" ]; then
         MYSQL_PASSWORD=${MYSQL_PASSWORD_1}
         break
     else
