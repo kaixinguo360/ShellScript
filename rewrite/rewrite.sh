@@ -22,7 +22,10 @@ NGINX_REWRITE_CONF_URL='https://raw.githubusercontent.com/kaixinguo360/BashScrip
 # 读取参数
 read -p '您的网站域名: ' SERVER_NAME
 
+# 安装配置
 wget -O "${NGINX_CONF}rewrite" "${NGINX_REWRITE_CONF_URL}"
 sed "s/TMP_SERVER_NAME/${SERVER_NAME}/g" "${NGINX_CONF}rewrite" -i
-
 sed "s/ default_server//g" "${NGINX_CONF}default" -i
+
+# 重启Nginx服务
+service nginx restart
