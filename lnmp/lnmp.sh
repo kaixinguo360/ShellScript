@@ -18,7 +18,7 @@ fi
 
 # 设置变量
 PHP_CONF='/etc/php/7.0/fpm/php.ini'
-NGINX_CONF='/etc/nginx/sites-available/'
+NGINX_CONF='/etc/nginx/sites-enabled/'
 NGINX_CONF_URL='https://raw.githubusercontent.com/kaixinguo360/BashScript/master/lnmp/'
 SITE_CONF='nginx_site_config'
 SITE_REWRITE_CONF='nginx_site_rewrite_config'
