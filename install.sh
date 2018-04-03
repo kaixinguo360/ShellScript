@@ -20,11 +20,11 @@ set sql_wp_user [lindex $argv 2]
 set sql_wp_pw [lindex $argv 3]
 
 # 下载lnmp.sh
-spawn wget -O lnmp.sh $lnmp_url
+spawn wget -O lnmp.sh $lnmp_url && chmod +x lnmp.sh
 expect eof
 
 # 下载wp.sh
-spawn wget -O wp.sh $wp_url
+spawn wget -O wp.sh $wp_url && chmod +x wp.sh
 expect eof
 
 # 运行lnmp.sh
