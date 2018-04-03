@@ -58,7 +58,7 @@ python /usr/local/v2ray.fun/openport.py
 service v2ray restart
 
 
-clear
+#clear
 
 echo "V2ray.fun 安装成功！"
 echo "输入 v2ray 回车即可使用"
