@@ -18,8 +18,10 @@ fi
 
 # 设置变量
 PHP_CONF='/etc/php/7.0/fpm/php.ini'
-NGINX_CONF='/etc/nginx/sites-available/default'
-NGINX_CONF_URL='https://raw.githubusercontent.com/kaixinguo360/BashScript/master/lnmp/nginx_site_config'
+NGINX_CONF='/etc/nginx/sites-available/'
+NGINX_CONF_URL='https://raw.githubusercontent.com/kaixinguo360/BashScript/master/lnmp/'
+SITE_CONF='nginx_site_config'
+SITE_REWRITE_CONF='nginx_site_rewrite_config'
 
 # 读取参数
 
@@ -58,6 +60,25 @@ do
 	esac
 done
 
+while true :
+do
+	read -r -p "重定向未绑定域名? [Y/n] " input
+
+	case $input in
+	    [yY][eE][sS]|[yY])
+	    		REWRITE='1'
+			break
+            		;;
+
+	    [nN][oO]|[nN])
+            		break
+            		;;
+
+	    *)
+		echo "Invalid input..."
+		;;
+	esac
+done
 
 # 更新apt
 apt-get update
@@ -82,8 +103,12 @@ sed 's/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/g' ${PHP_CONF} -i
 systemctl restart php7.0-fpm
 
 # 配置Nginx以使用PHP
-wget -O ${NGINX_CONF} ${NGINX_CONF_URL}
-sed "s/TMP_SERVER_NAME/${SERVER_NAME}/g" ${NGINX_CONF} -i
+wget -O "${NGINX_CONF}default" "${NGINX_CONF_URL}${SITE_CONF}"
+sed "s/TMP_SERVER_NAME/${SERVER_NAME}/g" "${NGINX_CONF}default" -i
+if [ -n "${REWRITE}" ]; then
+wget -O "${NGINX_CONF}rewrite" "${NGINX_CONF_URL}${SITE_REWRITE_CONF}"
+sed "s/ default_server//g" "${NGINX_CONF}rewrite" -i
+fi
 systemctl restart nginx
 
 # 测试安装结果
