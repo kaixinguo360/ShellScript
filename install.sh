@@ -57,7 +57,7 @@ if {$is_lnmp} {
     set is_rewrite false
 }
 
-set is_lnmp [readin "安装V2Ray.fun? \[Y/n\]: "]
+set is_v2ray [readin "安装V2Ray.fun? \[Y/n\]: "]
 
 
 # 安装程序正式开始
