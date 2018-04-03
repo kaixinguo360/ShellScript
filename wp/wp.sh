@@ -70,6 +70,7 @@ tar xzvf wp.tar.gz
 cp /tmp/wordpress/wp-config-sample.php /tmp/wordpress/wp-config.php
 mkdir /tmp/wordpress/wp-content/upgrade
 cp -a /tmp/wordpress/. /var/www/html
+rm -rf /tmp/wordpress wp.tar.gz
 
 # 配置WordPress文件夹权限
 chown -R www-data:www-data /var/www/html
