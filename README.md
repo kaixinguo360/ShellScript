@@ -5,7 +5,7 @@ Some useful script for linux
 install.sh
 =======
 
-- Description: Auto install many thing for Ubuntu 16
+- Description: Auto install many things for Ubuntu 16
 ```bash
 sudo apt update && sudo apt install expect -y
 wget -O install.sh https://raw.githubusercontent.com/kaixinguo360/BashScript/master/install.sh && chmod +x install.sh && ./install.sh
