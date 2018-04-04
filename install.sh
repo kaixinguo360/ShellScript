@@ -94,7 +94,7 @@ if {$is_lnmp} {
 }
 
 if {$is_lnmp} {
-    set is_rewrite [readin "重定向未绑定的域名访问? \[Y/n\]: "]
+    set is_rewrite [! [readin "允许未绑定的域名访问(不重定向)? \[Y/n\]: "]]
     if {$is_rewrite} {
         set host [checkvalue $host "请输入网站域名"]
     }
