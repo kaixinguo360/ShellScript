@@ -55,6 +55,14 @@ v2ray.sh
 wget -O v2ray.sh https://raw.githubusercontent.com/kaixinguo360/BashScript/master/v2ray/v2ray.sh && chmod +x v2ray.sh && sudo ./v2ray.sh
 ```
 
+v2ray_ssl.sh
+=======
+
+- Description: Auto enable WS + TLS + Web for V2Ray
+```bash
+wget -O v2ray_ssl.sh https://raw.githubusercontent.com/kaixinguo360/BashScript/master/v2ray/v2ray_ssl.sh && chmod +x v2ray_ssl.sh && sudo ./v2ray_ssl.sh
+```
+
 bbr.sh
 =======
 
