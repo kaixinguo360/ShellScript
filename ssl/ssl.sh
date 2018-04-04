@@ -37,7 +37,7 @@ fi
 ~/.acme.sh/acme.sh --issue  -d  ${SERVER_NAME}  --nginx
 
 # 安装SSL证书
-acme.sh  --installcert  -d  ${SERVER_NAME} \
+~/.acme.sh/acme.sh  --installcert  -d  ${SERVER_NAME} \
         --key-file  /etc/nginx/ssl/${SERVER_NAME}.key \
         --fullchain-file  /etc/nginx/ssl/fullchain.cer \
         --reloadcmd  "service nginx force-reload"
