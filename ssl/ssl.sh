@@ -19,6 +19,7 @@ fi
 # 设置变量
 SITE_CONF='/etc/nginx/sites-enabled/default'
 MY_CONF='/etc/nginx/my/default/'
+SSL_PATH='/etc/nginx/ssl/'
 
 # 读取参数
 
@@ -37,9 +38,10 @@ fi
 ${ACME} --issue  -d  ${SERVER_NAME}  --nginx || exit -1
 
 # 安装SSL证书
+mkdir -p ${SSL_PATH}
 ${ACME}  --installcert  -d  ${SERVER_NAME} \
-        --key-file  /etc/nginx/ssl/${SERVER_NAME}.key \
-        --fullchain-file  /etc/nginx/ssl/fullchain.cer \
+        --key-file  ${SSL_PATH}${SERVER_NAME}.key \
+        --fullchain-file  ${SSL_PATH}fullchain.cer \
         --reloadcmd  "service nginx force-reload" || exit -1
 
 # 初始化Nginx-MY配置环境
@@ -54,8 +56,8 @@ sed "s/#listen \[::\]:443 ssl/listen \[::\]:443 ssl/g" ${SITE_CONF} -i
 
 # 增加Nginx-MY配置文件 - ssl.conf
 cat > ${MY_CONF}ssl.conf << HERE
-ssl_certificate /etc/nginx/ssl/fullchain.cer;
-ssl_certificate_key /etc/nginx/ssl/${SERVER_NAME}.key;
+ssl_certificate ${SSL_PATH}fullchain.cer;
+ssl_certificate_key ${SSL_PATH}${SERVER_NAME}.key;
 keepalive_timeout   70;
 HERE
 
