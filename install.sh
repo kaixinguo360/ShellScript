@@ -8,6 +8,7 @@ set wp_url "https://raw.githubusercontent.com/kaixinguo360/BashScript/master/wp/
 set rewrite_url "https://raw.githubusercontent.com/kaixinguo360/BashScript/master/rewrite/rewrite.sh"
 set ssl_url "https://raw.githubusercontent.com/kaixinguo360/BashScript/master/ssl/ssl.sh"
 set v2ray_url "https://raw.githubusercontent.com/kaixinguo360/BashScript/master/v2ray/v2ray.sh"
+set v2ray_ssl_url "https://raw.githubusercontent.com/kaixinguo360/BashScript/master/v2ray/v2ray_ssl.sh"
 set bbr_url "https://raw.githubusercontent.com/kaixinguo360/BashScript/master/bbr/bbr.sh"
 
 set host [lindex $argv 0]
@@ -66,6 +67,16 @@ if {$is_lnmp} {
 }
 
 set is_v2ray [readin "安装V2Ray.fun? \[Y/n\]: "]
+
+if {$is_v2ray} {
+    set is_v2ray_ssl [readin "开启V2Ray的WS+TLS+Web? \[Y/n\]: "]
+    puts "请输入V2Ray端口号"
+    gets stdin v_port
+    puts "请输入WS路径"
+    gets stdin ws_path
+} else {
+    set is_v2ray_ssl false
+}
 
 set is_bbr [readin "安装BBR? \[Y/n\]: "]
 
@@ -162,13 +173,33 @@ if {$is_v2ray} {
     expect eof
     spawn chmod +x v2ray.sh
     expect eof
-    # 运行v2ray.sh
+    # 运行.sh
     spawn ./v2ray.sh
     expect eof
     # 配置v2ray
     #先不配置了
     # 删除脚本
     spawn rm -f v2ray.sh
+    expect eof
+}
+
+if {$is_v2ray_ssl} {
+    # 下载.sh
+    spawn wget -O v2ray_ssl.sh $v2ray_ssl_url
+    expect eof
+    spawn chmod +x v2ray_ssl.sh
+    expect eof
+    # 运行.sh
+    spawn ./v2ray_ssl.sh
+    expect "*网站域名*"
+    send "$host\r"
+    expect "*端口号*"
+    send "$v_port\r"
+    expect "*WS路径*"
+    send "$ws_path\r"
+    expect eof
+    # 删除脚本
+    spawn rm -f v2ray_ssl.sh
     expect eof
 }
 
