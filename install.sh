@@ -11,19 +11,23 @@ set v2ray_url "https://raw.githubusercontent.com/kaixinguo360/BashScript/master/
 set v2ray_ssl_url "https://raw.githubusercontent.com/kaixinguo360/BashScript/master/v2ray/v2ray_ssl.sh"
 set bbr_url "https://raw.githubusercontent.com/kaixinguo360/BashScript/master/bbr/bbr.sh"
 
-set host [lindex $argv 0]
-set sql_root_pw [lindex $argv 1]
-set sql_wp_user [lindex $argv 2]
-set sql_wp_pw [lindex $argv 3]
-
 # 读取命令行参数
-if { $argc < 4 } {
+if { [lindex $argv 0] == "--help" || [lindex $argv 0] == "-h"  } {
     send_user "用法: $argv0 网站域名\n"
     send_user "                   MySQL根密码\n"
     send_user "                   WP数据库用户名\n"
     send_user "                   WP数据库密码\n"
+    send_user "                   V2Ray端口\n"
+    send_user "                   V2RayWS路径\n"
     exit
 }
+
+set host [lindex $argv 0]
+set sql_root_pw [lindex $argv 1]
+set sql_wp_user [lindex $argv 2]
+set sql_wp_pw [lindex $argv 3]
+set v_port [lindex $argv 4]
+set ws_path [lindex $argv 5]
 
 # 工具函数
 proc readin {text} {
@@ -45,23 +49,64 @@ proc readin {text} {
     return $read_in
 }
 
+proc readstr {text} {
+    while {true} {
+        puts $text
+        gets stdin input
+        switch -regexp $input {
+            ^$ {
+                puts "输入不能为空!\n"
+            }
+            default {
+                break;
+            }
+        }
+    }
+    return $input
+}
+
+proc checkvalue {value text} {
+    if {$value == ""} {
+        return [readstr $text]
+    } else {
+        return $value
+    }
+}
+
+
 # 读取用户输入
 set is_lnmp [readin "安装LNMP? \[Y/n\]: "]
+if {$is_lnmp} {
+    set host [checkvalue $host "请输入网站域名"]
+    set sql_root_pw [checkvalue $sql_root_pw "MySQL根密码"]
+}
 
 if {$is_lnmp} {
     set is_wp [readin "安装WordPress? \[Y/n\]: "]
+    if {$is_wp} {
+        set host [checkvalue $host "请输入网站域名"]
+        set sql_root_pw [checkvalue $sql_root_pw "MySQL根密码"]
+        set sql_wp_user [checkvalue $sql_wp_user "WP数据库用户名"]
+        set sql_wp_pw [checkvalue $sql_wp_pw "WP数据库密码"]
+    }
 } else {
     set is_wp false
 }
 
 if {$is_lnmp} {
     set is_rewrite [readin "重定向未绑定的域名访问? \[Y/n\]: "]
+    if {$is_rewrite} {
+        set host [checkvalue $host "请输入网站域名"]
+    }
 } else {
     set is_rewrite false
 }
 
 if {$is_lnmp} {
     set is_ssl [readin "开启SSL? \[Y/n\]: "]
+    if {$is_ssl} {
+        set host [checkvalue $host "请输入网站域名"]
+    }
 } else {
     set is_ssl false
 }
@@ -70,10 +115,11 @@ set is_v2ray [readin "安装V2Ray.fun? \[Y/n\]: "]
 
 if {$is_v2ray} {
     set is_v2ray_ssl [readin "开启V2Ray的WS+TLS+Web? \[Y/n\]: "]
-    puts "请输入V2Ray端口号"
-    gets stdin v_port
-    puts "请输入WS路径"
-    gets stdin ws_path
+    if {$is_v2ray_ssl} {
+        set host [checkvalue $host "请输入网站域名"]
+        set v_port [checkvalue $v_port "请输入V2Ray端口号"]
+        set ws_path [checkvalue $ws_path "请输入WS路径"]
+    }
 } else {
     set is_v2ray_ssl false
 }
