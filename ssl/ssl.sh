@@ -42,10 +42,12 @@ acme.sh  --installcert  -d  ${SERVER_NAME} \
         --fullchain-file  /etc/nginx/ssl/fullchain.cer \
         --reloadcmd  "service nginx force-reload"
 
-# 修改Nginx配置文件 - 
+# 修改Nginx配置文件 - sites-enabled/default
 sed "s/#listen 443 ssl/listen 443 ssl/g" ${NGINX_CONF} -i
 sed "s/#listen [::]:443/listen [::]:443/g" ${NGINX_CONF} -i
 sed "/#include snippets\/snakeoil.conf;/a\include my\/ssl.conf;" ${NGINX_CONF} -i
+
+# 修改Nginx配置文件 - my/ssl.conf
 mkdir /etc/nginx/my
 echo -e "ssl_certificate /etc/nginx/ssl/fullchain.cer;" >> /etc/nginx/my/ssl.conf
 echo -e "ssl_certificate_key /etc/nginx/ssl/${SERVER_NAME}.key;" >> /etc/nginx/my/ssl.conf
