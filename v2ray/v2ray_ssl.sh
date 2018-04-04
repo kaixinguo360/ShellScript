@@ -67,6 +67,9 @@ location /${WS_PATH} {
 }
 HERE
 
+# 重启Nginx
+service nginx restart
+
 # 配置V2Ray
 #...
 
