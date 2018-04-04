@@ -18,7 +18,7 @@ fi
 
 # 设置变量
 SITE_CONF='/etc/nginx/sites-enabled/default'
-SSL_CONF='/etc/nginx/my/ssl.conf'
+MY_CONF='/etc/nginx/my/default/'
 
 # 读取参数
 
@@ -45,13 +45,13 @@ ${ACME}  --installcert  -d  ${SERVER_NAME} \
 # 修改Nginx配置文件 - sites-enabled/default
 sed "s/#listen 443 ssl/listen 443 ssl/g" ${SITE_CONF} -i
 sed "s/#listen \[::\]:443 ssl/listen \[::\]:443 ssl/g" ${SITE_CONF} -i
-sed "s/#include snippets\/snakeoil.conf;/include my\/ssl.conf;/g" ${SITE_CONF} -i
+sed "s/#include snippets\/snakeoil.conf;/include my\/default/*;/g" ${SITE_CONF} -i
 
-# 增加Nginx配置文件 - my/ssl.conf
-mkdir /etc/nginx/my
-echo -e "ssl_certificate /etc/nginx/ssl/fullchain.cer;" > ${SSL_CONF}
-echo -e "ssl_certificate_key /etc/nginx/ssl/${SERVER_NAME}.key;" >> ${SSL_CONF}
-echo -e "keepalive_timeout   70;" >> ${SSL_CONF}
+# 增加Nginx配置文件 - my/default/ssl.conf
+mkdir ${MY_CONF}
+echo -e "ssl_certificate /etc/nginx/ssl/fullchain.cer;" > ${MY_CONF}ssl.conf
+echo -e "ssl_certificate_key /etc/nginx/ssl/${SERVER_NAME}.key;" >> ${MY_CONF}ssl.conf
+echo -e "keepalive_timeout   70;" >> ${MY_CONF}ssl.conf
 
 # 重启Nginx
 service nginx force-reload
