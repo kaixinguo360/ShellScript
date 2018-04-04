@@ -45,7 +45,7 @@ ${ACME}  --installcert  -d  ${SERVER_NAME} \
 
 # 修改Nginx配置文件 - sites-enabled/default
 sed "s/#listen 443 ssl/listen 443 ssl/g" ${NGINX_CONF} -i
-sed "s/#listen [::]:443 ssl/listen [::]:443 ssl/g" ${NGINX_CONF} -i
+sed "s/#listen \[::\]:443 ssl/listen \[::\]:443 ssl/g" ${NGINX_CONF} -i
 sed "s/#include snippets\/snakeoil.conf;/include my\/ssl.conf;/g" ${NGINX_CONF} -i
 
 # 增加Nginx配置文件 - my/ssl.conf
