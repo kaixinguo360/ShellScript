@@ -6,6 +6,7 @@ set timeout -1
 set lnmp_url "https://raw.githubusercontent.com/kaixinguo360/BashScript/master/lnmp/lnmp.sh"
 set wp_url "https://raw.githubusercontent.com/kaixinguo360/BashScript/master/wp/wp.sh"
 set rewrite_url "https://raw.githubusercontent.com/kaixinguo360/BashScript/master/rewrite/rewrite.sh"
+set ssl_url "https://raw.githubusercontent.com/kaixinguo360/BashScript/master/ssl/ssl.sh"
 set v2ray_url "https://raw.githubusercontent.com/kaixinguo360/BashScript/master/v2ray/v2ray.sh"
 set bbr_url "https://raw.githubusercontent.com/kaixinguo360/BashScript/master/bbr/bbr.sh"
 
@@ -56,6 +57,12 @@ if {$is_lnmp} {
     set is_rewrite [readin "重定向未绑定的域名访问? \[Y/n\]: "]
 } else {
     set is_rewrite false
+}
+
+if {$is_lnmp} {
+    set is_ssl [readin "开启SSL? \[Y/n\]: "]
+} else {
+    set is_ssl false
 }
 
 set is_v2ray [readin "安装V2Ray.fun? \[Y/n\]: "]
@@ -112,7 +119,7 @@ if {$is_wp} {
 }
 
 if {$is_rewrite} {
-    # 下载rewrite.sh
+    # 下载.sh
     spawn wget -O rewrite.sh $rewrite_url
     expect eof
     spawn chmod +x rewrite.sh
@@ -124,6 +131,22 @@ if {$is_rewrite} {
     expect eof
     # 删除脚本
     spawn rm -f rewrite.sh
+    expect eof
+}
+
+if {$is_ssl} {
+    # 下载.sh
+    spawn wget -O ssl.sh $ssl_url
+    expect eof
+    spawn chmod +x ssl.sh
+    expect eof
+    # 运行.sh
+    spawn ./ssl.sh
+    expect "*网站域名*"
+    send "$host\r"
+    expect eof
+    # 删除脚本
+    spawn rm -f ssl.sh
     expect eof
 }
 
