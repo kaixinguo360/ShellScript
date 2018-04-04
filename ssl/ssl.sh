@@ -31,27 +31,26 @@ read -p '您的网站域名: ' SERVER_NAME
 #安装 acme.sh 以自动获取SSL证书
 ACME="${HOME}/.acme.sh/acme.sh"
 if [ ! -x ${ACME} ]; then
-    su - $SUDO_USER -c "curl  https://get.acme.sh | sh"
-    source "${HOME}/.acme.sh/acme.sh.env"
+    su - $SUDO_USER -c "curl  https://get.acme.sh | sh" && source "${HOME}/.acme.sh/acme.sh.env"
 fi
 
 # 获取SSL证书
-${ACME} --issue  -d  ${SERVER_NAME}  --nginx
+${ACME} --issue  -d  ${SERVER_NAME}  --nginx || exit -1
 
 # 安装SSL证书
 ${ACME}  --installcert  -d  ${SERVER_NAME} \
         --key-file  /etc/nginx/ssl/${SERVER_NAME}.key \
         --fullchain-file  /etc/nginx/ssl/fullchain.cer \
-        --reloadcmd  "service nginx force-reload"
+        --reloadcmd  "service nginx force-reload" || exit -1
 
 # 修改Nginx配置文件 - sites-enabled/default
 sed "s/#listen 443 ssl/listen 443 ssl/g" ${NGINX_CONF} -i
-sed "s/#listen [::]:443/listen [::]:443/g" ${NGINX_CONF} -i
-sed "/#include snippets\/snakeoil.conf;/a\include my\/ssl.conf;" ${NGINX_CONF} -i
+sed "s/#listen [::]:443 ssl/listen [::]:443 ssl/g" ${NGINX_CONF} -i
+sed "s/#include snippets\/snakeoil.conf;/include my\/ssl.conf;/g" ${NGINX_CONF} -i
 
 # 增加Nginx配置文件 - my/ssl.conf
 mkdir /etc/nginx/my
-echo -e "ssl_certificate /etc/nginx/ssl/fullchain.cer;" >> /etc/nginx/my/ssl.conf
+echo -e "ssl_certificate /etc/nginx/ssl/fullchain.cer;" > /etc/nginx/my/ssl.conf
 echo -e "ssl_certificate_key /etc/nginx/ssl/${SERVER_NAME}.key;" >> /etc/nginx/my/ssl.conf
 echo -e "keepalive_timeout   70;" >> /etc/nginx/my/ssl.conf
 
