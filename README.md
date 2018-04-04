@@ -8,7 +8,7 @@ install.sh
 - Description: Auto install many things for Ubuntu 16
 ```bash
 sudo apt update && sudo apt install expect -y
-wget -O install.sh https://raw.githubusercontent.com/kaixinguo360/BashScript/master/install.sh && chmod +x install.sh && sudo ./install.sh
+wget -O install.sh https://raw.githubusercontent.com/kaixinguo360/BashScript/master/install.sh && chmod +x install.sh && sudo ./install.sh --help
 ```
 
 lnmp.sh
