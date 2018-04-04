@@ -26,6 +26,19 @@ read -p '您的网站域名: ' SERVER_NAME
 
 while true :
 do
+	read -p 'V2Ray端口号: ' V_PORT
+	case ${V_PORT} in
+	    [0-9]*)
+			break
+            ;;
+	    *)
+		    echo -e "请输入数字...\n"
+		    ;;
+	esac
+done
+
+while true :
+do
     read -p 'WS路径: /' WS_PATH
     if [ -n "${WS_PATH}" ]; then
         break
@@ -46,11 +59,11 @@ fi
 cat > ${MY_CONF}v2ray.conf << HERE
 location /${WS_PATH} {
         proxy_redirect off;
-        proxy_pass http://127.0.0.1:8080;
+        proxy_pass http://127.0.0.1:$V_PORT;
         proxy_http_version 1.1;
-        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Upgrade \$http_upgrade;
         proxy_set_header Connection "upgrade";
-        proxy_set_header Host $http_host;
+        proxy_set_header Host \$http_host;
 }
 HERE
 
