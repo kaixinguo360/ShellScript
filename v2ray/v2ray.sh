@@ -32,8 +32,8 @@ else
 fi
 
 #安装 acme.sh 以自动获取SSL证书
-if [ ! -a '~/.acme.sh/acme.sh' ]; then
-    su - $USER -c "curl  https://get.acme.sh | sh"
+if [ ! -x ~/.acme.sh/acme.sh ]; then
+    su - $SUDO_USER -c "curl  https://get.acme.sh | sh"
 fi
 
 #克隆V2ray.fun项目
