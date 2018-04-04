@@ -24,7 +24,6 @@ MY_CONF='/etc/nginx/my/default/'
 
 read -p '您的网站域名: ' SERVER_NAME
 
-
 while true :
 do
     read -p 'WS路径: /' WS_PATH
@@ -37,13 +36,13 @@ done
 
 # 正式安装开始
 
-# 初始化MY配置环境
+# 初始化Nginx-MY配置环境
 if [ ! -e ${MY_CONF} ]; then
     mkdir -p ${MY_CONF}
     sed "s/#include snippets\/snakeoil.conf;/include my\/default\/\*;/g" ${SITE_CONF} -i
 fi
 
-# 增加MY配置文件 - v2ray.conf
+# 增加Nginx-MY配置文件 - v2ray.conf
 cat > ${MY_CONF}v2ray.conf << HERE
 location /${WS_PATH} {
         proxy_redirect off;
@@ -54,3 +53,9 @@ location /${WS_PATH} {
         proxy_set_header Host $http_host;
 }
 HERE
+
+# 配置V2Ray
+#...
+
+
+
