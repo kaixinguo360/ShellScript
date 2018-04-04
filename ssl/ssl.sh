@@ -29,8 +29,10 @@ read -p '您的网站域名: ' SERVER_NAME
 # 正式安装开始
 
 #安装 acme.sh 以自动获取SSL证书
-if [ ! -a '~/.acme.sh/acme.sh' ]; then
-    su - $USER -c "curl  https://get.acme.sh | sh"
+ACME_HOME="${HOME}/.acme.sh"
+if [ ! -x ${ACME_HOME}/acme.sh ]; then
+    su - $SUDO_USER -c "curl  https://get.acme.sh | sh"
+    source ${ACME_HOME}/acme.sh.env
 fi
 
 # 获取SSL证书
