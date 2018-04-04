@@ -17,7 +17,7 @@ fi
 # 正式安装开始
 
 # 设置变量
-NGINX_CONF='/etc/nginx/sites-available/default'
+NGINX_CONF='/etc/nginx/sites-enabled/default'
 
 # 读取参数
 
