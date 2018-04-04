@@ -69,6 +69,12 @@ set is_v2ray [readin "安装V2Ray.fun? \[Y/n\]: "]
 
 set is_bbr [readin "安装BBR? \[Y/n\]: "]
 
+if {$is_bbr} {
+    set is_reboot [readin "自动重启? \[Y/n\]: "]
+} else {
+    set is_reboot false
+}
+
 
 # 安装程序正式开始
 
@@ -192,11 +198,10 @@ expect eof
 puts "\n所有安装已完成!"
 if {$is_bbr} {
     puts "因为安装了BBR,需要重启系统."
-    set is_reboot [readin "立即重启? \[Y/n\]: "]
     if {$is_reboot} {
         spawn reboot
         expect eof
     } else {
-        puts "重启已取消..."
+        puts "稍后请手动重启"
     }
 }
