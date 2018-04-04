@@ -42,16 +42,22 @@ ${ACME}  --installcert  -d  ${SERVER_NAME} \
         --fullchain-file  /etc/nginx/ssl/fullchain.cer \
         --reloadcmd  "service nginx force-reload" || exit -1
 
-# 修改Nginx配置文件 - sites-enabled/default
+# 初始化Nginx-MY配置环境
+if [ ! -e ${MY_CONF} ]; then
+    mkdir -p ${MY_CONF}
+    sed "s/#include snippets\/snakeoil.conf;/include my\/default\/\*;/g" ${SITE_CONF} -i
+fi
+
+# 修改Nginx配置,打开SSL端口
 sed "s/#listen 443 ssl/listen 443 ssl/g" ${SITE_CONF} -i
 sed "s/#listen \[::\]:443 ssl/listen \[::\]:443 ssl/g" ${SITE_CONF} -i
-sed "s/#include snippets\/snakeoil.conf;/include my\/default\/\*;/g" ${SITE_CONF} -i
 
-# 增加Nginx配置文件 - my/default/ssl.conf
-mkdir -p ${MY_CONF}
-echo -e "ssl_certificate /etc/nginx/ssl/fullchain.cer;" > ${MY_CONF}ssl.conf
-echo -e "ssl_certificate_key /etc/nginx/ssl/${SERVER_NAME}.key;" >> ${MY_CONF}ssl.conf
-echo -e "keepalive_timeout   70;" >> ${MY_CONF}ssl.conf
+# 增加Nginx-MY配置文件 - ssl.conf
+cat > ${MY_CONF}ssl.conf << HERE
+ssl_certificate /etc/nginx/ssl/fullchain.cer;
+ssl_certificate_key /etc/nginx/ssl/${SERVER_NAME}.key;
+keepalive_timeout   70;
+HERE
 
 # 重启Nginx
 service nginx force-reload
