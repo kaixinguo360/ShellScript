@@ -28,6 +28,24 @@ wp.sh
 wget -O wp.sh https://raw.githubusercontent.com/kaixinguo360/BashScript/master/wp/wp.sh && chmod +x wp.sh && sudo ./wp.sh
 ```
 
+rewrite.sh
+=======
+
+- Description: Rewrite unbound domain request
+- Dependent: LNMP installed
+```bash
+wget -O rewrite.sh https://raw.githubusercontent.com/kaixinguo360/BashScript/master/rewrite/rewrite.sh && chmod +x rewrite.sh && sudo ./rewrite.sh
+```
+
+ssl.sh
+=======
+
+- Description: Auto enable SSL for LNMP
+- Dependent: LNMP installed
+```bash
+wget -O ssl.sh https://raw.githubusercontent.com/kaixinguo360/BashScript/master/ssl/ssl.sh && chmod +x ssl.sh && sudo ./ssl.sh
+```
+
 v2ray.sh
 =======
 
@@ -44,12 +62,4 @@ bbr.sh
 - Author: Not Me
 ```bash
 wget -O bbr.sh https://raw.githubusercontent.com/kaixinguo360/BashScript/master/bbr/bbr.sh && chmod +x bbr.sh && sudo ./bbr.sh
-```
-
-rewrite.sh
-=======
-
-- Description: Rewrite unbound domain request
-```bash
-wget -O rewrite.sh https://raw.githubusercontent.com/kaixinguo360/BashScript/master/rewrite/rewrite.sh && chmod +x rewrite.sh && sudo ./rewrite.sh
 ```
