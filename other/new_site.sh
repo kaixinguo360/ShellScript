@@ -68,8 +68,8 @@ done
 # 新建配置文件
 cat > ${NGINX_CONF}${SITE_NAME} << HERE
 server {
-	listen 80;
-	listen [::]:80;
+	listen ${SITE_PORT};
+	listen [::]:${SITE_PORT};
 
 	# MY config dir
 	include my/${SITE_NAME}/*;
@@ -79,7 +79,7 @@ server {
 	# Add index.php to the list if you are using PHP
 	index index.php index.html index.htm index.nginx-debian.html;
 
-	server_name ${SERVER_NAME};
+	server_name localhost;
 
 	client_max_body_size 20m;
 
@@ -114,6 +114,15 @@ server {
 	location ~* \.(css|gif|ico|jpeg|jpg|js|png)$ {
 		expires max;
 		log_not_found off;
+    }
+}
+server {
+    listen       80;
+    server_name  ${SERVER_NAME};
+    
+    location / {
+        proxy_redirect off;
+        proxy_pass http://locahost:${SITE_PORT};
     }
 }
 HERE
