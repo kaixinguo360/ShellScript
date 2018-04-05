@@ -71,3 +71,19 @@ bbr.sh
 ```bash
 wget -O bbr.sh https://raw.githubusercontent.com/kaixinguo360/BashScript/master/bbr/bbr.sh && chmod +x bbr.sh && sudo ./bbr.sh
 ```
+
+new_site.sh
+=======
+
+- Description: Auto create new virtual server for Ubuntu 16
+```bash
+wget -O new_site.sh https://raw.githubusercontent.com/kaixinguo360/BashScript/master/other/new_site.sh && chmod +x new_site.sh && sudo ./new_site.sh
+```
+
+mail.sh
+=======
+
+- Description: Auto install Mail System (Postfix + Dovecot + RainLoop) for Ubuntu 16
+```bash
+wget -O mail.sh https://raw.githubusercontent.com/kaixinguo360/BashScript/master/other/mail.sh && chmod +x mail.sh && sudo ./mail.sh
+```
