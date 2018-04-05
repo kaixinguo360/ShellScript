@@ -105,7 +105,7 @@ server {
 
 	# pass the PHP scripts to FastCGI server listening on 127.0.0.1:9000
 	#
-	location ~ \\.php\$ {
+	location ~ \.php\$ {
 		include snippets/fastcgi-php.conf;
 	
 		# With php7.0-cgi alone:
@@ -117,14 +117,14 @@ server {
 	# deny access to .htaccess files, if Apache's document root
 	# concurs with nginx's one
 	#
-	location ~ /\\.ht {
+	location ~ /\.ht {
 		deny all;
 	}
 	
 	# for wordpress
 	location = /favicon.ico { log_not_found off; access_log off; }
 	location = /robots.txt { log_not_found off; access_log off; allow all; }
-	location ~* \\.(css|gif|ico|jpeg|jpg|js|png)\$ {
+	location ~* \.(css|gif|ico|jpeg|jpg|js|png)\$ {
 		expires max;
 		log_not_found off;
 	}
