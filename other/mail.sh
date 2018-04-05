@@ -21,7 +21,6 @@ P_CF_MASTER="/etc/postfix/master.cf"
 
 # 交互式读取参数
 read -p '您的根域名: ' SERVER_NAME
-read -p '您的邮件域名: ' MAIL_NAME
 MAIL_NAME="mail.${SERVER_NAME}"
 while true :
 do
