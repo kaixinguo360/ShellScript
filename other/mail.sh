@@ -274,16 +274,18 @@ service auth {
   # To give the caller full permissions to lookup all users, set the mode to
   # something else than 0666 and Dovecot lets the kernel enforce the
   # permissions (e.g. 0777 allows everyone full permissions).
-  unix_listener auth-userdb {
+  #unix_listener auth-userdb {
+    #mode = 0666
+    #user = 
+    #group = 
+  #}
+
+  # Postfix smtp-auth
+  unix_listener /var/spool/postfix/private/auth {
     mode = 0666
     user = postfix
     group = postfix
   }
-
-  # Postfix smtp-auth
-  #unix_listener /var/spool/postfix/private/auth {
-  #  mode = 0666
-  #}
 
   # Auth process is run as this user.
   #user = \$default_internal_user
