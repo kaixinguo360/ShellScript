@@ -99,13 +99,13 @@ server {
 	location / {
 		# First attempt to serve request as file, then
 		# as directory, then fall back to displaying a 404.
-		#try_files $uri $uri/ =404;
-        try_files $uri $uri/ /index.php$is_args$args;
+		#try_files \$uri \$uri/ =404;
+        try_files \$uri \$uri/ /index.php\$is_args\$args;
 	}
 
 	# pass the PHP scripts to FastCGI server listening on 127.0.0.1:9000
 	#
-	location ~ \.php$ {
+	location ~ \.php\$ {
 		include snippets/fastcgi-php.conf;
 	
 		# With php7.0-cgi alone:
@@ -124,7 +124,7 @@ server {
 	# for wordpress
 	location = /favicon.ico { log_not_found off; access_log off; }
 	location = /robots.txt { log_not_found off; access_log off; allow all; }
-	location ~* \.(css|gif|ico|jpeg|jpg|js|png)$ {
+	location ~* \.(css|gif|ico|jpeg|jpg|js|png)\$ {
 		expires max;
 		log_not_found off;
 	}
