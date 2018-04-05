@@ -22,6 +22,27 @@ P_CF_MASTER="/etc/postfix/master.cf"
 # 交互式读取参数
 read -p '您的根域名: ' SERVER_NAME
 read -p '您的邮件域名: ' MAIL_NAME
+MAIL_NAME="mail.${SERVER_NAME}"
+while true :
+do
+	read -r -p "使用默认邮件域名(${MAIL_NAME})? [Y/n] " input
+	case $input in
+	    [yY][eE][sS]|[yY])
+			break
+            		;;
+
+	    [nN][oO]|[nN])
+			read -p '设置自定义邮件域名: ' MAIL_NAME
+			echo -e "已设置自定义邮件域名(${MAIL_NAME})"
+            		break
+            		;;
+
+	    *)
+		echo "Invalid input..."
+		;;
+	esac
+done
+
 while true :
 do
 	read -r -p "安装Postfix? [Y/n] " input
@@ -87,6 +108,8 @@ done
 ## 安装Postfix ##
 #################
 
+if [ -n "IS_P" ];then
+
 echo "postfix postfix/mailname string kaixinguo.site" | debconf-set-selections
 echo "postfix postfix/main_mailer_type string 'Internet Site'" | debconf-set-selections
 apt install -y postfix
@@ -139,10 +162,13 @@ service postfix restart
 
 echo -e "\n  ## Postfix安装完成! ##\n"
 
+fi
 
 #################
 ## 安装Dovecot ##
 #################
+
+if [ -n "IS_D" ];then
 
 sudo apt-get install dovecot-common dovecot-imapd -y
 
@@ -287,7 +313,7 @@ service dovecot restart
 
 echo -e "\n  ## Dovecot安装完成! ##\n"
 
-
+fi
 
 
 
