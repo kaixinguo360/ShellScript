@@ -183,6 +183,11 @@ sed -i "s/#ssl_key = <\/etc\/dovecot\/private\/dovecot.pem/ssl_key = <\/etc\/ssl
 D_AUTH_CF="/etc/dovecot/conf.d/10-auth.conf"
 sed -i "s/#disable_plaintext_auth = yes/disable_plaintext_auth = no/g" ${D_AUTH_CF}
 
+#10-auth.conf
+D_MAIL_CF="/etc/dovecot/conf.d/10-mail.conf"
+sed -i "s/mail_location = mbox:~\/mail:INBOX=\/var\/mail\/%u/mail_location = maildir:~\/Maildir/g" ${D_MAIL_CF}
+
+
 #10-master.conf
 D_MASTER_CF="/etc/dovecot/conf.d/10-master.conf"
 cat > ${D_MASTER_CF} << HERE
