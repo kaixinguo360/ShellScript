@@ -107,7 +107,7 @@ done
 ## 安装Postfix ##
 #################
 
-if [ -n "IS_P" ];then
+if [ -n "${IS_P}" ];then
 
 echo "postfix postfix/mailname string kaixinguo.site" | debconf-set-selections
 echo "postfix postfix/main_mailer_type string 'Internet Site'" | debconf-set-selections
@@ -167,7 +167,7 @@ fi
 ## 安装Dovecot ##
 #################
 
-if [ -n "IS_D" ];then
+if [ -n "${IS_D}" ];then
 
 sudo apt-get install dovecot-common dovecot-imapd -y
 
@@ -315,7 +315,15 @@ echo -e "\n  ## Dovecot安装完成! ##\n"
 fi
 
 
+##################
+## 安装RainLoop ##
+##################
 
+if [ -n "${IS_RL}" ];then
+
+echo "RainLoop安装功能暂未推出..."
+
+fi
 
 
 
