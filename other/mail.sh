@@ -137,7 +137,7 @@ HERE
 # 重启Postfix
 service postfix restart
 
-echo "  ## Postfix安装完成! ##"
+echo -e "\n  ## Postfix安装完成! ##\n"
 
 
 #################
@@ -151,8 +151,8 @@ sudo apt-get install dovecot-common dovecot-imapd -y
 #10-ssl.conf
 D_SSL_CF="/etc/dovecot/conf.d/10-ssl.conf"
 #sed -i "s/ssl = on/ssl = required/" ${D_SSL_CF}
-sed -i "s/#ssl_cert = <\/etc\/dovecot\/dovecot.pem/ssl_cert = <\/etc\/dovecot\/dovecot.pem/" ${D_SSL_CF}
-sed -i "s/#ssl_key = <\/etc\/dovecot\/private\/dovecot.pem/ssl_key = <\/etc\/dovecot\/private\/dovecot.pem/" ${D_SSL_CF}
+sed -i "s/#ssl_cert = <\/etc\/dovecot\/dovecot.pem/ssl_cert = <\/etc\/ssl\/certs\/ssl-cert-snakeoil.pem/" ${D_SSL_CF}
+sed -i "s/#ssl_key = <\/etc\/dovecot\/private\/dovecot.pem/ssl_key = <\/etc\/ssl\/private\/ssl-cert-snakeoil.key/" ${D_SSL_CF}
 
 #10-auth.conf
 D_AUTH_CF="/etc/dovecot/conf.d/10-auth.conf"
@@ -285,7 +285,7 @@ HERE
 # 重启Dovecot
 service dovecot restart
 
-echo "  ## Dovecot安装完成! ##"
+echo -e "\n  ## Dovecot安装完成! ##\n"
 
 
 
