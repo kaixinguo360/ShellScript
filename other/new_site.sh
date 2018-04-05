@@ -121,8 +121,10 @@ server {
     server_name  ${SERVER_NAME};
     
     location / {
-        proxy_redirect off;
         proxy_pass http://localhost:${SITE_PORT};
+	proxy_set_header   Host    \$host; 
+	proxy_set_header   X-Real-IP   \$remote_addr; 
+	proxy_set_header   X-Forwarded-For \$proxy_add_x_forwarded_for; 
     }
 }
 HERE
