@@ -350,12 +350,22 @@ expect << HERE
   send "${MAIL_NAME}\r"
   
   expect "*启用SSL*"
-  send "y\r"
+  send "n\r"
   
   expect eof
 HERE
 
 rm -rf new_site.sh
+
+wget -O tmp_rainloop.zip https://www.rainloop.net/repository/webmail/rainloop-community-latest.zip
+mkdir tmp_rainloop
+unzip -d tmp_rainloop tmp_rainloop.zip
+cp -a tmp_rainloop/. /var/rainloop/
+chown -R www-data:www-data /var/rainloop/
+rm -rf tmp_rainloop
+
+echo -e "\n  ## RainLoop安装完成 ##"
+echo -e "   您可以通过 http://${MAIL_NAME}/ 访问RainLoop\n"
 
 fi
 
