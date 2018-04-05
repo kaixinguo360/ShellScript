@@ -102,6 +102,9 @@ HERE
 # 新建MY配置文件夹
 mkdir -p ${MY_CONF}${SITE_NAME}
 
+# 新建网站根文件夹
+mkdir -p ${SITE_ROOT}
+
 # 重启Server
 service nginx restart
 
