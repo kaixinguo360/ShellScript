@@ -84,6 +84,7 @@ mail.sh
 =======
 
 - Description: Auto install Mail System (Postfix + Dovecot + RainLoop) for Ubuntu 16
+- DO NOT set IMAP/SMTP server as 127.0.0.1 on RainLoop, or you will waste whole night for auth failed as me...
 ```bash
 wget -O mail.sh https://raw.githubusercontent.com/kaixinguo360/BashScript/master/other/mail.sh && chmod +x mail.sh && sudo ./mail.sh
 ```
