@@ -119,12 +119,14 @@ server {
 server {
     listen       80;
     server_name  ${SERVER_NAME};
-    
+
     location / {
-        proxy_pass http://localhost:${SITE_PORT};
-	proxy_set_header   Host    \$host; 
-	proxy_set_header   X-Real-IP   \$remote_addr; 
-	proxy_set_header   X-Forwarded-For \$proxy_add_x_forwarded_for; 
+        proxy_set_header Host \$http_host;
+        proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+        proxy_set_header X-Real-Ip \$remote_addr;
+        proxy_set_header X-NginX-Proxy true;
+        proxy_pass http://127.0.0.1:${SITE_PORT};
+        proxy_redirect off;
     }
 }
 HERE
