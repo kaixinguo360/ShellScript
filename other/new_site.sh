@@ -122,7 +122,7 @@ server {
     
     location / {
         proxy_redirect off;
-        proxy_pass http://locahost:${SITE_PORT};
+        proxy_pass http://localhost:${SITE_PORT};
     }
 }
 HERE
