@@ -34,6 +34,7 @@ do
 
 	    [nN][oO]|[nN])
 			read -p '设置新的根目录: ' SITE_ROOT
+			echo -e "已设置新的根目录(${SITE_ROOT})"
             		break
             		;;
 
