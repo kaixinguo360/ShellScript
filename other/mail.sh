@@ -17,6 +17,7 @@ fi
 
 # 设置静态变量
 P_CF_MASTER="/etc/postfix/master.cf"
+NEW_SITE_URL="https://raw.githubusercontent.com/kaixinguo360/BashScript/master/other/new_site.sh"
 
 
 # 交互式读取参数
@@ -330,7 +331,6 @@ if [ -n "${IS_RL}" ];then
 
 echo -e "\n RainLoop功能并不稳定...\n"
 
-NEW_SITE_URL="https://github.com/kaixinguo360/BashScript/blob/master/other/new_site.sh"
 wget -O new_site.sh ${NEW_SITE_URL}
 chmod +x new_site.sh
 
@@ -360,7 +360,7 @@ rm -rf new_site.sh
 wget -O tmp_rainloop.zip https://www.rainloop.net/repository/webmail/rainloop-community-latest.zip
 mkdir tmp_rainloop
 unzip -d tmp_rainloop tmp_rainloop.zip
-cp -a tmp_rainloop/. /var/rainloop/
+cp -a tmp_rainloop/. /var/www/rainloop/
 chown -R www-data:www-data /var/rainloop/
 rm -rf tmp_rainloop
 
