@@ -23,7 +23,25 @@ SSL_PATH='/etc/nginx/ssl/'
 
 # 读取参数
 read -p '新网站的本地配置文件名: ' SITE_NAME
-read -p '新网站的根目录: ' SITE_ROOT
+SITE_ROOT="/var/www/${SITE_NAME}"
+while true :
+do
+	read -r -p "使用默认根目录(${SITE_ROOT})? [Y/n] " input
+	case $input in
+	    [yY][eE][sS]|[yY])
+			break
+            		;;
+
+	    [nN][oO]|[nN])
+			read -p '设置新的根目录: ' SITE_ROOT
+            		break
+            		;;
+
+	    *)
+		echo "Invalid input..."
+		;;
+	esac
+done
 read -p '新网站的本地监听端口: ' SITE_PORT
 read -p '新网站的域名: ' SERVER_NAME
 while true :
