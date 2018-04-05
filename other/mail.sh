@@ -183,7 +183,7 @@ sed -i "s/#ssl_key = <\/etc\/dovecot\/private\/dovecot.pem/ssl_key = <\/etc\/ssl
 D_AUTH_CF="/etc/dovecot/conf.d/10-auth.conf"
 sed -i "s/#disable_plaintext_auth = yes/disable_plaintext_auth = no/g" ${D_AUTH_CF}
 
-#10-auth.conf
+#10-mail.conf
 D_MAIL_CF="/etc/dovecot/conf.d/10-mail.conf"
 sed -i "s/mail_location = mbox:~\/mail:INBOX=\/var\/mail\/%u/mail_location = maildir:~\/Maildir/g" ${D_MAIL_CF}
 
@@ -328,7 +328,34 @@ fi
 
 if [ -n "${IS_RL}" ];then
 
-echo "RainLoop安装功能暂未推出..."
+echo -e "\n RainLoop功能并不稳定...\n"
+
+NEW_SITE_URL="https://github.com/kaixinguo360/BashScript/blob/master/other/new_site.sh"
+wget -O new_site.sh ${NEW_SITE_URL}
+chmod +x new_site.sh
+
+expect << HERE
+  spawn ./new_site.sh
+  
+  expect "*本地配置文件名*"
+  send "rainloop\r"
+  
+  expect "*默认根目录*"
+  send "y\r"
+  
+  expect "*监听端口*"
+  send "801\r"
+  
+  expect "*域名*"
+  send "${MAIL_NAME}\r"
+  
+  expect "*启用SSL*"
+  send "y\r"
+  
+  expect eof
+HERE
+
+rm -rf new_site.sh
 
 fi
 
