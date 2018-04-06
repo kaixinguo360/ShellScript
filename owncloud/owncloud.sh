@@ -26,6 +26,7 @@ NEW_SITE_URL="https://raw.githubusercontent.com/kaixinguo360/ShellScript/master/
 # 读取用户输入
 read -p '您的网站域名: ' SERVER_NAME
 
+
 ## 正式安装开始 ##
 
 # 新增apt密钥
