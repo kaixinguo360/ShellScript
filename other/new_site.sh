@@ -172,7 +172,7 @@ ${ACME}  --installcert  -d  ${SERVER_NAME} \
 # 配置Nginx
 cat > ${MY_CONF}${SITE_NAME}/ssl.conf << HERE
 listen 443 ssl;
-listen \[::\]:443 ssl;
+listen [::]:443 ssl;
 ssl_certificate ${SSL_PATH}${SERVER_NAME}.cer;
 ssl_certificate_key ${SSL_PATH}${SERVER_NAME}.key;
 keepalive_timeout   70;
