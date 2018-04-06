@@ -5,8 +5,8 @@ set timeout -1
 
 set lnmp_url "https://raw.githubusercontent.com/kaixinguo360/ShellScript/master/lnmp/lnmp.sh"
 set wp_url "https://raw.githubusercontent.com/kaixinguo360/ShellScript/master/wp/wp.sh"
-set rewrite_url "https://raw.githubusercontent.com/kaixinguo360/ShellScript/master/rewrite/rewrite.sh"
-set ssl_url "https://raw.githubusercontent.com/kaixinguo360/ShellScript/master/ssl/ssl.sh"
+set rewrite_url "https://raw.githubusercontent.com/kaixinguo360/ShellScript/master/other/rewrite.sh"
+set ssl_url "https://raw.githubusercontent.com/kaixinguo360/ShellScript/master/other/ssl.sh"
 set v2ray_url "https://raw.githubusercontent.com/kaixinguo360/ShellScript/master/v2ray/v2ray.sh"
 set v2ray_ssl_url "https://raw.githubusercontent.com/kaixinguo360/ShellScript/master/v2ray/v2ray_ssl.sh"
 set bbr_url "https://raw.githubusercontent.com/kaixinguo360/ShellScript/master/bbr/bbr.sh"
