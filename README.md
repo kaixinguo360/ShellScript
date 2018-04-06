@@ -1,4 +1,4 @@
-# BashScript
+# ShellScript
 Some useful script for linux
 (All of them need wget)
 
@@ -28,24 +28,6 @@ wp.sh
 wget -O wp.sh https://raw.githubusercontent.com/kaixinguo360/ShellScript/master/wp/wp.sh && chmod +x wp.sh && sudo ./wp.sh
 ```
 
-rewrite.sh
-=======
-
-- Description: Rewrite unbound domain request
-- Dependent: LNMP installed
-```bash
-wget -O rewrite.sh https://raw.githubusercontent.com/kaixinguo360/ShellScript/master/other/rewrite.sh && chmod +x rewrite.sh && sudo ./rewrite.sh
-```
-
-ssl.sh
-=======
-
-- Description: Auto enable SSL for LNMP
-- Dependent: LNMP installed
-```bash
-wget -O ssl.sh https://raw.githubusercontent.com/kaixinguo360/ShellScript/master/ssl/ssl.sh && chmod +x ssl.sh && sudo ./ssl.sh
-```
-
 v2ray.sh
 =======
 
@@ -72,6 +54,17 @@ bbr.sh
 wget -O bbr.sh https://raw.githubusercontent.com/kaixinguo360/ShellScript/master/bbr/bbr.sh && chmod +x bbr.sh && sudo ./bbr.sh
 ```
 
+mail.sh
+=======
+
+- Description: Auto install Mail System (Postfix + Dovecot + RainLoop) for Ubuntu 16
+- DO NOT set IMAP/SMTP server as 127.0.0.1 on RainLoop, or you will waste whole night for auth failed as me...
+```bash
+wget -O mail.sh https://raw.githubusercontent.com/kaixinguo360/ShellScript/master/mail/mail.sh && chmod +x mail.sh && sudo ./mail.sh
+```
+
+# Other
+
 new_site.sh
 =======
 
@@ -80,11 +73,20 @@ new_site.sh
 wget -O new_site.sh https://raw.githubusercontent.com/kaixinguo360/ShellScript/master/other/new_site.sh && chmod +x new_site.sh && sudo ./new_site.sh
 ```
 
-mail.sh
+rewrite.sh
 =======
 
-- Description: Auto install Mail System (Postfix + Dovecot + RainLoop) for Ubuntu 16
-- DO NOT set IMAP/SMTP server as 127.0.0.1 on RainLoop, or you will waste whole night for auth failed as me...
+- Description: Rewrite unbound domain request
+- Dependent: LNMP installed
 ```bash
-wget -O mail.sh https://raw.githubusercontent.com/kaixinguo360/ShellScript/master/other/mail.sh && chmod +x mail.sh && sudo ./mail.sh
+wget -O rewrite.sh https://raw.githubusercontent.com/kaixinguo360/ShellScript/master/other/rewrite.sh && chmod +x rewrite.sh && sudo ./rewrite.sh
+```
+
+ssl.sh
+=======
+
+- Description: Auto enable SSL for LNMP
+- Dependent: LNMP installed
+```bash
+wget -O ssl.sh https://raw.githubusercontent.com/kaixinguo360/ShellScript/master/other/ssl.sh && chmod +x ssl.sh && sudo ./ssl.sh
 ```
