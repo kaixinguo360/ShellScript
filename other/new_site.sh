@@ -159,6 +159,11 @@ service nginx restart
 
 ## 开启SSL ##
 
+###############
+#   有BUG!!   #
+#  无法开启SSL #
+###############
+
 if [ -n "${ENABLE_SSL}" ]; then
 
 #安装 acme.sh 以自动获取SSL证书
