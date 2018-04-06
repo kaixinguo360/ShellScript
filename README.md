@@ -34,7 +34,7 @@ rewrite.sh
 - Description: Rewrite unbound domain request
 - Dependent: LNMP installed
 ```bash
-wget -O rewrite.sh https://raw.githubusercontent.com/kaixinguo360/ShellScript/master/rewrite/rewrite.sh && chmod +x rewrite.sh && sudo ./rewrite.sh
+wget -O rewrite.sh https://raw.githubusercontent.com/kaixinguo360/ShellScript/master/other/rewrite.sh && chmod +x rewrite.sh && sudo ./rewrite.sh
 ```
 
 ssl.sh
