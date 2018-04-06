@@ -343,9 +343,6 @@ expect << HERE
   expect "*默认根目录*"
   send "y\r"
   
-  expect "*监听端口*"
-  send "801\r"
-  
   expect "*域名*"
   send "${MAIL_NAME}\r"
   
