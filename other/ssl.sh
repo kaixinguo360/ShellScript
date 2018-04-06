@@ -38,7 +38,7 @@ if [ ! -x ${ACME} ]; then
 fi
 
 # 获取SSL证书
-${ACME} --issue  -d  ${SERVER_NAME}  --nginx || exit -1
+${ACME} --issue  -d  ${SERVER_NAME}  --nginx
 
 # 安装SSL证书
 mkdir -p ${SSL_PATH}
