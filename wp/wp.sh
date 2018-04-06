@@ -18,7 +18,7 @@ fi
 
 # 设置变量
 NGINX_CONF='/etc/nginx/sites-enabled/default'
-NGINX_CONF_URL='https://raw.githubusercontent.com/kaixinguo360/BashScript/master/wp/nginx_site_config'
+NGINX_CONF_URL='https://raw.githubusercontent.com/kaixinguo360/ShellScript/master/wp/nginx_site_config'
 WP_CONF='/var/www/html/wp-config.php'
 WP_URL='https://cn.wordpress.org/wordpress-4.9.4-zh_CN.tar.gz'
 
