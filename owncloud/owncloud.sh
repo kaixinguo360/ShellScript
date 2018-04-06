@@ -25,19 +25,6 @@ NEW_SITE_URL="https://raw.githubusercontent.com/kaixinguo360/ShellScript/master/
 
 # 读取用户输入
 read -p '您的网站域名: ' SERVER_NAME
-while true :
-do
-    read -s -p '请设置MySQL根密码: ' MYSQL_PASSWORD_1
-    echo ''
-    read -s -p '再输一遍: ' MYSQL_PASSWORD_2
-    echo ''
-    if [ "${MYSQL_PASSWORD_1}" = "${MYSQL_PASSWORD_2}" ]; then
-        MYSQL_PASSWORD=${MYSQL_PASSWORD_1}
-        break
-    else
-        echo -e "两次输入密码不一致!\n"
-    fi
-done
 
 ## 正式安装开始 ##
 
