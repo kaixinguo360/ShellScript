@@ -21,6 +21,7 @@ APT_KEY='https://download.owncloud.org/download/repositories/production/Ubuntu_1
 APT_SOURCE='http://download.owncloud.org/download/repositories/production/Ubuntu_16.04/'
 NGINX_CONF='/etc/nginx/sites-enabled/'
 OC_SITE_CONF='https://raw.githubusercontent.com/kaixinguo360/ShellScript/master/owncloud/nginx_site_conf'
+NEW_SITE_URL="https://raw.githubusercontent.com/kaixinguo360/ShellScript/master/other/new_site.sh"
 
 # 读取用户输入
 read -p '您的网站域名: ' SERVER_NAME
@@ -58,6 +59,28 @@ systemctl restart php7.0-fpm
 
 
 ## 配置Nginx ##
+
+# 创建新的网站
+wget -O new_site.sh ${NEW_SITE_URL}
+chmod +x new_site.sh
+
+expect << HERE
+  spawn ./new_site.sh
+  
+  expect "*本地配置文件名*"
+  send "owncloud\r"
+  
+  expect "*默认根目录*"
+  send "y\r"
+  
+  expect "*域名*"
+  send "${SERVER_NAME}\r"
+  
+  expect "*启用SSL*"
+  send "y\r"
+  
+  expect eof
+HERE
 
 # 下载配置文件
 wget -O ${NGINX_CONF}owncloud ${OC_SITE_CONF}
