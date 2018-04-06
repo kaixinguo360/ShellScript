@@ -16,13 +16,12 @@ fi
 
 # 正式安装开始
 
-# 设置变量
+# 设置静态变量
 PHP_CONF='/etc/php/7.0/fpm/php.ini'
 NGINX_CONF='/etc/nginx/sites-enabled/default'
 NGINX_CONF_URL='https://raw.githubusercontent.com/kaixinguo360/ShellScript/master/lnmp/nginx_site_config'
 
-# 读取参数
-
+# 读取用户输入
 read -p '您的网站域名: ' SERVER_NAME
 while true :
 do
