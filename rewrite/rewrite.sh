@@ -17,7 +17,7 @@ fi
 
 # 设置变量
 NGINX_CONF='/etc/nginx/sites-enabled/'
-NGINX_REWRITE_CONF_URL='https://raw.githubusercontent.com/kaixinguo360/BashScript/master/rewrite/nginx_rewrite_config'
+NGINX_REWRITE_CONF_URL='https://raw.githubusercontent.com/kaixinguo360/Shellcript/master/rewrite/nginx_rewrite_config'
 
 # 读取参数
 read -p '您的网站域名: ' SERVER_NAME
