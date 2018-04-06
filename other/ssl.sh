@@ -26,7 +26,7 @@ SSL_PATH='/etc/nginx/ssl/'
 read -p '您的网站域名: ' SERVER_NAME
 read -p '您的网站的本地配置文件名: ' SITE_NAME
 SITE_CONF=${SITE_CONF_ROOT}'${SITE_NAME}
-MY_CONF=${MY_CONF_ROOT}${SITE_NAME}
+MY_CONF=${MY_CONF_ROOT}${SITE_NAME}/
 
 
 # 正式安装开始
