@@ -63,6 +63,14 @@ mail.sh
 wget -O mail.sh https://raw.githubusercontent.com/kaixinguo360/ShellScript/master/mail/mail.sh && chmod +x mail.sh && sudo ./mail.sh
 ```
 
+owncloud.sh
+=======
+
+- Description: Auto install OwnCloud for Ubuntu 16
+```bash
+wget -O owncloud.sh https://raw.githubusercontent.com/kaixinguo360/ShellScript/master/owncloud/owncloud.sh && chmod +x owncloud.sh && sudo ./owncloud.sh
+```
+
 # Other
 
 new_site.sh
