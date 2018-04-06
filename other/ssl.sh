@@ -17,13 +17,16 @@ fi
 # 安装准备
 
 # 设置变量
-SITE_CONF='/etc/nginx/sites-enabled/default'
-MY_CONF='/etc/nginx/my/default/'
+SITE_CONF_ROOT='/etc/nginx/sites-enabled/'
+MY_CONF_ROOT='/etc/nginx/my/'
 SSL_PATH='/etc/nginx/ssl/'
 
 # 读取参数
 
 read -p '您的网站域名: ' SERVER_NAME
+read -p '您的网站的本地配置文件名: ' SITE_NAME
+SITE_CONF=${SITE_CONF_ROOT}'${SITE_NAME}
+MY_CONF=${MY_CONF_ROOT}${SITE_NAME}
 
 
 # 正式安装开始
@@ -47,8 +50,8 @@ ${ACME}  --installcert  -d  ${SERVER_NAME} \
 # 初始化Nginx-MY配置环境
 if [ ! -e ${MY_CONF} ]; then
     mkdir -p ${MY_CONF}
-    sed "s/#include snippets\/snakeoil.conf;/include my\/default\/\*.conf;/g" ${SITE_CONF} -i
-    sed "s/# Virtual Host configuration for example.com/include my\/default\/\*.ser;/g" ${SITE_CONF} -i
+    sed "s/#include snippets\/snakeoil.conf;/include my\/${SITE_NAME}\/\*.conf;/g" ${SITE_CONF} -i
+    sed "s/# Virtual Host configuration for example.com/include my\/${SITE_NAME}\/\*.ser;/g" ${SITE_CONF} -i
 fi
 
 # 修改Nginx配置,打开SSL端口
