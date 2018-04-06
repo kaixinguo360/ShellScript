@@ -170,7 +170,7 @@ ${ACME}  --installcert  -d  ${SERVER_NAME} \
         --reloadcmd  "service nginx force-reload" || exit -1
 
 # 配置Nginx
-cat > ${MY_CONF}${SITE_NAME} << HERE
+cat > ${MY_CONF}${SITE_NAME}/ssl.conf << HERE
 listen 443 ssl;
 listen \[::\]:443 ssl;
 ssl_certificate ${SSL_PATH}${SERVER_NAME}.cer;
