@@ -111,6 +111,8 @@ expect << HERE
   expect eof
 HERE
 
+rm -rf new_site.sh
+
 # 下载配置文件
 wget -O ${NGINX_CONF}owncloud ${OC_SITE_CONF}
 
