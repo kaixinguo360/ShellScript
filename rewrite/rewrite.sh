@@ -17,14 +17,26 @@ fi
 
 # 设置变量
 NGINX_CONF='/etc/nginx/sites-enabled/'
-NGINX_REWRITE_CONF_URL='https://raw.githubusercontent.com/kaixinguo360/Shellcript/master/rewrite/nginx_rewrite_config'
 
 # 读取参数
 read -p '您的网站域名: ' SERVER_NAME
 
-# 安装配置
-wget -O "${NGINX_CONF}rewrite" "${NGINX_REWRITE_CONF_URL}"
-sed "s/TMP_SERVER_NAME/${SERVER_NAME}/g" "${NGINX_CONF}rewrite" -i
+
+## 安装配置 ##
+
+# 添加配置 - rewrite
+cat > ${NGINX_CONF}rewrite << HERE
+server {
+    listen 80 default_server;
+    listen [::]:80 default_server;
+    
+    server_name  _;
+    
+    rewrite ^(.*) http://${SERVER_NAME}/\$1 permanent;
+}
+HERE
+
+# 修改配置 - default
 sed "s/ default_server//g" "${NGINX_CONF}default" -i
 
 # 重启Nginx服务
