@@ -14,7 +14,7 @@ if [ ! -z "`cat /etc/issue | grep 'Ubuntu 16'`" ];
 fi
 
 
-# 正式安装开始
+## 初始化安装参数 ##
 
 # 设置静态变量
 PHP_CONF='/etc/php/7.0/fpm/php.ini'
@@ -57,6 +57,7 @@ do
 	esac
 done
 
+## 正式安装开始 ##
 
 # 更新apt
 apt-get update
