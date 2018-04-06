@@ -47,7 +47,7 @@ do
 done
 
 if [ -n "${CREATE_USER}" ];then
-read -s -p '请输入MySQL根用户密码(!务必正确!): ' MYSQL_PW
+read -p '请输入MySQL根用户密码(!务必正确!): ' MYSQL_PW
 read -p '请设置新的MySQL用户名: ' MYSQL_USER
 while true :
 do
