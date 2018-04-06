@@ -17,7 +17,7 @@ fi
 
 # 设置静态变量
 P_CF_MASTER="/etc/postfix/master.cf"
-NEW_SITE_URL="https://raw.githubusercontent.com/kaixinguo360/BashScript/master/other/new_site.sh"
+NEW_SITE_URL="https://raw.githubusercontent.com/kaixinguo360/ShellScript/master/other/new_site.sh"
 
 
 # 交互式读取参数
