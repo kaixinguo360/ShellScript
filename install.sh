@@ -207,6 +207,8 @@ if {$is_ssl} {
     spawn ./ssl.sh
     expect "*网站域名*"
     send "$host\r"
+    expect "*本地配置文件*"
+    send "default\r"
     expect eof
     # 删除脚本
     spawn rm -f ssl.sh
