@@ -54,12 +54,10 @@ if [ ! -e ${MY_CONF} ]; then
     sed "s/# Virtual Host configuration for example.com/include my\/${SITE_NAME}\/\*.ser;/g" ${SITE_CONF} -i
 fi
 
-# 修改Nginx配置,打开SSL端口
-sed "s/#listen 443 ssl/listen 443 ssl/g" ${SITE_CONF} -i
-sed "s/#listen \[::\]:443 ssl/listen \[::\]:443 ssl/g" ${SITE_CONF} -i
-
-# 增加Nginx-MY配置文件 - ssl.conf
+# 配置Nginx
 cat > ${MY_CONF}ssl.conf << HERE
+listen 443 ssl;
+listen [::]:443 ssl;
 ssl_certificate ${SSL_PATH}${SERVER_NAME}.cer;
 ssl_certificate_key ${SSL_PATH}${SERVER_NAME}.key;
 keepalive_timeout   70;
