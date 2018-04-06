@@ -78,6 +78,10 @@ apt-get update
 # 安装OwnCloud
 apt-get install owncloud-files -y
 
+# 创建数据目录
+mkdir -p /var/owncloud/data
+chown -R www-data:www-data /var/owncloud/data
+
 # 安装PHP扩展插件
 apt-get install php-curl php-gd php-mbstring php-mcrypt php-xml php-xmlrpc php-zip php-intl -y
 systemctl restart php7.0-fpm
