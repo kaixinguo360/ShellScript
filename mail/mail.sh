@@ -350,7 +350,7 @@ expect << HERE
   send "${MAIL_NAME}\r"
   
   expect "*启用SSL*"
-  send "n\r"
+  send "y\r"
   
   expect eof
 HERE
