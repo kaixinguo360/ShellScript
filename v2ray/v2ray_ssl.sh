@@ -53,7 +53,8 @@ done
 # 初始化Nginx-MY配置环境
 if [ ! -e ${MY_CONF} ]; then
     mkdir -p ${MY_CONF}
-    sed "s/#include snippets\/snakeoil.conf;/include my\/default\/\*;/g" ${SITE_CONF} -i
+    sed "s/#include snippets\/snakeoil.conf;/include my\/default\/\*.conf;/g" ${SITE_CONF} -i
+    sed "s/# Virtual Host configuration for example.com/include my\/default\/\*.ser;/g" ${SITE_CONF} -i
 fi
 
 # 增加Nginx-MY配置文件 - v2ray.conf
