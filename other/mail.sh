@@ -362,7 +362,7 @@ mkdir tmp_rainloop
 unzip -d tmp_rainloop tmp_rainloop.zip
 cp -a tmp_rainloop/. /var/www/rainloop/
 chown -R www-data:www-data /var/www/rainloop/
-rm -rf tmp_rainloop
+rm -rf tmp_rainloop tmp_rainloop.zip
 
 echo -e "\n  ## RainLoop安装完成 ##"
 echo -e "   您可以通过 http://${MAIL_NAME}/ 访问RainLoop\n"
