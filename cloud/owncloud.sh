@@ -114,7 +114,7 @@ HERE
 rm -rf new_site.sh
 
 # 下载配置文件
-wget -O ${NGINX_CONF}owncloud ${OC_SITE_CONF}
+wget -O ${NGINX_CONF}owncloud ${SITE_CONF}
 
 # 修改配置文件
 sed -i "s/TMP_SERVER_NAME/${SERVER_NAME}/g" ${NGINX_CONF}owncloud
