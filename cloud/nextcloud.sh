@@ -112,7 +112,7 @@ HERE
 rm -rf new_site.sh
 
 # 下载配置文件
-wget -O ${NGINX_CONF}nextcloud ${OC_SITE_CONF}
+wget -O ${NGINX_CONF}nextcloud ${SITE_CONF}
 
 # 修改配置文件
 sed -i "s/TMP_SERVER_NAME/${SERVER_NAME}/g" ${NGINX_CONF}nextcloud
