@@ -129,9 +129,9 @@ if [ -n "${CREATE_USER}" ];then
 # 数据库操作
 MYSQL_SHORTCUT="mysql -u root -p${MYSQL_PW} -e"
 # 创建数据库
-${MYSQL_SHORTCUT} "CREATE DATABASE oc DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;"
-# 创建WP用户
-${MYSQL_SHORTCUT} "GRANT ALL ON oc.* TO '${MYSQL_USER}'@'localhost' IDENTIFIED BY '${MYSQL_PW}';"
+${MYSQL_SHORTCUT} "CREATE DATABASE nc DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;"
+# 创建用户
+${MYSQL_SHORTCUT} "GRANT ALL ON nc.* TO '${MYSQL_USER}'@'localhost' IDENTIFIED BY '${MYSQL_PW}';"
 # 刷新特权, 令MySQL知道最近的改变:
 ${MYSQL_SHORTCUT} "FLUSH PRIVILEGES;"
 
