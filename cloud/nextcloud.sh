@@ -79,7 +79,7 @@ mkdir -p /var/cloud/data
 chown -R www-data:www-data /var/cloud/data
 
 # 安装PHP扩展插件
-apt-get install libapache2-mod-php7.0 -y
+#apt-get install libapache2-mod-php7.0 -y
 apt-get install php7.0-gd php7.0-json php7.0-mysql php7.0-curl php7.0-mbstring -y
 apt-get install php7.0-intl php7.0-mcrypt php-imagick php7.0-xml php7.0-zip -y
 systemctl restart php7.0-fpm
