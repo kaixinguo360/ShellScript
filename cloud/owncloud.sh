@@ -20,7 +20,7 @@ fi
 APT_KEY='https://download.owncloud.org/download/repositories/production/Ubuntu_16.04/Release.key'
 APT_SOURCE='http://download.owncloud.org/download/repositories/production/Ubuntu_16.04/'
 NGINX_CONF='/etc/nginx/sites-enabled/'
-OC_SITE_CONF='https://raw.githubusercontent.com/kaixinguo360/ShellScript/master/owncloud/nginx_site_conf'
+SITE_CONF='https://raw.githubusercontent.com/kaixinguo360/ShellScript/master/cloud/nginx_site_conf'
 NEW_SITE_URL="https://raw.githubusercontent.com/kaixinguo360/ShellScript/master/other/new_site.sh"
 
 # 读取用户输入
