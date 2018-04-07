@@ -48,7 +48,7 @@ upstream php-handler {
       add_header X-Permitted-Cross-Domain-Policies none;
   
       # Path to the root of your installation
-      root /var/www/owncloud/;
+      root /var/www/SITE_NAME/;
   
       location = /robots.txt {
           allow all;
