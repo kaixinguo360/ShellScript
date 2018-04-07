@@ -68,7 +68,15 @@ owncloud.sh
 
 - Description: Auto install OwnCloud for Ubuntu 16
 ```bash
-wget -O owncloud.sh https://raw.githubusercontent.com/kaixinguo360/ShellScript/master/owncloud/owncloud.sh && chmod +x owncloud.sh && sudo ./owncloud.sh
+wget -O owncloud.sh https://raw.githubusercontent.com/kaixinguo360/ShellScript/master/cloud/owncloud.sh && chmod +x owncloud.sh && sudo ./owncloud.sh
+```
+
+nextcloud.sh
+=======
+
+- Description: Auto install NextCloud for Ubuntu 16
+```bash
+wget -O nextcloud.sh https://raw.githubusercontent.com/kaixinguo360/ShellScript/master/cloud/nextcloud.sh && chmod +x nextcloud.sh && sudo ./nextcloud.sh
 ```
 
 # Other
