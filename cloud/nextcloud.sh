@@ -116,6 +116,7 @@ wget -O ${NGINX_CONF}nextcloud ${SITE_CONF}
 
 # 修改配置文件
 sed -i "s/TMP_SERVER_NAME/${SERVER_NAME}/g" ${NGINX_CONF}nextcloud
+sed -i "s/SITE_NAME/nextcloud/g" ${NGINX_CONF}nextcloud
 
 # 重启Nginx
 service nginx restart
