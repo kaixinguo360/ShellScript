@@ -70,7 +70,7 @@ wget -O tmp_nextcloud.zip ${NC_URL}
 mkdir tmp_nextcloud
 unzip -d tmp_nextcloud tmp_nextcloud.zip
 mkdir -p /var/www/nextcloud
-cp -a tmp_nextcloud/. /var/www/nextcloud/
+cp -a tmp_nextcloud/nextcloud/. /var/www/nextcloud/
 chown -R www-data:www-data /var/www/nextcloud/
 rm -rf tmp_nextcloud tmp_nextcloud.zip
 
