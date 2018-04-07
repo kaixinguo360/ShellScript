@@ -118,6 +118,7 @@ wget -O ${NGINX_CONF}owncloud ${SITE_CONF}
 
 # 修改配置文件
 sed -i "s/TMP_SERVER_NAME/${SERVER_NAME}/g" ${NGINX_CONF}owncloud
+sed -i "s/SITE_NAME/owncloud/g" ${NGINX_CONF}owncloud
 
 # 重启Nginx
 service nginx restart
