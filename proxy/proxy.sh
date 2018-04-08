@@ -74,7 +74,7 @@ expect << HERE
   send "n\r"
   
   expect "*新的根目录*"
-  send "tmp_proxy"
+  send "tmp_proxy\r"
   
   expect "*域名*"
   send "${SERVER_NAME}\r"
