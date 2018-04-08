@@ -20,6 +20,7 @@ fi
 MY_CONF='/etc/nginx/my/'
 NGINX_CONF='/etc/nginx/sites-enabled/'
 PROXY_CONF_URL='https://raw.githubusercontent.com/kaixinguo360/ShellScript/master/proxy/nginx_proxy_config'
+NEW_SITE_URL="https://raw.githubusercontent.com/kaixinguo360/ShellScript/master/other/new_site.sh"
 
 # 读取用户输入
 read -p '您的网站域名: ' SERVER_NAME
@@ -72,7 +73,7 @@ expect << HERE
   expect "*默认根目录*"
   send "n\r"
   
-  expect "新的根目录"
+  expect "*新的根目录*"
   send "tmp_proxy"
   
   expect "*域名*"
