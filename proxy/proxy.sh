@@ -62,7 +62,7 @@ HERE
 wget -O new_site.sh ${NEW_SITE_URL}
 chmod +x new_site.sh
 
-expect << HERE2
+expect << HERE
   spawn ./new_site.sh
   
   expect "*本地配置文件名*"
@@ -81,7 +81,7 @@ expect << HERE2
   send "y\r"
   
   expect eof
-HERE2
+HERE
 
 rm -rf new_site.sh
 rm -rf /etc/nginx/my/${SITE_NAME}
@@ -92,7 +92,7 @@ wget -O ${MY_CONF}proxy/${SITE_NAME} ${PROXY_CONF_URL}
 
 # 修改配置文件
 sed -i "s/TMP_SERVER_NAME/${SERVER_NAME/g" ${MY_CONF}proxy/${SITE_NAME}
-sed -i "s/TMP_TARGET_NAME/${TARGET_NAME/g" ${MY_CONF}proxy/${SITE_NAME}
+sed -i "s/TMP_TARGET_NAME/${TARGET_NAME}/g" ${MY_CONF}proxy/${SITE_NAME}
 
 # 重启Nginx服务器
 service nginx restart
