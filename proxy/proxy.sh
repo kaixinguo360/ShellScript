@@ -53,7 +53,7 @@ done
 if [ -e ${NGINX_CONF}include ]; then
 HAS_PROXY=$(sed -n "/include my\/proxy/\*;/p" ${NGINX_CONF}include)
 fi
-if [ -n "${HAS_PROXY}" ]; then
+if [ ! -n "${HAS_PROXY}" ]; then
 mkdir -p ${MY_CONF}proxy
 cat >> ${NGINX_CONF}include << HERE
 include my/proxy/*;
