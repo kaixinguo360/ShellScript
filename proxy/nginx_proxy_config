@@ -1,4 +1,4 @@
-        proxy_cache_path /var/nginx/cache/one  levels=1:2   keys_zone=one:10m max_size=10g;
+        proxy_cache_path /var/nginx/cache/TMP_SERVER_NAME  levels=1:2   keys_zone=one:10m max_size=10g;
         proxy_cache_key "$host$request_uri";
 
         upstream google {
