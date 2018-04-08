@@ -62,7 +62,7 @@ HERE
 wget -O new_site.sh ${NEW_SITE_URL}
 chmod +x new_site.sh
 
-expect << HERE
+expect << HERE2
   spawn ./new_site.sh
   
   expect "*本地配置文件名*"
@@ -81,7 +81,7 @@ expect << HERE
   send "y\r"
   
   expect eof
-HERE
+HERE2
 
 rm -rf new_site.sh
 rm -rf /etc/nginx/my/${SITE_NAME}
