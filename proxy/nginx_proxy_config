@@ -1,0 +1,39 @@
+        proxy_cache_path /var/nginx/cache/one  levels=1:2   keys_zone=one:10m max_size=10g;
+        proxy_cache_key "$host$request_uri";
+
+        upstream google {
+                server 74.125.239.112:80 max_fails=3;
+                server 74.125.239.113:80 max_fails=3;
+                server 74.125.239.114:80 max_fails=3;
+                server 74.125.239.115:80 max_fails=3;
+                server 74.125.239.116:80 max_fails=3;
+        }
+
+        server {
+                listen 80;
+                server_name TMP_SERVER_NAME;
+                rewrite ^(.*) https://TMP_SERVER_NAME$1 permanent;
+        }
+
+        server {
+        listen 443;
+        server_name TMP_SERVER_NAME
+        ssl on;
+        ssl_certificate /usr/local/nginx/conf/server.crt;
+        ssl_certificate_key /usr/local/nginx/conf/server.key;
+        location / {
+                proxy_cache one;
+                proxy_cache_valid  200 302 1h;
+                proxy_cache_valid  404 1m;
+                proxy_redirect https://www.google.com/ /;
+                proxy_cookie_domain google.com TMP_SERVER_NAME;
+                proxy_pass http://google;
+                proxy_set_header Host "www.google.com";
+                proxy_set_header Accept-Encoding "";
+                proxy_set_header User-Agent $http_user_agent;
+                proxy_set_header Accept-Language "zh-CN";
+                proxy_set_header Cookie "PREF=ID=047808f19f6de346:U=0f62f33dd8549d11:FF=2:LD=zh-CN:NW=1:TM=1325338577:LM=1332142444:GM=1:SG=2:S=rE0SyJh2w1IQ-Maw";
+                sub_filter www.google.com TMP_SERVER_NAME ;
+                sub_filter_once off;
+                }
+        }
