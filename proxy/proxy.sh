@@ -57,6 +57,7 @@ mkdir -p ${MY_CONF}proxy
 cat >> ${NGINX_CONF}include << HERE
 include my/proxy/*;
 HERE
+fi
 
 # 运行new_site.sh
 wget -O new_site.sh ${NEW_SITE_URL}
@@ -96,5 +97,3 @@ sed -i "s/TMP_TARGET_NAME/${TARGET_NAME}/g" ${MY_CONF}proxy/${SITE_NAME}
 
 # 重启Nginx服务器
 service nginx restart
-
-
