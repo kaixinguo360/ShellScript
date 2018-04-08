@@ -79,6 +79,14 @@ nextcloud.sh
 wget -O nextcloud.sh https://raw.githubusercontent.com/kaixinguo360/ShellScript/master/cloud/nextcloud.sh && chmod +x nextcloud.sh && sudo ./nextcloud.sh
 ```
 
+proxy.sh
+=======
+
+- Description: Auto create reverse proxy use nginx for Ubuntu 16
+```bash
+wget -O proxy.sh https://raw.githubusercontent.com/kaixinguo360/ShellScript/master/proxy/proxy.sh && chmod +x proxy.sh && sudo ./proxy.sh
+```
+
 # Other
 
 new_site.sh
