@@ -91,7 +91,7 @@ rm -rf /var/www/tmp_proxy
 wget -O ${MY_CONF}proxy/${SITE_NAME} ${PROXY_CONF_URL}
 
 # 修改配置文件
-sed -i "s/TMP_SERVER_NAME/${SERVER_NAME/g" ${MY_CONF}proxy/${SITE_NAME}
+sed -i "s/TMP_SERVER_NAME/${SERVER_NAME}/g" ${MY_CONF}proxy/${SITE_NAME}
 sed -i "s/TMP_TARGET_NAME/${TARGET_NAME}/g" ${MY_CONF}proxy/${SITE_NAME}
 
 # 重启Nginx服务器
