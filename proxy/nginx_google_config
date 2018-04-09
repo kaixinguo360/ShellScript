@@ -13,9 +13,8 @@ server {
 }
 
 server {
-    listen 443;
+    listen 443 ssl;
     server_name api.kaixinguo.site;
-    #ssl on;
     ssl_certificate /etc/nginx/ssl/api.kaixinguo.site.cer;
     ssl_certificate_key /etc/nginx/ssl/api.kaixinguo.site.key;
     
