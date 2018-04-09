@@ -49,15 +49,15 @@ done
 
 while true :
 do
-	read -r -p "使用自签名证书? [Y/n] " input
+	read -r -p "使用acme.sh签名证书? [Y/n] " input
 	case $input in
 	    [yY][eE][sS]|[yY])
-	                ACEM_SSL="n"
+	                ACEM_SSL="y"
 			        break
             		;;
 
 	    [nN][oO]|[nN])
-	                ACEM_SSL="y"
+	                ACEM_SSL="n"
             		break
             		;;
 
@@ -73,11 +73,12 @@ do
 
 	case $input in
 	    [yY][eE][sS]|[yY])
-	    		ENABLE_COOKIES='1'
+	    		ENABLE_COOKIES="y"
 			break
             		;;
 
 	    [nN][oO]|[nN])
+	    		ENABLE_COOKIES="n"
             		break
             		;;
 
@@ -144,7 +145,7 @@ sed -i "s/\/etc\/nginx\/ssl\/${SERVER_NAME}.key/\/etc\/ssl\/private\/ssl-cert-sn
 fi
 
 # 如果不使用Cooikes
-if [ ! -n "${ENABLE_COOKIES}" ]; then
+if [ "${ENABLE_COOKIES}" = "n" ]; then
 sed -i "s/proxy_set_header Cookie/#proxy_set_header Cookie/g" ${MY_CONF}proxy/${SITE_NAME}
 fi
 
