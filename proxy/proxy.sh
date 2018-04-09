@@ -70,10 +70,11 @@ done
 while true :
 do
 	read -r -p "开启Cookies? [Y/n] " input
+
 	case $input in
 	    [yY][eE][sS]|[yY])
-	                ENABLE_COOKIES="1"
-			        break
+	    		ENABLE_COOKIES='1'
+			break
             		;;
 
 	    [nN][oO]|[nN])
@@ -85,6 +86,7 @@ do
 		;;
 	esac
 done
+
 # 安装正式开始
 
 # 建立MY-INCLUDE环境
