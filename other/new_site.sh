@@ -46,15 +46,22 @@ done
 read -p '新网站的域名: ' SERVER_NAME
 while true :
 do
-	read -r -p "启用SSL? [Y/n] " input
+	read -r -p "启用SSL类型(acme.sh/自签名/不使用)? [Y/s/n] " input
 
 	case $input in
 	    [yY][eE][sS]|[yY])
-	    		ENABLE_SSL='1'
+	    		SSL_TYPE='y'
+			break
+            		;;
+			
+
+	    [sS][eE][lL][fF]|[sS])
+	    		SSL_TYPE='s'
 			break
             		;;
 
 	    [nN][oO]|[nN])
+	    		SSL_TYPE='n'
             		break
             		;;
 
@@ -142,10 +149,13 @@ mkdir -p ${SITE_ROOT}
 # 重启Server
 service nginx restart
 
-
+#############
 ## 开启SSL ##
+#############
 
-if [ -n "${ENABLE_SSL}" ]; then
+## 使用acme.sh证书 ##
+
+if [ "${SSL_TYPE}" = "y" ]; then
 
 #安装 acme.sh 以自动获取SSL证书
 ACME="${HOME}/.acme.sh/acme.sh"
@@ -175,3 +185,10 @@ HERE
 # 重启Server
 service nginx restart
 fi
+
+## 使用自签名证书 ##
+
+if [ "${SSL_TYPE}" = "s" ]; then
+echo -e "自签名证书暂时不会设置..."
+fi
+
