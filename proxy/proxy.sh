@@ -47,6 +47,26 @@ do
 	esac
 done
 
+while true :
+do
+	read -r -p "使用自签名证书? [Y/n] " input
+	case $input in
+	    [yY][eE][sS]|[yY])
+	                ACEM_SSL="n"
+			        break
+            		;;
+
+	    [nN][oO]|[nN])
+	                ACEM_SSL="y"
+            		break
+            		;;
+
+	    *)
+		echo "Invalid input..."
+		;;
+	esac
+done
+
 # 安装正式开始
 
 # 建立MY-INCLUDE环境
@@ -80,12 +100,13 @@ expect << HERE
   send "${SERVER_NAME}\r"
   
   expect "*启用SSL*"
-  send "y\r"
+  send "${ACEM_SSL}\r"
   
   expect eof
 HERE
 
 rm -rf new_site.sh
+rm -rf /etc/nginx/site-enabled/${SITE_NAME}
 rm -rf /etc/nginx/my/${SITE_NAME}
 rm -rf /var/www/tmp_proxy
 
@@ -95,6 +116,12 @@ wget -O ${MY_CONF}proxy/${SITE_NAME} ${PROXY_CONF_URL}
 # 修改配置文件
 sed -i "s/TMP_SERVER_NAME/${SERVER_NAME}/g" ${MY_CONF}proxy/${SITE_NAME}
 sed -i "s/TMP_TARGET_NAME/${TARGET_NAME}/g" ${MY_CONF}proxy/${SITE_NAME}
+
+# 如果使用自签名证书
+if [ "${ACEM_SSL}" = "n" ]; then
+sed -i "s/\/etc\/nginx\/ssl\/${TARGET_NAME}.cer/\/etc\/ssl\/certs\/ssl-cert-snakeoil.pem/g" ${MY_CONF}proxy/${SITE_NAME}
+sed -i "s/\/etc\/nginx\/ssl\/${TARGET_NAME}.key/\/etc\/ssl\/private\/ssl-cert-snakeoil.key/g" ${MY_CONF}proxy/${SITE_NAME}
+fi
 
 # 重启Nginx服务器
 service nginx restart
