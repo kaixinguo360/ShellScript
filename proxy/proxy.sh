@@ -144,8 +144,8 @@ sed -i "s/\/etc\/nginx\/ssl\/${SERVER_NAME}.cer/\/etc\/ssl\/certs\/ssl-cert-snak
 sed -i "s/\/etc\/nginx\/ssl\/${SERVER_NAME}.key/\/etc\/ssl\/private\/ssl-cert-snakeoil.key/g" ${MY_CONF}proxy/${SITE_NAME}
 fi
 
-# 如果不使用Cooikes
-if [ "${ENABLE_COOKIES}" = "n" ]; then
+# 如果使用Cooikes
+if [ "${ENABLE_COOKIES}" = "y" ]; then
 sed -i "s/proxy_set_header Cookie/#proxy_set_header Cookie/g" ${MY_CONF}proxy/${SITE_NAME}
 fi
 
