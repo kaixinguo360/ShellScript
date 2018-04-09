@@ -87,6 +87,14 @@ proxy.sh
 wget -O proxy.sh https://raw.githubusercontent.com/kaixinguo360/ShellScript/master/proxy/proxy.sh && chmod +x proxy.sh && sudo ./proxy.sh
 ```
 
+proxys.sh
+=======
+
+- Description: Batch create reverse proxys use nginx for Ubuntu 16
+```bash
+wget -O proxys.sh https://raw.githubusercontent.com/kaixinguo360/ShellScript/master/proxy/proxys.sh && chmod +x proxys.sh && sudo ./proxys.sh
+```
+
 # Other
 
 new_site.sh
