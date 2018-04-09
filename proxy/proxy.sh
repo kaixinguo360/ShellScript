@@ -49,11 +49,16 @@ done
 
 while true :
 do
-	read -r -p "使用acme.sh签名证书? [Y/n] " input
+	read -r -p "使用 acme.sh/自签名/系统自带snakeoil 证书? [Y/s/n] " input
 	case $input in
 	    [yY][eE][sS]|[yY])
 	                ACEM_SSL="y"
-			        break
+			break
+            		;;
+
+	    [sS][eE][lL][fF]|[sS])
+	                ACEM_SSL="s"
+            		break
             		;;
 
 	    [nN][oO]|[nN])
@@ -144,7 +149,7 @@ cat > ${MY_CONF}proxy_subs_filter/${SITE_NAME} << HERE
 subs_filter ${TARGET_NAME} ${SERVER_NAME};
 HERE
 
-# 如果使用自签名证书
+# 如果使用系统自带snakeoil证书
 if [ "${ACEM_SSL}" = "n" ]; then
 sed -i "s/\/etc\/nginx\/ssl\/${SERVER_NAME}.cer/\/etc\/ssl\/certs\/ssl-cert-snakeoil.pem/g" ${MY_CONF}proxy/${SITE_NAME}
 sed -i "s/\/etc\/nginx\/ssl\/${SERVER_NAME}.key/\/etc\/ssl\/private\/ssl-cert-snakeoil.key/g" ${MY_CONF}proxy/${SITE_NAME}
