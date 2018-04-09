@@ -102,5 +102,8 @@ rm -rf proxy.sh
 rm -rf tmp_proxys.sh
 
 # 运行完成
+echo -e "正在重启Nginx服务器..."
+sleep 5s
 service nginx restart
-echo -e "\n运行完成\n"
+echo -e "重启Nginx服务器完成!"
+echo -e "\n全部任务完成\n"
