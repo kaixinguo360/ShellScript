@@ -108,7 +108,7 @@ HERE
 rm -rf new_site.sh
 rm -rf /etc/nginx/site-enabled/${SITE_NAME}
 rm -rf /etc/nginx/my/${SITE_NAME}
-rm -rf /var/www/tmp_proxy
+rm -rf tmp_proxy
 
 # 下载配置文件
 wget -O ${MY_CONF}proxy/${SITE_NAME} ${PROXY_CONF_URL}
