@@ -67,6 +67,24 @@ do
 	esac
 done
 
+while true :
+do
+	read -r -p "开启Cookies? [Y/n] " input
+	case $input in
+	    [yY][eE][sS]|[yY])
+	                ENABLE_COOKIES="1"
+			        break
+            		;;
+
+	    [nN][oO]|[nN])
+            		break
+            		;;
+
+	    *)
+		echo "Invalid input..."
+		;;
+	esac
+done
 # 安装正式开始
 
 # 建立MY-INCLUDE环境
@@ -121,6 +139,11 @@ sed -i "s/TMP_TARGET_NAME/${TARGET_NAME}/g" ${MY_CONF}proxy/${SITE_NAME}
 if [ "${ACEM_SSL}" = "n" ]; then
 sed -i "s/\/etc\/nginx\/ssl\/${SERVER_NAME}.cer/\/etc\/ssl\/certs\/ssl-cert-snakeoil.pem/g" ${MY_CONF}proxy/${SITE_NAME}
 sed -i "s/\/etc\/nginx\/ssl\/${SERVER_NAME}.key/\/etc\/ssl\/private\/ssl-cert-snakeoil.key/g" ${MY_CONF}proxy/${SITE_NAME}
+fi
+
+# 如果不使用Cooikes
+if [ ! -n "${ENABLE_COOKIES}" ]; then
+sed -i "s/proxy_set_header Cookie/#proxy_set_header Cookie/g" ${MY_CONF}proxy/${SITE_NAME}
 fi
 
 # 重启Nginx服务器
