@@ -138,6 +138,12 @@ wget -O ${MY_CONF}proxy/${SITE_NAME} ${PROXY_CONF_URL}
 sed -i "s/TMP_SERVER_NAME/${SERVER_NAME}/g" ${MY_CONF}proxy/${SITE_NAME}
 sed -i "s/TMP_TARGET_NAME/${TARGET_NAME}/g" ${MY_CONF}proxy/${SITE_NAME}
 
+# 添加subs_filter设置
+mkdir -p ${MY_CONF}proxy_subs_filter
+cat > ${MY_CONF}proxy_subs_filter/${SITE_NAME} << HERE
+subs_filter ${TARGET_NAME} ${SERVER_NAME};
+HERE
+
 # 如果使用自签名证书
 if [ "${ACEM_SSL}" = "n" ]; then
 sed -i "s/\/etc\/nginx\/ssl\/${SERVER_NAME}.cer/\/etc\/ssl\/certs\/ssl-cert-snakeoil.pem/g" ${MY_CONF}proxy/${SITE_NAME}
