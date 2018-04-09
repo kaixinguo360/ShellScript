@@ -1,14 +1,36 @@
+# 将http的访问强制跳转到https
 server {
         listen 80;
         server_name TMP_SERVER_NAME;
         rewrite ^(.*) https://TMP_SERVER_NAME$1 permanent;
 }
 
+# https的设置
 server {
     listen 443 ssl;
+    
     server_name TMP_SERVER_NAME;
+    
+    # SSL证书的设置
     ssl_certificate /etc/nginx/ssl/TMP_SERVER_NAME.cer;
     ssl_certificate_key /etc/nginx/ssl/TMP_SERVER_NAME.key;
+    
+    # 防止网络爬虫
+    #forbid spider
+    if ($http_user_agent ~* "qihoobot|Baiduspider|Googlebot|Googlebot-Mobile|Googlebot-Image|Mediapartners-Google|Adsbot-Google|Feedfetcher-Google|Yahoo! Slurp|Yahoo! Slurp China|YoudaoBot|Sosospider|Sogou spider|Sogou web spider|MSNBot|ia_archiver|Tomato Bot") 
+    { 
+        return 403; 
+    }
+    
+    # 禁止用其他域名或直接用IP访问，只允许指定的域名
+    #forbid illegal domain
+    if ( $host != "TMP_SERVER_NAME" ) {
+        return 403; 
+    }
+    
+    # 禁用日志记录
+    access_log  off;
+    error_log   off;
     
     location / {
         proxy_redirect off;
