@@ -1,0 +1,59 @@
+# 将http的访问强制跳转到https
+server {
+        listen 80;
+        server_name TMP_SERVER_NAME;
+        rewrite ^(.*) https://TMP_SERVER_NAME$1 permanent;
+}
+
+# https的设置
+server {
+    listen 443 ssl;
+    
+    server_name TMP_SERVER_NAME;
+    
+    # SSL证书的设置
+    ssl_certificate /etc/nginx/ssl/TMP_SERVER_NAME.cer;
+    ssl_certificate_key /etc/nginx/ssl/TMP_SERVER_NAME.key;
+    
+    # 防止网络爬虫
+    #forbid spider
+    if ($http_user_agent ~* "qihoobot|Baiduspider|Googlebot|Googlebot-Mobile|Googlebot-Image|Mediapartners-Google|Adsbot-Google|Feedfetcher-Google|Yahoo! Slurp|Yahoo! Slurp China|YoudaoBot|Sosospider|Sogou spider|Sogou web spider|MSNBot|ia_archiver|Tomato Bot") 
+    { 
+        return 403; 
+    }
+    
+    # 禁止用其他域名或直接用IP访问，只允许指定的域名
+    #forbid illegal domain
+    if ( $host != "TMP_SERVER_NAME" ) {
+        return 403; 
+    }
+    
+    # 禁用日志记录
+    access_log  off;
+    error_log   off;
+    
+    location / {
+        proxy_redirect off;
+        proxy_cookie_domain TMP_TARGET_NAME TMP_SERVER_NAME; 
+        proxy_pass https://TMP_TARGET_NAME;
+        proxy_connect_timeout 60s;
+        proxy_read_timeout 5400s;
+        proxy_send_timeout 5400s;
+    
+        proxy_set_header Host "TMP_TARGET_NAME";
+        proxy_set_header User-Agent $http_user_agent;
+        proxy_set_header Referer https://TMP_TARGET_NAME;
+        proxy_set_header Accept-Encoding "";
+        proxy_set_header X-Real-IP $remote_addr; 
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for; 
+        proxy_set_header X-Forwarded-Proto https;
+        proxy_set_header Accept-Language "zh-CN";
+        proxy_set_header Cookie "PREF=ID=047808f19f6de346:U=0f62f33dd8549d11:FF=2:LD=en-US:NW=1:TM=1325338577:LM=1332142444:GM=1:SG=2:S=rE0SyJh2W1IQ-Maw";
+    
+        subs_filter TMP_TARGET_NAME TMP_SERVER_NAME;
+        #subs_filter_types text/css text/xml text/javascript;
+    
+        sub_filter_once off; 
+    }
+}
+
