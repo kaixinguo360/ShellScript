@@ -151,3 +151,7 @@ fi
 
 # 重启Nginx服务器
 service nginx restart
+
+# 完成设置
+echo -e "\n  ## 对 ${TARGET_NAME} 的反向代理设置完成 ##"
+echo -e "   您可以通过 http://${SERVER_NAME}/ 查看设置结果\n"
