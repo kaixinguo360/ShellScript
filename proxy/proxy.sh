@@ -52,17 +52,17 @@ do
 	read -r -p "使用 acme.sh/自签名/系统自带snakeoil 证书? [Y/s/n] " input
 	case $input in
 	    [yY][eE][sS]|[yY])
-	                ACEM_SSL="y"
+	                SSL_TYPE="y"
 			break
             		;;
 
 	    [sS][eE][lL][fF]|[sS])
-	                ACEM_SSL="s"
+	                SSL_TYPE="s"
             		break
             		;;
 
 	    [nN][oO]|[nN])
-	                ACEM_SSL="n"
+	                SSL_TYPE="n"
             		break
             		;;
 
@@ -126,7 +126,7 @@ expect << HERE
   send "${SERVER_NAME}\r"
   
   expect "*启用SSL*"
-  send "${ACEM_SSL}\r"
+  send "${SSL_TYPE}\r"
   
   expect eof
 HERE
@@ -150,7 +150,7 @@ subs_filter ${TARGET_NAME} ${SERVER_NAME};
 HERE
 
 # 如果使用系统自带snakeoil证书
-if [ "${ACEM_SSL}" = "n" ]; then
+if [ "${SSL_TYPE}" = "n" ]; then
 sed -i "s/\/etc\/nginx\/ssl\/${SERVER_NAME}.cer/\/etc\/ssl\/certs\/ssl-cert-snakeoil.pem/g" ${MY_CONF}proxy/${SITE_NAME}
 sed -i "s/\/etc\/nginx\/ssl\/${SERVER_NAME}.key/\/etc\/ssl\/private\/ssl-cert-snakeoil.key/g" ${MY_CONF}proxy/${SITE_NAME}
 fi
