@@ -34,11 +34,19 @@ exit 0
 fi
 
 # 工具函数
-cat > tmp_proxys.sh << "HERE"
-#!/bin/bash
-export PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
-export RESULT=${RESULT}$1.$2
-expect << HERE2
+cat > tmp_proxys.sh <<- "HERE"
+  #!/bin/bash
+  export PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+  
+  if [ "$3" = "y" ]; then
+    IS_ACME="y"
+  elif [ "$3" = "s" ]; then
+    IS_ACME="s"
+  else
+    IS_ACME="n"
+  fi
+  
+expect <<- HERE2
     spawn ./proxy.sh
     
     expect "*您的网站域名*"
@@ -51,23 +59,48 @@ expect << HERE2
     send "y\r"
     
     expect "*acme.sh签名*"
-    send "n\r"
+    send "${IS_ACME}\r"
     
     expect "*开启Cookies*"
     send "y\r"
     
     expect eof
 HERE2
+
 HERE
 chmod +x tmp_proxys.sh
 
 # 正式开始运行
-wget -O proxy.sh ${PROXY_URL}
+wget -O proxy.sh ${PROXY_URL} -q
+echo ""
 chmod +x proxy.sh
-cat ${SOURCE_PATH} | awk '{printf "https://"$1"\t-->\thttps://"$2;cmd1="./tmp_proxys.sh "$1" "$2"> /dev/null";system(cmd1);printf "\t[ OK ]\n"};'
+cat ${SOURCE_PATH} | awk '
+    BEGIN {
+        print "目标网站域名", "        -->        ", "本地网站域名";
+        print "==================================================================";
+    }
+    {
+        printf "https://%s    -->    https://%s    ", $1, $2;
+        if ( $1!="" && $2!="") {
+                cmd="./tmp_proxys.sh " $1 " " $2 " " $3 " > /dev/null";
+                res=system(cmd);
+        } else {
+                res=1
+        }
+        if (res == 0) {
+                print "[\033[32m OK \033[0m]";
+        } else {
+                print "[\033[31m Fail \033[0m]";
+        }
+    }
+    END {
+        print "==================================================================";
+        print "总共建立了", NR, "个代理";
+    }
+'
 rm -rf proxy.sh
 rm -rf tmp_proxys.sh
 
 # 运行完成
 service nginx restart
-echo -e "\n  ## 运行完成 ##\n"
+echo -e "\n运行完成\n"
