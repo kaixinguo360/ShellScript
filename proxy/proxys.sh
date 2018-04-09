@@ -69,4 +69,5 @@ rm -rf proxy.sh
 rm -rf tmp_proxys.sh
 
 # 运行完成
+service nginx restart
 echo -e "\n  ## 运行完成 ##\n"
