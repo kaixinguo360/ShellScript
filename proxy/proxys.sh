@@ -1,5 +1,6 @@
 #!/bin/bash
-##注意! 此脚本写的巨烂...
+##注意! 此脚本写的巨烂！
+##将就着用吧...
 export PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 
 # 检查是否为Root
@@ -63,7 +64,7 @@ chmod +x tmp_proxys.sh
 # 正式开始运行
 wget -O proxy.sh ${PROXY_URL}
 chmod +x proxy.sh
-cat ${SOURCE_PATH} | awk '{print "https://"$1"\t-->\thttps://"$2;cmd1="./tmp_proxys.sh "$1" "$2"> /dev/null";system(cmd1);}'
+cat ${SOURCE_PATH} | awk '{printf "https://"$1"\t-->\thttps://"$2;cmd1="./tmp_proxys.sh "$1" "$2"> /dev/null";system(cmd1);printf "\t[ OK ]\n"};'
 rm -rf proxy.sh
 rm -rf tmp_proxys.sh
 
