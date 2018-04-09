@@ -71,9 +71,9 @@ done
 
 # 建立MY-INCLUDE环境
 if [ -e ${NGINX_CONF}include ]; then
-HAS_PROXY=$(sed -n "/include my\/proxy/\*;/p" ${NGINX_CONF}include)
+HAS_PROXY=$(sed -n "/include my\/proxy\/\*;/p" ${NGINX_CONF}include)
 fi
-if [ ! -n "${HAS_PROXY}" ]; then
+if [ "${HAS_PROXY}" = "" ]; then
 mkdir -p ${MY_CONF}proxy
 cat >> ${NGINX_CONF}include << HERE
 include my/proxy/*;
@@ -106,7 +106,7 @@ expect << HERE
 HERE
 
 rm -rf new_site.sh
-rm -rf /etc/nginx/site-enabled/${SITE_NAME}
+rm -rf /etc/nginx/sites-enabled/${SITE_NAME}
 rm -rf /etc/nginx/my/${SITE_NAME}
 rm -rf tmp_proxy
 
