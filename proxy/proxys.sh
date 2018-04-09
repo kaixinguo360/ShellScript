@@ -58,7 +58,7 @@ expect <<- HERE2
     expect "*默认本地配置*"
     send "y\r"
     
-    expect "*acme.sh签名*"
+    expect "*证书*"
     send "${IS_ACME}\r"
     
     expect "*开启Cookies*"
