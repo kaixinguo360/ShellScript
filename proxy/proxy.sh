@@ -26,7 +26,7 @@ NEW_SITE_URL="https://raw.githubusercontent.com/kaixinguo360/ShellScript/master/
 read -p '您的网站域名: ' SERVER_NAME
 read -p '您的目标网站域名: ' TARGET_NAME
 
-SITE_NAME="$SERVER_NAME"
+SITE_NAME="${TARGET_NAME}"
 while true :
 do
 	read -r -p "使用本默认本地配置文件:(${SITE_NAME})? [Y/n] " input
@@ -119,8 +119,8 @@ sed -i "s/TMP_TARGET_NAME/${TARGET_NAME}/g" ${MY_CONF}proxy/${SITE_NAME}
 
 # 如果使用自签名证书
 if [ "${ACEM_SSL}" = "n" ]; then
-sed -i "s/\/etc\/nginx\/ssl\/${TARGET_NAME}.cer/\/etc\/ssl\/certs\/ssl-cert-snakeoil.pem/g" ${MY_CONF}proxy/${SITE_NAME}
-sed -i "s/\/etc\/nginx\/ssl\/${TARGET_NAME}.key/\/etc\/ssl\/private\/ssl-cert-snakeoil.key/g" ${MY_CONF}proxy/${SITE_NAME}
+sed -i "s/\/etc\/nginx\/ssl\/${SERVER_NAME}.cer/\/etc\/ssl\/certs\/ssl-cert-snakeoil.pem/g" ${MY_CONF}proxy/${SITE_NAME}
+sed -i "s/\/etc\/nginx\/ssl\/${SERVER_NAME}.key/\/etc\/ssl\/private\/ssl-cert-snakeoil.key/g" ${MY_CONF}proxy/${SITE_NAME}
 fi
 
 # 重启Nginx服务器
