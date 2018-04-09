@@ -1,4 +1,5 @@
 #!/bin/bash
+##注意! 此脚本写的巨烂...
 export PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 
 # 检查是否为Root
@@ -32,40 +33,39 @@ exit 0
 fi
 
 # 工具函数
-create_proxy(){
-  
-  RESULT=${RESULT}目标域名: ${1}\t本地域名: ${2}\n
-  
-  expect << HERE
+cat > tmp_proxys.sh << "HERE"
+#!/bin/bash
+export PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+export RESULT=${RESULT}$1.$2
+expect << HERE2
     spawn ./proxy.sh
     
     expect "*您的网站域名*"
-    send "${2}\r"
+    send "$2\r"
     
     expect "*目标网站域名*"
-    send "${1}\r"
+    send "$1\r"
     
-    expect "*默认本地配置文件*"
-    send "$y\r"
+    expect "*默认本地配置*"
+    send "y\r"
     
     expect "*acme.sh签名*"
-    send "$n\r"
+    send "n\r"
     
     expect "*开启Cookies*"
-    send "$y\r"
+    send "y\r"
     
     expect eof
-  HERE
-  
-}
+HERE2
+HERE
+chmod +x tmp_proxys.sh
 
 # 正式开始运行
 wget -O proxy.sh ${PROXY_URL}
-cat ${SOURCE_PATH} | awk {create_proxy $1 $2}
+chmod +x proxy.sh
+cat ${SOURCE_PATH} | awk '{print "https://"$1"\t-->\thttps://"$2;cmd1="./tmp_proxys.sh "$1" "$2"> /dev/null";system(cmd1);}'
 rm -rf proxy.sh
+rm -rf tmp_proxys.sh
 
 # 运行完成
 echo -e "\n  ## 运行完成 ##\n"
-echo -e "运行结果如下:"
-echo -e "$RESULT"
-
