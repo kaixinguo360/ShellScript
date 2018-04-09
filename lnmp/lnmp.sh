@@ -23,6 +23,7 @@ NGINX_CONF_URL='https://raw.githubusercontent.com/kaixinguo360/ShellScript/maste
 
 # 读取用户输入
 read -p '您的网站域名: ' SERVER_NAME
+
 while true :
 do
     read -s -p '请设置MySQL根密码: ' MYSQL_PASSWORD_1
@@ -42,18 +43,18 @@ do
 	read -r -p "跳过MySQL安全性增强脚本? [Y/n] " input
 
 	case $input in
-	    [yY][eE][sS]|[yY])
+		[yY][eE][sS]|[yY])
 			break
-            		;;
+			;;
 
-	    [nN][oO]|[nN])
-	    		ENSURE_MYSQL='1'
-            		break
-            		;;
+		[nN][oO]|[nN])
+			ENSURE_MYSQL='1'
+			break
+			;;
 
-	    *)
-		echo "Invalid input..."
-		;;
+		*)
+			echo "Invalid input..."
+			;;
 	esac
 done
 
