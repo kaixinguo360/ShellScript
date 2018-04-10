@@ -213,7 +213,7 @@ ${MYCA} sign -n ${SERVER_NAME} -p ${Password}
 
 # 安装SSL证书
 mkdir -p ${SSL_PATH}
-${MYCA} --name  ${SERVER_NAME} \
+${MYCA} deploy --name  ${SERVER_NAME} \
         --key  ${SSL_PATH}${SERVER_NAME}.key \
         --crt  ${SSL_PATH}${SERVER_NAME}.crt || exit -1
 
