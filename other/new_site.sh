@@ -209,7 +209,7 @@ if [ ! -x ${MYCA} ]; then
 fi
 
 # 获取SSL证书
-${MYCA} sign -n ${SERVER_NAME} -p ${Password}
+${MYCA} sign -n ${SERVER_NAME}
 
 # 安装SSL证书
 mkdir -p ${SSL_PATH}
