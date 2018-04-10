@@ -24,7 +24,7 @@ upstream php-handler {
       listen 443 ssl http2;
       server_name TMP_SERVER_NAME;
   
-      ssl_certificate /etc/nginx/ssl/TMP_SERVER_NAME.cer;
+      ssl_certificate /etc/nginx/ssl/TMP_SERVER_NAME.crt;
       ssl_certificate_key /etc/nginx/ssl/TMP_SERVER_NAME.key;
 
       # Example SSL/TLS configuration. Please read into the manual of NGINX before applying these.
