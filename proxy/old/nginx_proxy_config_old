@@ -12,7 +12,7 @@ server {
     server_name TMP_SERVER_NAME;
     
     # SSL证书的设置
-    ssl_certificate /etc/nginx/ssl/TMP_SERVER_NAME.cer;
+    ssl_certificate /etc/nginx/ssl/TMP_SERVER_NAME.crt;
     ssl_certificate_key /etc/nginx/ssl/TMP_SERVER_NAME.key;
     
     # 防止网络爬虫
