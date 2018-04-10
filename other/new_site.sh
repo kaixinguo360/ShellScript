@@ -198,23 +198,24 @@ echo -e "自签名证书功能暂不稳定!!!"
 
 #安装 myca.sh 以自动获取SSL证书
 MYCA="${HOME}/.ca/myca.sh"
-CA_PW=$1
+Password=$1
+if [ "$Password" = "" ];then
+	Password="12345"
+fi
 if [ ! -x ${MYCA} ]; then
     wget -O install.sh https://raw.githubusercontent.com/kaixinguo360/MyCA/master/install.sh \
                 && chmod +x install.sh \
-		&& sudo ./install.sh ${CA_PW}
+		&& sudo ./install.sh ${Password}
 fi
 
 # 获取SSL证书
-${MYCA} --issue  -d  ${SERVER_NAME}  --nginx
-
+${MYCA} sign -n ${SERVER_NAME} -p ${Password}
 
 # 安装SSL证书
 mkdir -p ${SSL_PATH}
-${MYCA}  --installcert  -d  ${SERVER_NAME} \
-        --key-file  ${SSL_PATH}${SERVER_NAME}.key \
-        --fullchain-file  ${SSL_PATH}${SERVER_NAME}.crt \
-        --reloadcmd  "service nginx force-reload" || exit -1
+${MYCA} --name  ${SERVER_NAME} \
+        --key  ${SSL_PATH}${SERVER_NAME}.key \
+        --crt  ${SSL_PATH}${SERVER_NAME}.crt || exit -1
 
 # 配置Nginx
 cat > ${MY_CONF}${SITE_NAME}/ssl.conf << HERE
@@ -228,16 +229,4 @@ HERE
 # 重启Server
 service nginx restart
 fi
-
-
-
-
-
-
-
-
-
-
-
-
 
