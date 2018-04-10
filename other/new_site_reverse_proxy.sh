@@ -179,14 +179,14 @@ ${ACME} --issue  -d  ${SERVER_NAME}  --nginx
 mkdir -p ${SSL_PATH}
 ${ACME}  --installcert  -d  ${SERVER_NAME} \
         --key-file  ${SSL_PATH}${SERVER_NAME}.key \
-        --fullchain-file  ${SSL_PATH}${SERVER_NAME}.cer \
+        --fullchain-file  ${SSL_PATH}${SERVER_NAME}.crt \
         --reloadcmd  "service nginx force-reload" || exit -1
 
 # 配置Nginx
 cat > ${MY_CONF}${SITE_NAME}/ssl.conf << HERE
 listen 443 ssl;
 listen \[::\]:443 ssl;
-ssl_certificate ${SSL_PATH}${SERVER_NAME}.cer;
+ssl_certificate ${SSL_PATH}${SERVER_NAME}.crt;
 ssl_certificate_key ${SSL_PATH}${SERVER_NAME}.key;
 keepalive_timeout   70;
 HERE
