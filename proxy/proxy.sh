@@ -151,7 +151,7 @@ HERE
 
 # 如果使用系统自带snakeoil证书
 if [ "${SSL_TYPE}" = "n" ]; then
-sed -i "s/\/etc\/nginx\/ssl\/${SERVER_NAME}.cer/\/etc\/ssl\/certs\/ssl-cert-snakeoil.pem/g" ${MY_CONF}proxy/${SITE_NAME}
+sed -i "s/\/etc\/nginx\/ssl\/${SERVER_NAME}.crt/\/etc\/ssl\/certs\/ssl-cert-snakeoil.pem/g" ${MY_CONF}proxy/${SITE_NAME}
 sed -i "s/\/etc\/nginx\/ssl\/${SERVER_NAME}.key/\/etc\/ssl\/private\/ssl-cert-snakeoil.key/g" ${MY_CONF}proxy/${SITE_NAME}
 fi
 
