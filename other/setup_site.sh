@@ -24,9 +24,13 @@ SSL_PATH='/etc/nginx/ssl/'
 # 读取参数
 if [[ $1 = "-h" || $1 = "--help" ]];then
   echo -e "用法: $0 [-n|--name Name] [-k|--key Key Path] [-c|--crt Crt Path]"
-  echo -e "\t-n --name 主机名称"
-  echo -e "\t-k --key 私钥路径"
-  echo -e "\t-c --crt 公钥路径"
+  echo -e "\t-n --host-name 主机名称"
+  echo -e "\t-c --config-file 配置文件名"
+  echo -e "\t-r --root-path 根目录默认为/var/www/配置文件名"
+  echo -e "\t-s --ssl-type SSL类型, 缺省为不使用SSL"
+  echo -e "\t\t\t可选SSL类型:"
+  echo -e "\t\t\t\tacme 使用acme.sh创建SSL"
+  echo -e "\t\t\t\tmyca 使用myca.sh创建自签名SSL"
   exit 0
 fi
 
@@ -134,6 +138,11 @@ while true ; do
     esac
 done
 
+for arg do
+   echo "非法参数'$arg'" ;
+   exit 1
+done
+
 if [ -z "$SSL_TYPE" ];then
     SSL_TYPE='n'
     echo "不使用SSL"
@@ -153,11 +162,6 @@ if [ -z "$SITE_ROOT" ];then
     SITE_ROOT="/var/www/${SITE_NAME}"
     echo "未设置根目录,使用默认根目录(${SITE_ROOT})"
 fi
-
-for arg do
-   echo "非法参数'$arg'" ;
-   exit 1
-done
 
 fi
 
