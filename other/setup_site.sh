@@ -111,12 +111,16 @@ while true ; do
                 acme)
                     SSL_TYPE='y'
                     echo "使用acme.sh创建SSL"
+                    ;;
                 myca)
                     SSL_TYPE='s'
                     echo "使用myca.sh创建SSL"
+                    ;;
                 *)
                     echo "未知的SSL类型'$2'"
                     exit 1
+                    ;;
+            esac
             shift 2
             ;;
         --)
