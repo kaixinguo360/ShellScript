@@ -20,6 +20,7 @@ fi
 NGINX_CONF='/etc/nginx/sites-enabled/'
 MY_CONF='/etc/nginx/my/'
 SSL_PATH='/etc/nginx/ssl/'
+DEFAULT_CLIENT_CERT='~/.ca/cacert.pem'
 
 # 读取参数
 if [[ $1 = "-h" || $1 = "--help" ]];then
@@ -31,11 +32,13 @@ if [[ $1 = "-h" || $1 = "--help" ]];then
   echo -e "    -r --root-path        根目录默认为/var/www/配置文件名"
   echo -e "    -s --ssl-type         SSL类型, 缺省为不使用SSL"
   echo -e "        可选SSL类型:"
-  echo -e "            acme 使用acme.sh创建SSL"
-  echo -e "            myca 使用myca.sh创建自签名SSL"
+  echo -e "          acme 使用acme.sh创建SSL"
+  echo -e "          myca 使用myca.sh创建自签名SSL"
+  echo -e "    --ssl-clent-cert      客户端证书路径, 为"."则使用默认路径${DEFAULT_CLIENT_CERT}"
   exit 0
 fi
 
+# 判断输入方式
 if [ -z "$1" ];then
 
 # 交互式读取输入参数
@@ -90,10 +93,10 @@ done
 
 else
 
-# 读取命令行输入参数
+# 命令行读取输入参数
 TEMP=`getopt \
     -o n:c:r:s: \
-    --long host-name:,config-file:,root-path:,ssl-type, \
+    --long host-name:,config-file:,root-path:,ssl-type,ssl-client-cert, \
     -n "$0" -- "$@"`
 if [ $? != 0 ] ; then echo "Terminating..." >&2 ; exit 1 ; fi
 eval set -- "$TEMP"
@@ -129,6 +132,15 @@ while true ; do
             esac
             shift 2
             ;;
+        --ssl-client-cert)
+            if [ "$2" = "." ];then
+                CLIENT_CERT=${DEFAULT_CLIENT_CERT}
+            else
+                CLIENT_CERT=$2
+            fi
+            CLIENT_CERT=$(readlink -f ${CLIENT_CERT})
+            shift 2
+            ;;
         --)
             shift
             break
@@ -145,6 +157,10 @@ for arg do
    exit 1
 done
 
+fi
+# 输入参数读取完成
+
+# 检查输入参数合法性
 if [ -z "$SSL_TYPE" ];then
     SSL_TYPE='n'
     echo "不使用SSL"
@@ -165,7 +181,14 @@ if [ -z "$SITE_ROOT" ];then
     echo "未设置根目录,使用默认根目录(${SITE_ROOT})"
 fi
 
+if [ -n "$CLIENT_CERT" ]; then
+    if [ -e $CLIENT_CERT ];then
+        echo "使用用户证书${CLIENT_CERT}"
+    else
+        echo "指定客户端证书不存在"
+    fi
 fi
+
 
 # 新建配置文件
 cat > ${NGINX_CONF}${SITE_NAME} << HERE
@@ -247,9 +270,9 @@ service nginx restart
 
 
 
-#############
-## 开启SSL ##
-#############
+######################
+## 启用SSL服务器验证 ##
+######################
 
 
 ## 使用acme.sh证书 ##
@@ -270,19 +293,8 @@ mkdir -p ${SSL_PATH}
 ${ACME}  --installcert  -d  ${SERVER_NAME} \
         --key-file  ${SSL_PATH}${SERVER_NAME}.key \
         --fullchain-file  ${SSL_PATH}${SERVER_NAME}.crt \
-        --reloadcmd  "service nginx force-reload" || exit -1
+        --reloadcmd  "service nginx force-reload" || echo -e "\n\033[31m使用acme.sh安装SSL证书时出现错误!\033[0m" && FAIL_SSL='y'
 
-# 配置Nginx
-cat > ${MY_CONF}${SITE_NAME}/ssl.conf << HERE
-listen 443 ssl;
-listen [::]:443 ssl;
-ssl_certificate ${SSL_PATH}${SERVER_NAME}.crt;
-ssl_certificate_key ${SSL_PATH}${SERVER_NAME}.key;
-keepalive_timeout   70;
-HERE
-
-# 重启Server
-service nginx restart
 fi
 
 
@@ -311,9 +323,14 @@ ${MYCA} issue -n ${SERVER_NAME}
 mkdir -p ${SSL_PATH}
 ${MYCA} deploy --name  ${SERVER_NAME} \
         --key  ${SSL_PATH}${SERVER_NAME}.key \
-        --crt  ${SSL_PATH}${SERVER_NAME}.crt || exit -1
+        --crt  ${SSL_PATH}${SERVER_NAME}.crt || echo -e "\n\033[31m使用myca.sh安装SSL证书时出现错误!\033[0m" && FAIL_SSL='y'
 
-# 配置Nginx
+fi
+
+
+## 设置Nginx以启用安装的证书 ##
+
+if [[ ! "${SSL_TYPE}" = "n" && -z "${FAIL_SSL}" ]]; then
 cat > ${MY_CONF}${SITE_NAME}/ssl.conf << HERE
 listen 443 ssl;
 listen [::]:443 ssl;
@@ -321,8 +338,23 @@ ssl_certificate ${SSL_PATH}${SERVER_NAME}.crt;
 ssl_certificate_key ${SSL_PATH}${SERVER_NAME}.key;
 keepalive_timeout   70;
 HERE
-
-# 重启Server
-service nginx restart
 fi
+
+
+######################
+## 启用SSL客户端验证 ##
+######################
+
+if [ -n "$CLIENT_CERT" ];then
+cat > ${MY_CONF}${SITE_NAME}/ssl_client.conf << HERE
+ssl_client_certificate ${CLIENT_CERT};
+ssl_verify_client on;
+HERE
+fi
+
+
+###############
+## 重启Nginx ##
+###############
+service nginx restart
 
