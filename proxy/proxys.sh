@@ -24,7 +24,7 @@ SOURCE_PATH=$1
 
 if [ "${SOURCE_PATH}" = "" ];then
 echo -e "用法: $0 参数文件\n"
-echo -e "参数文件格式: 每行: 目标域名 本地域名\n"
+echo -e "参数文件格式: 每行: 目标域名 本地域名 [SSL类型 (Y/s/n)] [客户端验证 (Y/n)]\n"
 exit 0
 fi
 
