@@ -23,14 +23,16 @@ SSL_PATH='/etc/nginx/ssl/'
 
 # 读取参数
 if [[ $1 = "-h" || $1 = "--help" ]];then
-  echo -e "用法: $0 [-n|--name Name] [-k|--key Key Path] [-c|--crt Crt Path]"
-  echo -e "\t-n --host-name 主机名称"
-  echo -e "\t-c --config-file 配置文件名"
-  echo -e "\t-r --root-path 根目录默认为/var/www/配置文件名"
-  echo -e "\t-s --ssl-type SSL类型, 缺省为不使用SSL"
-  echo -e "\t\t\t可选SSL类型:"
-  echo -e "\t\t\t\tacme 使用acme.sh创建SSL"
-  echo -e "\t\t\t\tmyca 使用myca.sh创建自签名SSL"
+  echo -e "用法: $0"
+  echo -e "    不加任何参数进入交互式创建模式"
+  echo -e "用法: $0 [选项]"
+  echo -e "    -n --host-name    主机名称"
+  echo -e "    -c --config-file      配置文件名"
+  echo -e "    -r --root-path        根目录默认为/var/www/配置文件名"
+  echo -e "    -s --ssl-type          SSL类型, 缺省为不使用SSL"
+  echo -e "        可选SSL类型:"
+  echo -e "            acme 使用acme.sh创建SSL"
+  echo -e "            myca 使用myca.sh创建自签名SSL"
   exit 0
 fi
 
