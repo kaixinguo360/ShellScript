@@ -20,22 +20,24 @@ fi
 NGINX_CONF='/etc/nginx/sites-enabled/'
 MY_CONF='/etc/nginx/my/'
 SSL_PATH='/etc/nginx/ssl/'
-DEFAULT_CLIENT_CERT='~/.ca/cacert.pem'
+DEFAULT_CLIENT_CERT="${HOME}/.ca/cacert.pem"
 
 # 读取参数
 if [[ $1 = "-h" || $1 = "--help" ]];then
-  echo -e "用法: $0"
-  echo -e "    不加任何参数进入交互式创建模式"
-  echo -e "用法: $0 [选项]"
-  echo -e "    -n --host-name    主机名称"
-  echo -e "    -c --config-file      配置文件名"
-  echo -e "    -r --root-path        根目录默认为/var/www/配置文件名"
-  echo -e "    -s --ssl-type         SSL类型, 缺省为不使用SSL"
-  echo -e "        可选SSL类型:"
-  echo -e "          acme 使用acme.sh创建SSL"
-  echo -e "          myca 使用myca.sh创建自签名SSL"
-  echo -e "    --ssl-clent-cert      客户端证书路径, 为"."则使用默认路径${DEFAULT_CLIENT_CERT}"
-  exit 0
+    echo -e "用法: $0"
+    echo -e "  不加任何参数进入交互式创建模式"
+    echo -e "用法: $0 [选项]"
+    echo -e "  必须:"
+    echo -e "    -n --host-name     主机名称"
+    echo -e "    -c --config-file   配置文件名"
+    echo -e "  可选:"
+    echo -e "    -r --root-path     根目录, 缺省为/var/www/配置文件名"
+    echo -e "    -s --ssl-type      SSL类型, 缺省为不使用SSL"
+    echo -e "                       可选SSL类型:"
+    echo -e "                         acme 使用acme.sh创建SSL"
+    echo -e "                         myca 使用myca.sh创建自签名SSL"
+    echo -e "    --ssl-client-cert  客户端证书路径, 为"."则使用默认路径${DEFAULT_CLIENT_CERT}"
+    exit 0
 fi
 
 # 判断输入方式
@@ -96,7 +98,7 @@ else
 # 命令行读取输入参数
 TEMP=`getopt \
     -o n:c:r:s: \
-    --long host-name:,config-file:,root-path:,ssl-type,ssl-client-cert, \
+    --long host-name:,config-file:,root-path:,ssl-type:,ssl-client-cert:, \
     -n "$0" -- "$@"`
 if [ $? != 0 ] ; then echo "Terminating..." >&2 ; exit 1 ; fi
 eval set -- "$TEMP"
@@ -119,11 +121,9 @@ while true ; do
             case $2 in
                 acme)
                     SSL_TYPE='y'
-                    echo "使用acme.sh创建SSL"
                     ;;
                 myca)
                     SSL_TYPE='s'
-                    echo "使用myca.sh创建SSL"
                     ;;
                 *)
                     echo "未知的SSL类型'$2'"
@@ -163,7 +163,6 @@ fi
 # 检查输入参数合法性
 if [ -z "$SSL_TYPE" ];then
     SSL_TYPE='n'
-    echo "不使用SSL"
 fi
 
 if [ -z "$SERVER_NAME" ];then
@@ -181,11 +180,10 @@ if [ -z "$SITE_ROOT" ];then
     echo "未设置根目录,使用默认根目录(${SITE_ROOT})"
 fi
 
-if [ -n "$CLIENT_CERT" ]; then
-    if [ -e $CLIENT_CERT ];then
-        echo "使用用户证书${CLIENT_CERT}"
-    else
+if [ -n "${CLIENT_CERT}" ]; then
+    if [ ! -f $CLIENT_CERT ];then
         echo "指定客户端证书不存在"
+        exit 1
     fi
 fi
 
@@ -265,9 +263,6 @@ mkdir -p ${MY_CONF}${SITE_NAME}
 # 新建网站根文件夹
 mkdir -p ${SITE_ROOT}
 
-# 重启Server
-service nginx restart
-
 
 
 ######################
@@ -301,8 +296,6 @@ fi
 ## 使用自签名证书 ##
 
 if [ "${SSL_TYPE}" = "s" ]; then
-
-echo -e "自签名证书功能暂不稳定!!!"
 
 #安装 myca.sh 以自动获取SSL证书
 MYCA="${HOME}/.ca/myca.sh"
