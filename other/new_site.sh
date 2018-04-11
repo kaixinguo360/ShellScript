@@ -22,6 +22,23 @@ MY_CONF='/etc/nginx/my/'
 SSL_PATH='/etc/nginx/ssl/'
 
 # 读取参数
+if [[ $1 = "-h" || $1 = "--help" ]];then
+  echo -e "用法: $0"
+  echo -e "    不加任何参数进入交互式创建模式"
+  echo -e "用法: $0 [选项]"
+  echo -e "    -n --host-name    主机名称"
+  echo -e "    -c --config-file      配置文件名"
+  echo -e "    -r --root-path        根目录默认为/var/www/配置文件名"
+  echo -e "    -s --ssl-type         SSL类型, 缺省为不使用SSL"
+  echo -e "        可选SSL类型:"
+  echo -e "            acme 使用acme.sh创建SSL"
+  echo -e "            myca 使用myca.sh创建自签名SSL"
+  exit 0
+fi
+
+if [ -z "$1" ];then
+
+# 交互式读取输入参数
 read -p '新网站的本地配置文件名: ' SITE_NAME
 SITE_ROOT="/var/www/${SITE_NAME}"
 while true :
@@ -70,6 +87,85 @@ do
 		;;
 	esac
 done
+
+else
+
+# 读取命令行输入参数
+TEMP=`getopt \
+    -o n:c:r:s: \
+    --long host-name:,config-file:,root-path:,ssl-type, \
+    -n "$0" -- "$@"`
+if [ $? != 0 ] ; then echo "Terminating..." >&2 ; exit 1 ; fi
+eval set -- "$TEMP"
+
+while true ; do
+    case "$1" in
+        -n|--host-name)
+            SERVER_NAME=$2
+            shift 2
+            ;;
+        -c|--config-file)
+            SITE_NAME=$2
+            shift 2
+            ;;
+        -r|--root-path)
+            SITE_ROOT=$(readlink -f $2)
+            shift 2
+            ;;
+        -s|--ssl-type)
+            case $2 in
+                acme)
+                    SSL_TYPE='y'
+                    echo "使用acme.sh创建SSL"
+                    ;;
+                myca)
+                    SSL_TYPE='s'
+                    echo "使用myca.sh创建SSL"
+                    ;;
+                *)
+                    echo "未知的SSL类型'$2'"
+                    exit 1
+                    ;;
+            esac
+            shift 2
+            ;;
+        --)
+            shift
+            break
+            ;;
+        *)
+            echo "Internal error!"
+            exit 1
+            ;;
+    esac
+done
+
+for arg do
+   echo "非法参数'$arg'" ;
+   exit 1
+done
+
+if [ -z "$SSL_TYPE" ];then
+    SSL_TYPE='n'
+    echo "不使用SSL"
+fi
+
+if [ -z "$SERVER_NAME" ];then
+    echo "未设置服务器域名"
+    exit 1
+fi
+
+if [ -z "$SITE_NAME" ];then
+    echo "未设置配置文件名"
+    exit 1
+fi
+
+if [ -z "$SITE_ROOT" ];then
+    SITE_ROOT="/var/www/${SITE_NAME}"
+    echo "未设置根目录,使用默认根目录(${SITE_ROOT})"
+fi
+
+fi
 
 # 新建配置文件
 cat > ${NGINX_CONF}${SITE_NAME} << HERE
