@@ -147,7 +147,7 @@ sed -i "s/TMP_TARGET_NAME/${TARGET_NAME}/g" ${MY_CONF}proxy/${SITE_NAME}
 
 # 添加subs_filter设置
 mkdir -p ${MY_CONF}proxy_subs_filter
-cat > ${MY_CONF}proxy_subs_filter/${SITE_NAME} << HERE
+cat > ${MY_CONF}proxy_ext/subs_filter/${SITE_NAME} << HERE
 subs_filter ${TARGET_NAME} ${SERVER_NAME};
 HERE
 

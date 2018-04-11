@@ -18,6 +18,7 @@ fi
 
 ## 设置静态参数 ##
 PROXY_URL='https://raw.githubusercontent.com/kaixinguo360/ShellScript/master/proxy/proxy.sh'
+MY_PATH='/etc/nginx/my/'
 
 ## 读取输入参数 ##
 SOURCE_PATH=$1
@@ -80,6 +81,9 @@ HERE
 chmod +x tmp_proxys.sh
 
 # 正式开始运行
+
+rm -rf ${MY_PATH}proxy/* ${MY_PATH}proxy_ext/subs_filter/*
+
 wget -O proxy.sh ${PROXY_URL} -q
 echo ""
 chmod +x proxy.sh
