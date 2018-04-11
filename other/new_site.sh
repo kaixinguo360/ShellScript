@@ -314,7 +314,7 @@ ${MYCA} issue -n ${SERVER_NAME}
 
 # 安装SSL证书
 mkdir -p ${SSL_PATH}
-${MYCA} deploy --name  ${SERVER_NAME} \
+${MYCA} export --name  ${SERVER_NAME} \
         --key  ${SSL_PATH}${SERVER_NAME}.key \
         --crt  ${SSL_PATH}${SERVER_NAME}.crt || echo -e "\n\033[31m使用myca.sh安装SSL证书时出现错误!\033[0m" && FAIL_SSL='y'
 
