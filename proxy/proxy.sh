@@ -21,6 +21,7 @@ MY_CONF='/etc/nginx/my/'
 NGINX_CONF='/etc/nginx/sites-enabled/'
 PROXY_CONF_URL='https://raw.githubusercontent.com/kaixinguo360/ShellScript/master/proxy/nginx_proxy_config'
 NEW_SITE_URL="https://raw.githubusercontent.com/kaixinguo360/ShellScript/master/other/new_site.sh"
+DEFAULT_CLIENT_CERT="${HOME}/.ca/cacert.pem"
 
 # 读取用户输入
 read -p '您的网站域名: ' SERVER_NAME
@@ -74,6 +75,26 @@ done
 
 while true :
 do
+	read -r -p "使用客户端验证? [Y/n] " input
+	case $input in
+	    [yY][eE][sS]|[yY])
+	                SSL_CLIENT="y"
+			break
+            		;;
+
+	    [nN][oO]|[nN])
+	                SSL_CLIENT="n"
+            		break
+            		;;
+
+	    *)
+		echo "Invalid input..."
+		;;
+	esac
+done
+
+while true :
+do
 	read -r -p "开启Cookies? [Y/n] " input
 
 	case $input in
@@ -109,28 +130,9 @@ fi
 # 运行new_site.sh
 wget -O new_site.sh ${NEW_SITE_URL}
 chmod +x new_site.sh
+./new_site.sh -n ${SERVER_NAME} -c ${SITE_NAME} -r ./tmp_proxy -s ${SSL_TYPE}
 
-expect << HERE
-  spawn ./new_site.sh
-  
-  expect "*本地配置文件名*"
-  send "${SITE_NAME}\r"
-  
-  expect "*默认根目录*"
-  send "n\r"
-  
-  expect "*新的根目录*"
-  send "tmp_proxy\r"
-  
-  expect "*域名*"
-  send "${SERVER_NAME}\r"
-  
-  expect "*启用SSL*"
-  send "${SSL_TYPE}\r"
-  
-  expect eof
-HERE
-
+# 删除无用临时文件
 rm -rf new_site.sh
 rm -rf /etc/nginx/sites-enabled/${SITE_NAME}
 rm -rf /etc/nginx/my/${SITE_NAME}
@@ -153,6 +155,13 @@ HERE
 if [ "${SSL_TYPE}" = "n" ]; then
 sed -i "s/\/etc\/nginx\/ssl\/${SERVER_NAME}.crt/\/etc\/ssl\/certs\/ssl-cert-snakeoil.pem/g" ${MY_CONF}proxy/${SITE_NAME}
 sed -i "s/\/etc\/nginx\/ssl\/${SERVER_NAME}.key/\/etc\/ssl\/private\/ssl-cert-snakeoil.key/g" ${MY_CONF}proxy/${SITE_NAME}
+fi
+
+# 如果使用客户端证书
+if [ "${SSL_CLIENT}" = "y" ]; then
+sed -i "s#TMP_CLIENT_CERT_PATH#${DEFAULT_CLIENT_CERT}#g" ${MY_CONF}proxy/${SITE_NAME}
+sed -i "s/#ssl_client_certificate/ssl_client_certificate/g" ${MY_CONF}proxy/${SITE_NAME}
+sed -i "s/#ssl_verify_client/ssl_verify_client/g" ${MY_CONF}proxy/${SITE_NAME}
 fi
 
 # 如果开启Cooikes
