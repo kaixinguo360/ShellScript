@@ -30,7 +30,7 @@ if [[ $1 = "-h" || $1 = "--help" ]];then
   exit 0
 fi
 
-if [ $1 = "" ];then
+if [ -z "$1" ];then
 
 # 交互式读取输入参数
 read -p '新网站的本地配置文件名: ' SITE_NAME
