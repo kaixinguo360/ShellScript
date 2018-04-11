@@ -46,6 +46,12 @@ cat > tmp_proxys.sh <<- "HERE"
     IS_ACME="n"
   fi
   
+  if [ "$4" = "y" ]; then
+    IS_CLIENT="y"
+  else
+    IS_CLIENT="n"
+  fi
+  
 expect <<- HERE2
     spawn ./proxy.sh
     
@@ -60,6 +66,9 @@ expect <<- HERE2
     
     expect "*证书*"
     send "${IS_ACME}\r"
+    
+    expect "*客户端验证*"
+    send "${IS_CLIENT}\r"
     
     expect "*开启Cookies*"
     send "y\r"
@@ -82,7 +91,7 @@ cat ${SOURCE_PATH} | awk '
     {
         printf "https://%s    -->    https://%s    ", $1, $2;
         if ( $1!="" && $2!="") {
-                cmd="./tmp_proxys.sh " $1 " " $2 " " $3 " > /dev/null";
+                cmd="./tmp_proxys.sh " $1 " " $2 " " $3 " " $4 " > /dev/null";
                 res=system(cmd);
         } else {
                 res=1
