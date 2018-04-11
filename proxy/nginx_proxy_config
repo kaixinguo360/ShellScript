@@ -11,9 +11,13 @@ server {
     
     server_name TMP_SERVER_NAME;
     
-    # SSL证书的设置
+    # 服务器SSL设置
     ssl_certificate /etc/nginx/ssl/TMP_SERVER_NAME.crt;
     ssl_certificate_key /etc/nginx/ssl/TMP_SERVER_NAME.key;
+    
+    # 客户端SSL设置
+    #ssl_client_certificate TMP_CLIENT_CERT_PATH;
+    #ssl_verify_client on;
     
     # 防止网络爬虫
     #forbid spider
