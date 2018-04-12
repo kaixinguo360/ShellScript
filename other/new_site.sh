@@ -38,6 +38,7 @@ if [[ $1 = "-h" || $1 = "--help" ]];then
     echo -e "                         s|m|myca     使用myca.sh创建自签名SSL"
     echo -e "                         n|null|none  不使用SSL"
     echo -e "    --ssl-client-cert  客户端证书路径, 为"."则使用默认路径${DEFAULT_CLIENT_CERT}"
+    echo -e "    --no-restart         不重启Nginx服务器"
     exit 0
 fi
 
@@ -99,7 +100,7 @@ else
 # 命令行读取输入参数
 TEMP=`getopt \
     -o n:c:r:s: \
-    --long host-name:,config-file:,root-path:,ssl-type:,ssl-client-cert:, \
+    --long host-name:,config-file:,root-path:,ssl-type:,ssl-client-cert:,no-restart, \
     -n "$0" -- "$@"`
 if [ $? != 0 ] ; then echo "Terminating..." >&2 ; exit 1 ; fi
 eval set -- "$TEMP"
@@ -144,6 +145,11 @@ while true ; do
             fi
             CLIENT_CERT=$(readlink -f ${CLIENT_CERT})
             shift 2
+            ;;
+        --no-restart)
+            NO_RESTART='y'
+            shift
+            break
             ;;
         --)
             shift
@@ -353,5 +359,7 @@ fi
 ###############
 ## 重启Nginx ##
 ###############
-service nginx restart
+if [ ! "$NO_RESTART" = 'y' ];then
+    service nginx restart
+fi
 

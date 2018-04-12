@@ -130,7 +130,7 @@ fi
 # 运行new_site.sh
 wget -O new_site.sh ${NEW_SITE_URL}
 chmod +x new_site.sh
-./new_site.sh -n ${SERVER_NAME} -c ${SITE_NAME} -r ./tmp_proxy -s ${SSL_TYPE}
+./new_site.sh -n ${SERVER_NAME} -c ${SITE_NAME} -r ./tmp_proxy -s ${SSL_TYPE} --no-restart
 
 # 删除无用临时文件
 rm -rf new_site.sh
