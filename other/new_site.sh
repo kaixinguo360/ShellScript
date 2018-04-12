@@ -149,7 +149,6 @@ while true ; do
         --no-restart)
             NO_RESTART='y'
             shift
-            break
             ;;
         --)
             shift
