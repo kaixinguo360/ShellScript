@@ -139,6 +139,7 @@ rm -rf /etc/nginx/my/${SITE_NAME}
 rm -rf tmp_proxy
 
 # 下载配置文件
+mkdir -p ${MY_CONF}proxy > /dev/null
 wget -O ${MY_CONF}proxy/${SITE_NAME} ${PROXY_CONF_URL}
 
 # 修改配置文件
