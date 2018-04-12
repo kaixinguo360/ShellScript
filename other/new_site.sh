@@ -34,8 +34,9 @@ if [[ $1 = "-h" || $1 = "--help" ]];then
     echo -e "    -r --root-path     根目录, 缺省为/var/www/配置文件名"
     echo -e "    -s --ssl-type      SSL类型, 缺省为不使用SSL"
     echo -e "                       可选SSL类型:"
-    echo -e "                         acme 使用acme.sh创建SSL"
-    echo -e "                         myca 使用myca.sh创建自签名SSL"
+    echo -e "                         y|a|acme     使用acme.sh创建SSL"
+    echo -e "                         s|m|myca     使用myca.sh创建自签名SSL"
+    echo -e "                         n|null|none  不使用SSL"
     echo -e "    --ssl-client-cert  客户端证书路径, 为"."则使用默认路径${DEFAULT_CLIENT_CERT}"
     exit 0
 fi
@@ -119,11 +120,14 @@ while true ; do
             ;;
         -s|--ssl-type)
             case $2 in
-                acme)
+                y|a|acme)
                     SSL_TYPE='y'
                     ;;
-                myca)
+                s|m|myca)
                     SSL_TYPE='s'
+                    ;;
+                n|null|none)
+                    SSL_TYPE='n'
                     ;;
                 *)
                     echo "未知的SSL类型'$2'"
