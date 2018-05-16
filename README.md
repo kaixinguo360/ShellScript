@@ -67,6 +67,7 @@ owncloud.sh
 =======
 
 - Description: Auto install OwnCloud for Ubuntu 16
+- Default database's name is oc
 ```bash
 wget -O owncloud.sh https://raw.githubusercontent.com/kaixinguo360/ShellScript/master/cloud/owncloud.sh && chmod +x owncloud.sh && sudo ./owncloud.sh
 ```
@@ -75,6 +76,7 @@ nextcloud.sh
 =======
 
 - Description: Auto install NextCloud for Ubuntu 16
+- Default database's name is nc
 ```bash
 wget -O nextcloud.sh https://raw.githubusercontent.com/kaixinguo360/ShellScript/master/cloud/nextcloud.sh && chmod +x nextcloud.sh && sudo ./nextcloud.sh
 ```
