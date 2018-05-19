@@ -37,5 +37,8 @@ sudo apt-get install unixodbc-dev
 # 安装php插件
 pecl install sqlsrv
 pecl install pdo_sqlsrv
-sudo bash -c 'echo extension=pdo_sqlsrv.so >> `php --ini | grep "Scan for additional .ini files" | sed -e "s|.*:\s*||"`/30-pdo_sqlsrv.ini'
-sudo bash -c 'echo extension=sqlsrv.so >> `php --ini | grep "Scan for additional .ini files" | sed -e "s|.*:\s*||"`/20-sqlsrv.ini'
+echo extension=pdo_sqlsrv.so >> /etc/php/7.0/fpm/conf.d/30-pdo_sqlsrv.ini
+echo extension=sqlsrv.so >> /etc/php/7.0/fpm/conf.d/20-sqlsrv.ini
+
+# 重启php
+service php7.0-fpm restart
