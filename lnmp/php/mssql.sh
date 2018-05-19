@@ -16,7 +16,7 @@ fi
 ## 初始化安装参数 ##
 
 # 设置静态变量
-PHP_CONF='/etc/php/7.0/fpm/php.ini'
+PHP_PATH='/etc/php/7.0/fpm'
 
 ## 正式安装开始 ##
 apt-get update
@@ -28,17 +28,17 @@ apt install -y php7.0 php7.0-dev php7.0-xml php-pear
 curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add 
 curl https://packages.microsoft.com/config/ubuntu/16.04/prod.list > /etc/apt/sources.list.d/mssql-release.list
 apt-get update
-sudo ACCEPT_EULA=Y apt-get install msodbcsql17
-sudo ACCEPT_EULA=Y apt-get install mssql-tools
+ACCEPT_EULA=Y apt-get install msodbcsql17
+ACCEPT_EULA=Y apt-get install mssql-tools
 echo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bashrc
 source ~/.bashrc
-sudo apt-get install unixodbc-dev
+sudo apt-get -y install unixodbc-dev
 
 # 安装php插件
 pecl install sqlsrv
 pecl install pdo_sqlsrv
-echo extension=pdo_sqlsrv.so >> /etc/php/7.0/fpm/conf.d/30-pdo_sqlsrv.ini
-echo extension=sqlsrv.so >> /etc/php/7.0/fpm/conf.d/20-sqlsrv.ini
+echo extension=pdo_sqlsrv.so >> ${PHP_PATH}/conf.d/30-pdo_sqlsrv.ini
+echo extension=sqlsrv.so >> ${PHP_PATH}/conf.d/20-sqlsrv.ini
 
 # 重启php
 service php7.0-fpm restart
