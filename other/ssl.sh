@@ -63,6 +63,18 @@ ssl_certificate_key ${SSL_PATH}${SERVER_NAME}.key;
 keepalive_timeout   70;
 HERE
 
+# 重定向HTTP请求为HTTPS
+sed "s/listen 80;/#listen 80;/g" ${SITE_CONF} -i
+sed "s/listen [::]:80;/#listen [::]:80;/g" ${SITE_CONF} -i
+cat > ${MY_CONF}ssl.ser < HERE
+server {  
+    listen 80;
+    listen [::]:80;
+    server_name ${SERVER_NAME};
+    return 301 https://$server_name$request_uri;
+}
+HERE
+
 # 重启Nginx
 service nginx force-reload
 
