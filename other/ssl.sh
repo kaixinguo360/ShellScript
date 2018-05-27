@@ -65,15 +65,15 @@ HERE
 
 # 重定向HTTP请求为HTTPS
 sed "s/listen 80;/#listen 80;/g" ${SITE_CONF} -i
-sed "s/listen [::]:80;/#listen [::]:80;/g" ${SITE_CONF} -i
-cat > ${MY_CONF}ssl.ser << HERE
+sed "s/listen \[::\]:80;/#listen \[::\]:80;/g" ${SITE_CONF} -i
+cat > ${MY_CONF}ssl.ser << HERE1
 server {  
     listen 80;
     listen [::]:80;
     server_name ${SERVER_NAME};
     return 301 https://$server_name$request_uri;
 }
-HERE
+HERE1
 
 # 重启Nginx
 service nginx force-reload
