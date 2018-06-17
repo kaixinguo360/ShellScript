@@ -65,7 +65,7 @@ do
     fi
 done
 
-GITEA_ROOT="/home/${GIT_USER}/gitea/"
+GITEA_ROOT="/home/${GIT_USER}/.gitea/"
 
 
 
@@ -77,10 +77,9 @@ GITEA_ROOT="/home/${GIT_USER}/gitea/"
 ############
 
 # 如果指定用户不存在, 则创建此用户
-mkdir -p /home/${GIT_USER}/gitea-repositories
 HAS_GIT_USER=`cat /etc/passwd|grep -v nologin|grep -v halt|grep -v shutdown|awk -F":" '{ print $1 }' | grep ${GIT_USER}`
 if [ ! -n "${HAS_GIT_USER}" ];then
-    useradd -m -d /home/${GIT_USER}/gitea-repositories -s /usr/bin/git-shell ${GIT_USER}
+    useradd -m -d /home/${GIT_USER} -s /usr/bin/git-shell ${GIT_USER}
     echo $GIT_USER:$GIT_PW|chpasswd
     if [ $? -eq 0 ]; then
         echo "User '$GIT_USER' has been added to system!"
@@ -88,7 +87,6 @@ if [ ! -n "${HAS_GIT_USER}" ];then
         echo "Failed to add a user '$GIT_USER' !"
     fi
 fi
-chown $GIT_USER:$GIT_USER -R /home/${GIT_USER}
 
 
 ##############
@@ -107,14 +105,14 @@ chown git:git -R ${GITEA_ROOT}
 
 # 创建init.d配置
 wget $GIT_INIT_URL -O /etc/init.d/gitea -q
-sed "s#/home/git/gitea#/home/${GIT_USER}/gitea#g" /etc/init.d/gitea -i
+sed "s#/home/git/.gitea#/home/${GIT_USER}/.gitea#g" /etc/init.d/gitea -i
 sed "s#User=git#User=${GIT_USER}#g" /etc/init.d/gitea -i
 sed "s#Group=git#Group=${GIT_USER}#g" /etc/init.d/gitea -i
 chmod +x /etc/init.d/gitea
 
 # 创建systemd配置
 wget $GIT_SYSTEMD_URL -O /lib/systemd/system/gitea.service -q
-sed "s#WORKINGDIR=/home/git/gitea#WORKINGDIR=/home/${GIT_USER}/gitea#g" /etc/init.d/gitea -i
+sed "s#WORKINGDIR=/home/git/.gitea#WORKINGDIR=/home/${GIT_USER}/.gitea#g" /etc/init.d/gitea -i
 sed "s#USER=git#USER=${GIT_USER}#g" /etc/init.d/gitea -i
 chmod +x /lib/systemd/system/gitea.service
 
