@@ -128,6 +128,7 @@ chmod +x new_site.sh
 
 # 删除无用临时文件
 rm -rf new_site.sh
+em -rf /etc/nginx/sites-enabled/git
 rm -rf tmp_git
 
 # 写入新的配置文件
