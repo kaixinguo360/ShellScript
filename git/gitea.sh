@@ -18,7 +18,7 @@ fi
 # 设置静态变量
 NEW_SITE_URL='https://raw.githubusercontent.com/kaixinguo360/ShellScript/master/other/new_site.sh'
 GITEA_URL='https://dl.gitea.io/gitea/1.4.2/gitea-1.4.2-linux-amd64'
-GIT_INIT_UR='https://raw.githubusercontent.com/kaixinguo360/ShellScript/master/git/init/gitea'
+GIT_INIT_URL='https://raw.githubusercontent.com/kaixinguo360/ShellScript/master/git/init/gitea'
 GIT_SYSTEMD_URL='https://raw.githubusercontent.com/kaixinguo360/ShellScript/master/git/systemd/gitea.service'
 NGINX_CONF='/etc/nginx/sites-enabled/'
 
@@ -65,7 +65,7 @@ do
     fi
 done
 
-GITEA_ROOT='/home/${GIT_USER}/gitea/'
+GITEA_ROOT="/home/${GIT_USER}/gitea/"
 
 
 
@@ -111,7 +111,7 @@ sed "s#Group=git#Group=${GIT_USER}#g" /etc/init.d/gitea -i
 chmod +x /etc/init.d/gitea
 
 # 创建systemd配置
-wget $GIT_SYSTEMD_URL -O /lib/systems/system/gitea.service
+wget $GIT_SYSTEMD_URL -O /lib/systemd/system/gitea.service
 sed "s#WORKINGDIR=/home/git/gitea#WORKINGDIR=/home/${GIT_USER}/gitea#g" /etc/init.d/gitea -i
 sed "s#USER=git#USER=${GIT_USER}#g" /etc/init.d/gitea -i
 chmod +x /lib/systems/system/gitea.service
