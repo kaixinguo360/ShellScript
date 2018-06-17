@@ -115,6 +115,7 @@ wget $GIT_SYSTEMD_URL -O /lib/systemd/system/gitea.service -q
 sed "s#WORKINGDIR=/home/git/gitea#WORKINGDIR=/home/${GIT_USER}/gitea#g" /etc/init.d/gitea -i
 sed "s#USER=git#USER=${GIT_USER}#g" /etc/init.d/gitea -i
 chmod +x /lib/systemd/system/gitea.service
+systemctl daemon-reload
 
 
 ##############
@@ -163,8 +164,8 @@ include my/git/*.ser;
 HERE
 
 if [[ "${SSL_TYPE}" != "n" ]]; then
-sed "s/listen 80/#listen 80/g" ${SITE_CONF} -i
-sed "s/listen \[::\]:80/#listen \[::\]:80/g" ${SITE_CONF} -i
+sed "s/listen 80/#listen 80/g" /etc/nginx/sites-enabled/git -i
+sed "s/listen \[::\]:80/#listen \[::\]:80/g" /etc/nginx/sites-enabled/git -i
 fi
 
 # 重启Nginx
