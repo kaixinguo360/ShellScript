@@ -332,13 +332,25 @@ fi
 
 ## 设置Nginx以启用安装的证书 ##
 
-if [[ ! "${SSL_TYPE}" = "n" && -z "${FAIL_SSL}" ]]; then
+if [[ "${SSL_TYPE}" != "n" && -z "${FAIL_SSL}" ]]; then
 cat > ${MY_CONF}${SITE_NAME}/ssl.conf << HERE
 listen 443 ssl;
 listen [::]:443 ssl;
 ssl_certificate ${SSL_PATH}${SERVER_NAME}.crt;
 ssl_certificate_key ${SSL_PATH}${SERVER_NAME}.key;
 keepalive_timeout   70;
+HERE
+
+# 重定向HTTP请求为HTTPS
+sed "s/listen 80/#listen 80/g" ${NGINX_CONF}${SITE_NAME} -i
+sed "s/listen \[::\]:80/#listen \[::\]:80/g" ${NGINX_CONF}${SITE_NAME} -i
+cat > ${MY_CONF}${SITE_NAME}/ssl.ser << HERE
+server {  
+    listen 80;
+    listen [::]:80;
+    server_name ${SERVER_NAME};
+    return 301 https://\$server_name\$request_uri;
+}
 HERE
 fi
 
