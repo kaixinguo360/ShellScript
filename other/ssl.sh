@@ -64,8 +64,8 @@ keepalive_timeout   70;
 HERE
 
 # 重定向HTTP请求为HTTPS
-sed "s/ listen 80;/ #listen 80;/g" ${SITE_CONF} -i
-sed "s/ listen \[::\]:80;/ #listen \[::\]:80;/g" ${SITE_CONF} -i
+sed "s/listen 80/#listen 80/g" ${SITE_CONF} -i
+sed "s/listen \[::\]:80/#listen \[::\]:80/g" ${SITE_CONF} -i
 cat > ${MY_CONF}ssl.ser << HERE
 server {  
     listen 80;
