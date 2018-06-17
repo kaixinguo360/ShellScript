@@ -77,6 +77,7 @@ GITEA_ROOT="/home/${GIT_USER}/gitea/"
 ############
 
 # 如果指定用户不存在, 则创建此用户
+mkdir -p /home/${GIT_USER}/gitea-gitea-repositories
 HAS_GIT_USER=`cat /etc/passwd|grep -v nologin|grep -v halt|grep -v shutdown|awk -F":" '{ print $1 }' | grep ${GIT_USER}`
 if [ ! -n "${HAS_GIT_USER}" ];then
     useradd -m -d /home/${GIT_USER}/gitea-gitea-repositories -s /usr/bin/git-shell ${GIT_USER}
@@ -87,6 +88,7 @@ if [ ! -n "${HAS_GIT_USER}" ];then
         echo "Failed to add a user '$GIT_USER' !"
     fi
 fi
+chown $GIT_USER:$GIT_USER -R /home/${GIT_USER}
 
 
 ##############
