@@ -97,21 +97,21 @@ fi
 mkdir -p ${GITEA_ROOT}
 
 # 下载安装Gitea
-wget -O ${GITEA_ROOT}gitea ${GITEA_URL}
+wget -O ${GITEA_ROOT}gitea ${GITEA_URL} -q
 chmod +x ${GITEA_ROOT}gitea
 
 # 修改文件所有权
 chown git:git -R ${GITEA_ROOT}
 
 # 创建init.d配置
-wget $GIT_INIT_URL -O /etc/init.d/gitea
+wget $GIT_INIT_URL -O /etc/init.d/gitea -q
 sed "s#/home/git/gitea#/home/${GIT_USER}/gitea#g" /etc/init.d/gitea -i
 sed "s#User=git#User=${GIT_USER}#g" /etc/init.d/gitea -i
 sed "s#Group=git#Group=${GIT_USER}#g" /etc/init.d/gitea -i
 chmod +x /etc/init.d/gitea
 
 # 创建systemd配置
-wget $GIT_SYSTEMD_URL -O /lib/systemd/system/gitea.service
+wget $GIT_SYSTEMD_URL -O /lib/systemd/system/gitea.service -q
 sed "s#WORKINGDIR=/home/git/gitea#WORKINGDIR=/home/${GIT_USER}/gitea#g" /etc/init.d/gitea -i
 sed "s#USER=git#USER=${GIT_USER}#g" /etc/init.d/gitea -i
 chmod +x /lib/systemd/system/gitea.service
@@ -122,7 +122,7 @@ chmod +x /lib/systemd/system/gitea.service
 ##############
 
 # 运行new_site.sh
-wget -O new_site.sh ${NEW_SITE_URL}
+wget -O new_site.sh ${NEW_SITE_URL} -q
 chmod +x new_site.sh
 ./new_site.sh -n ${SERVER_NAME} -c git -r ./tmp_git -s ${SSL_TYPE} --no-restart
 
