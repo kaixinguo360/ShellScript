@@ -80,7 +80,7 @@ GITEA_ROOT="/home/${GIT_USER}/gitea/"
 mkdir -p /home/${GIT_USER}/gitea-gitea-repositories
 HAS_GIT_USER=`cat /etc/passwd|grep -v nologin|grep -v halt|grep -v shutdown|awk -F":" '{ print $1 }' | grep ${GIT_USER}`
 if [ ! -n "${HAS_GIT_USER}" ];then
-    useradd -m -d /home/${GIT_USER}/gitea-gitea-repositories -s /usr/bin/git-shell ${GIT_USER}
+    useradd -m -d /home/${GIT_USER}/gitea-repositories -s /usr/bin/git-shell ${GIT_USER}
     echo $GIT_USER:$GIT_PW|chpasswd
     if [ $? -eq 0 ]; then
         echo "User '$GIT_USER' has been added to system!"
@@ -117,7 +117,13 @@ wget $GIT_SYSTEMD_URL -O /lib/systemd/system/gitea.service -q
 sed "s#WORKINGDIR=/home/git/gitea#WORKINGDIR=/home/${GIT_USER}/gitea#g" /etc/init.d/gitea -i
 sed "s#USER=git#USER=${GIT_USER}#g" /etc/init.d/gitea -i
 chmod +x /lib/systemd/system/gitea.service
+
+# 更新systemd并设置开机启动
 systemctl daemon-reload
+systemctl enable gitea.service
+
+# 启动Gitea服务
+service gitea start
 
 
 ##############
