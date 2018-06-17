@@ -79,7 +79,8 @@ GITEA_ROOT="/home/${GIT_USER}/.gitea/"
 # 如果指定用户不存在, 则创建此用户
 HAS_GIT_USER=`cat /etc/passwd|grep -v nologin|grep -v halt|grep -v shutdown|awk -F":" '{ print $1 }' | grep ${GIT_USER}`
 if [ ! -n "${HAS_GIT_USER}" ];then
-    useradd -m -d /home/${GIT_USER} -s /usr/bin/git-shell ${GIT_USER}
+    # useradd -m -d /home/${GIT_USER} -s /usr/bin/git-shell ${GIT_USER} 使用Gitea无需禁用ssh登陆, Gitea会自动禁止ssh私钥登陆
+    useradd -m -d /home/${GIT_USER} ${GIT_USER}
     echo $GIT_USER:$GIT_PW|chpasswd
     if [ $? -eq 0 ]; then
         echo "User '$GIT_USER' has been added to system!"
