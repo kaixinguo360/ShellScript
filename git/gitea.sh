@@ -16,6 +16,7 @@ fi
 ## 初始化安装参数 ##
 
 # 设置静态变量
+NEW_SITE_URL='https://raw.githubusercontent.com/kaixinguo360/ShellScript/master/other/new_site.sh'
 GITEA_URL='https://dl.gitea.io/gitea/1.4.2/gitea-1.4.2-linux-amd64'
 GIT_INIT_UR='https://raw.githubusercontent.com/kaixinguo360/ShellScript/master/git/init/gitea'
 GIT_SYSTEMD_URL='https://raw.githubusercontent.com/kaixinguo360/ShellScript/master/git/systemd/gitea.service'
@@ -26,29 +27,33 @@ read -p '您的网站域名: ' SERVER_NAME
 
 while true :
 do
-    read -r -p "创建新的Git用户? [Y/n] " input
+	read -r -p "使用 acme.sh/自签名/系统自带snakeoil 证书? [Y/s/n] " input
+	case $input in
+	    [yY][eE][sS]|[yY])
+	                SSL_TYPE="y"
+			break
+            		;;
 
-    case $input in
-        [yY][eE][sS]|[yY])
-            CREATE_USER='1'
-            break
-            ;;
+	    [sS][eE][lL][fF]|[sS])
+	                SSL_TYPE="s"
+            		break
+            		;;
 
 	    [nN][oO]|[nN])
-            break
-            ;;
+	                SSL_TYPE="n"
+            		break
+            		;;
 
-        *)
-        echo "Invalid input..."
-        ;;
-    esac
+	    *)
+		echo "Invalid input..."
+		;;
+	esac
 done
 
-if [ -n "${CREATE_USER}" ];then
-read -p '请设置新的用户名: ' GIT_USER
+read -p '请输入要使用的用户名(如果不存在则自动创建): ' GIT_USER
 while true :
 do
-    read -s -p "请设置新用户 ${GIT_USER} 的密码: " GIT_PASSWORD_1
+    read -s -p "请输入用户 ${GIT_USER} 的密码: " GIT_PASSWORD_1
     echo ''
     read -s -p '再输一遍: ' GIT_PASSWORD_2
     echo ''
@@ -59,14 +64,19 @@ do
         echo -e "两次输入密码不一致!\n"
     fi
 done
-fi
 
-GITEA_ROOT='/home/${GIT_USER}/'
+GITEA_ROOT='/home/${GIT_USER}/gitea/'
+
 
 
 ## 正式安装开始 ##
 
-# 新建git用户
+
+############
+# 用户 配置 #
+############
+
+# 如果指定用户不存在, 则创建此用户
 HAS_GIT_USER=`cat /etc/passwd|grep -v nologin|grep -v halt|grep -v shutdown|awk -F":" '{ print $1 }' | grep ${GIT_USER}`
 if [ ! -n "${HAS_GIT_USER}" ];then
     useradd -m -d /home/${GIT_USER}/gitea-gitea-repositories -s /usr/bin/git-shell ${GIT_USER}
@@ -78,15 +88,50 @@ if [ ! -n "${HAS_GIT_USER}" ];then
     fi
 fi
 
-# 创建数据目录
-mkdir -p ${GITEA_ROOT}gitea
+
+##############
+# Gitea 配置 #
+##############
+
+# 创建Gitea根目录
+mkdir -p ${GITEA_ROOT}
 
 # 下载安装Gitea
-wget -O ${GITEA_ROOT}gitea/gitea ${GITEA_URL}
-chmod +x ${GITEA_ROOT}gitea/gitea
+wget -O ${GITEA_ROOT}gitea ${GITEA_URL}
+chmod +x ${GITEA_ROOT}gitea
 
-# 创建配置文件
-${NGINX_CONF}git << HERE
+# 修改文件所有权
+chown git:git -R ${GITEA_ROOT}
+
+# 创建init.d配置
+wget $GIT_INIT_URL -O /etc/init.d/gitea
+sed "s#/home/git/gitea#/home/${GIT_USER}/gitea#g" /etc/init.d/gitea -i
+sed "s#User=git#User=${GIT_USER}#g" /etc/init.d/gitea -i
+sed "s#Group=git#Group=${GIT_USER}#g" /etc/init.d/gitea -i
+chmod +x /etc/init.d/gitea
+
+# 创建systemd配置
+wget $GIT_SYSTEMD_URL -O /lib/systems/system/gitea.service
+sed "s#WORKINGDIR=/home/git/gitea#WORKINGDIR=/home/${GIT_USER}/gitea#g" /etc/init.d/gitea -i
+sed "s#USER=git#USER=${GIT_USER}#g" /etc/init.d/gitea -i
+chmod +x /lib/systems/system/gitea.service
+
+
+##############
+# Nginx 配置 #
+##############
+
+# 运行new_site.sh
+wget -O new_site.sh ${NEW_SITE_URL}
+chmod +x new_site.sh
+./new_site.sh -n ${SERVER_NAME} -c git -r ./tmp_git -s ${SSL_TYPE} --no-restart
+
+# 删除无用临时文件
+rm -rf new_site.sh
+rm -rf tmp_git
+
+# 写入新的配置文件
+/etc/nginx/sites-enabled/git << HERE
 server {
         listen 80;
         listen [::]:80;
@@ -117,25 +162,6 @@ server {
 include my/git/*.ser;
 HERE
 
-# 创建init.d与systemd配置
-wget $GIT_INIT_URL -O /etc/init.d/gitea
-chmod +x /etc/init.d/gitea
-wget $GIT_SYSTEMD_URL -O /lib/systems/system/gitea.service
-chmod +x /lib/systems/system/gitea.service
-
 # 重启Nginx
 service nginx restart
-
-
-
-
-
-
-
-
-
-
-
-
-
 
