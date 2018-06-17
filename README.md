@@ -97,6 +97,14 @@ proxys.sh
 wget -O proxys.sh https://raw.githubusercontent.com/kaixinguo360/ShellScript/master/proxy/proxys.sh && chmod +x proxys.sh && sudo ./proxys.sh
 ```
 
+gitea.sh
+=======
+
+- Description: Auto Install Gitea on Ubuntu 16
+```bash
+wget -O gitea.sh https://raw.githubusercontent.com/kaixinguo360/ShellScript/master/git/gitea.sh && chmod +x gitea.sh && sudo ./gitea.sh
+```
+
 # Other
 
 new_site.sh
