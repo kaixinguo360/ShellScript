@@ -162,7 +162,7 @@ server {
 include my/git/*.ser;
 HERE
 
-if [[ ${SSL_TYPE} == "y" | ${SSL_TYPE} == "s" ]]; then
+if [[ "${SSL_TYPE}" != "n" ]]; then
 sed "s/listen 80/#listen 80/g" ${SITE_CONF} -i
 sed "s/listen \[::\]:80/#listen \[::\]:80/g" ${SITE_CONF} -i
 fi
