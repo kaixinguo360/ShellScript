@@ -114,7 +114,7 @@ chmod +x /etc/init.d/gitea
 wget $GIT_SYSTEMD_URL -O /lib/systemd/system/gitea.service
 sed "s#WORKINGDIR=/home/git/gitea#WORKINGDIR=/home/${GIT_USER}/gitea#g" /etc/init.d/gitea -i
 sed "s#USER=git#USER=${GIT_USER}#g" /etc/init.d/gitea -i
-chmod +x /lib/systems/system/gitea.service
+chmod +x /lib/systemd/system/gitea.service
 
 
 ##############
@@ -128,11 +128,10 @@ chmod +x new_site.sh
 
 # 删除无用临时文件
 rm -rf new_site.sh
-rm -rf /etc/nginx/sites-enabled/git
 rm -rf tmp_git
 
 # 写入新的配置文件
-/etc/nginx/sites-enabled/git << HERE
+cat > /etc/nginx/sites-enabled/git << HERE
 server {
         listen 80;
         listen [::]:80;
@@ -162,6 +161,11 @@ server {
 
 include my/git/*.ser;
 HERE
+
+if [[ ${SSL_TYPE} == "y" | ${SSL_TYPE} == "s" ]]; then
+sed "s/listen 80/#listen 80/g" ${SITE_CONF} -i
+sed "s/listen \[::\]:80/#listen \[::\]:80/g" ${SITE_CONF} -i
+fi
 
 # 重启Nginx
 service nginx restart
