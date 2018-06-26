@@ -105,6 +105,22 @@ gitea.sh
 wget -O gitea.sh https://raw.githubusercontent.com/kaixinguo360/ShellScript/master/git/gitea.sh && chmod +x gitea.sh && sudo ./gitea.sh
 ```
 
+backup.sh
+=======
+
+- Description: Auto Backup Data And Config on Ubuntu 16
+```bash
+wget -O backup.sh https://raw.githubusercontent.com/kaixinguo360/ShellScript/master/backup/backup.sh && chmod +x backup.sh && sudo ./backup.sh -h
+```
+
+restore.sh
+=======
+
+- Description: Auto Restore Data And Config on Ubuntu 16
+```bash
+wget -O restore.sh https://raw.githubusercontent.com/kaixinguo360/ShellScript/master/backup/restore.sh && chmod +x restore.sh && sudo ./restore.sh -h
+```
+
 # Other
 
 new_site.sh
