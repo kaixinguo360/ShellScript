@@ -182,63 +182,26 @@ fi
 echo "正在解压归档文件..."
 tar -zxpvf $FILE -C /
 
-exit 0
-
 if [[ -n "$WWW_PATH" ]]; then
-    echo "找到 WWW 备份"
 fi
 if [[ -n "$MYSQL_PATH" ]]; then
-    echo "找到 MYSQL 备份"
-    if [[ -z `dpkg -l|grep mysql-server` ]]; then
-        echo "mysql-server 未安装!"
-        debconf-set-selections <<< "mysql-server mysql-server/root_password password $MYSQL_PASSWORD"
-        debconf-set-selections <<< "mysql-server mysql-server/root_password_again password $MYSQL_PASSWORD"
-        apt-get install mysql-server -y
-    fi
+    mysql -uroot -p${MYSQL_PASSWORD} < $MYSQL_PATH
 fi
 if [[ -n "$CLOUD_PATH" ]]; then
-    echo "找到 CLOUD 备份"
 fi
 if [[ -n "$MYHOME_PATH" ]]; then
-    echo "找到 MYHOME 备份"
 fi
 if [[ -n "$ACME_PATH" ]]; then
-    echo "找到 ACME 备份"
 fi
 if [[ -n "$MYCA_PATH" ]]; then
-    echo "找到 MYCA 备份"
 fi
 if [[ -n "$NGINX_PATH" ]]; then
-    echo "找到 NGINX 备份"
-    if [[ -z `dpkg -l|grep nginx-full` ]]; then
-        echo "nginx-full 未安装!"
-        if [[ -z `dpkg -l|grep nginx-core` ]]; then
-            echo "nginx-core 未安装!"
-            apt install -y nginx
-        fi
-        apt remove -y nginx-core
-    fi
 fi
 if [[ -n "$PHP_PATH" ]]; then
-    echo "找到 PHP 备份"
-    if [[ -z `dpkg -l|grep php-fpm` ]]; then
-        echo "php-fpm 未安装!"
-        apt-get install -y php-fpm php-mysql
-    fi
 fi
 if [[ -n "$POST_PATH" ]]; then
-    echo "找到 POST 备份"
-    if [[ -z `dpkg -l|grep postfix` ]]; then
-        echo "postfix 未安装!"
-        apt-get install -y postfix
-    fi
 fi
 if [[ -n "$DOVE_PATH" ]]; then
-    echo "找到 DOVE 备份"
-    if [[ -z `dpkg -l|grep dovecot-common` ]]; then
-        echo "dovecot-common 未安装!"
-        debconf-set-selections <<< "mysql-server mysql-server/root_password password $MYSQL_PASSWORD"
-        debconf-set-selections <<< "mysql-server mysql-server/root_password_again password $MYSQL_PASSWORD"
-        apt-get install -y dovecot-common dovecot-imapd
-    fi
 fi
+
+exit 0
