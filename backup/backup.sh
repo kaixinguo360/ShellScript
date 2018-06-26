@@ -222,7 +222,7 @@ mkdir -p "$BACK_PATH"
 
 addPath "WWW" "网站数据"
 if [[ -n "$MYSQL" ]]; then
-    mysql -uroot -p${MYSQL_PASSWORD} -xA > $MYSQL_PATH
+    mysqldump -uroot -p${MYSQL_PASSWORD} -xA > $MYSQL_PATH
     addPath "MYSQL" "Mysql数据库数据"
 fi
 addPath "CLOUD" "NextCloud云盘数据"
