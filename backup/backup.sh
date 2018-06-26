@@ -233,7 +233,7 @@ addPath "NGINX" "Nginx配置"
 addPath "PHP" "PHP配置"
 
 # 备份MAIL
-if [[ "$MAIL" == "y" ]]; then
+if [[ "$MAIL" == "y" || -n "$ALL" ]]; then
     POST_PATH="y"
     DOVE_PATH="y"
     addPath "POST" "Postfix配置"
