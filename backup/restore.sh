@@ -14,6 +14,24 @@ if [ ! -z "`cat /etc/issue | grep 'Ubuntu 16'`" ];
 fi
 
 ############
+# 帮助信息 #
+############
+
+# 读取参数
+if [[ $1 = "-h" || $1 = "--help" ]];then
+    echo -e "介绍: 自动恢复脚本, 适用于用于:"
+    echo -e "      WWW, MYSQL, CLOUD, MYHOME, ACME, MYCA, NGINX, PHP, MAIL, POST, DOVE"
+    echo -e "用法: $0 [选项]"
+    echo -e "选项:"
+    echo -e "      -f --file         备份归档文件路径"
+    echo -e "      -u --url          备份归档文件URl"
+    echo -e "      -r --remove       直接删除冲突的文件"
+    echo -e "      -c --copy         先复制归档文件到/tmp目录, 避免被-r选项删除"
+    echo -e "      -p --passwd       MYSQL的ROOT密码, 用于导入整个数据库"
+    exit 0
+fi
+
+############
 # 工具函数 #
 ############
 
@@ -32,7 +50,7 @@ fi
 # 命令行读取输入参数
 TEMP=`getopt \
     -o f:u:rcp: \
---long file:,url:,remove,copy,password: \
+--long file:,url:,remove,copy,passwd: \
     -n "$0" -- "$@"`
 if [ $? != 0 ] ; then echo "Terminating..." >&2 ; exit 1 ; fi
 eval set -- "$TEMP"
@@ -55,7 +73,7 @@ while true ; do
             ENABLE_COPY='y'
             shift 1
             ;;
-        -p|--password)
+        -p|--passwd)
             MYSQL_PASSWORD=$2
             shift 2
             ;;
