@@ -24,8 +24,9 @@ if [[ $1 = "-h" || $1 = "--help" ]];then
     echo -e "      WWW, MYSQL, CLOUD, MYHOME, ACME, MYCA, NGINX, PHP, MAIL, POST, DOVE"
     echo -e "用法: $0 [选项] [自定义的文件]"
     echo -e "选项:"
-    echo -e "      -w --web       自动链接归档文件到默认WEB服务器根目录下"
-    echo -e "      -a --all       备份适用的全部数据与配置"
+    echo -e "      -w --web          自动链接归档文件到默认WEB服务器根目录下"
+    echo -e "      -a --all          备份适用的全部数据与配置"
+    echo -e "      -p --passwd       MYSQL的ROOT密码, 用于导出整个数据库"
     exit 0
 fi
 
@@ -52,7 +53,7 @@ DOVE=""
 
 # 数据路径
 WWW_PATH="/var/www/"
-MYSQL_PATH="${BACK_PATH}mysql"
+MYSQL_PATH="${BACK_PATH}mysql.sql"
 CLOUD_PATH="/var/cloud/"
 MYHOME_PATH="/home/"
 ACME_PATH=`cd ~/.acme.sh/; pwd`
@@ -120,7 +121,7 @@ eval VALUE=\$${1}
 eval VALUE_PATH=\$${1}_PATH
 if [[ "$VALUE" == "y" ]]; then
     section "正在检查 $2"
-    if [[ -d "$VALUE_PATH" ]];then
+    if [[ -d "$VALUE_PATH" || -x "$VALUE_PATH" ]];then
         log "$NAME $VALUE_PATH"
         BACKUP_PATH="$BACKUP_PATH $VALUE_PATH"
     else
@@ -137,8 +138,8 @@ fi
 
 # 命令行读取输入参数
 TEMP=`getopt \
-    -o wa \
---long web,all \
+    -o wap: \
+--long web,all,passwd \
     -n "$0" -- "$@"`
 if [ $? != 0 ] ; then echo "Terminating..." >&2 ; exit 1 ; fi
 eval set -- "$TEMP"
@@ -152,6 +153,10 @@ while true ; do
         -a|--all)
             ALL='y'
             shift 1
+            ;;
+        -p|--passwd)
+            MYSQL_PASSWORD=$2
+            shift 2
             ;;
         --)
             shift
@@ -174,20 +179,22 @@ for arg do
     fi
 done
 
+
 if [[ -z "$ALL" ]]; then
-section "数据备份设置"
+    section "数据备份设置"
 fi
 getBool "WWW" "备份网站数据($WWW_PATH)?"
 getBool "MYSQL" "备份MySQL数据库"
 getBool "CLOUD" "备份NextCloud文件数据($CLOUD_PATH)"
 getBool "MYHOME" "备份所有Home数据($MYHOME_PATH)"
 if [[ "$MYHOME" == "n" ]]; then
-getBool "ACME" "备份acme.sh数据($ACME_PATH)?"
-getBool "MYCA" "备份MyCA数据($MYCA_PATH)?"
+    getBool "ACME" "备份acme.sh数据($ACME_PATH)?"
+    getBool "MYCA" "备份MyCA数据($MYCA_PATH)?"
 fi
 
+
 if [[ -z "$ALL" ]]; then
-section "配置备份设置"
+    section "配置备份设置"
 fi
 getBool "NGINX" "备份Nginx配置($NGINX_PATH)?"
 getBool "PHP" "备份PHP配置($PHP_PATH)?"
@@ -214,7 +221,10 @@ mkdir -p "$BACK_PATH"
 
 
 addPath "WWW" "网站数据"
-addPath "MYSQL" "Mysql数据库数据"
+if [[ -n "$MYSQL" ]]; then
+    mysql -uroot -p${MYSQL_PASSWORD} -xA > $MYSQL_PATH
+    addPath "MYSQL" "Mysql数据库数据"
+fi
 addPath "CLOUD" "NextCloud云盘数据"
 addPath "MYHOME" "Home目录数据"
 addPath "ACME" "acme.sh数据"
