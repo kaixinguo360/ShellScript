@@ -121,7 +121,7 @@ eval VALUE=\$${1}
 eval VALUE_PATH=\$${1}_PATH
 if [[ "$VALUE" == "y" ]]; then
     section "正在检查 $2"
-    if [[ -d "$VALUE_PATH" || -x "$VALUE_PATH" ]];then
+    if [[ -d $VALUE_PATH || -f $VALUE_PATH ]];then
         log "$NAME $VALUE_PATH"
         BACKUP_PATH="$BACKUP_PATH $VALUE_PATH"
     else
@@ -171,7 +171,7 @@ done
 
 for arg do
     INPUT_PATH_TMP=$(readlink -f "$arg")
-    if [[ -d $INPUT_PATH_TMP || -x $INPUT_PATH_TMP  ]];then
+    if [[ -d $INPUT_PATH_TMP || -f $INPUT_PATH_TMP  ]];then
         INPUT_PATH="$INPUT_PATH $INPUT_PATH_TMP"
     else
         echo "文件 $INPUT_PATH_TMP 不存在!"
