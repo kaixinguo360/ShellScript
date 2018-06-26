@@ -265,6 +265,6 @@ echo "备份已完成! 归档文件保存在 ${BACK_PATH}backup.tar.gz"
 ############
 
 if [[ -n "$ENABLE_WEB" ]]; then
-    ln -s ${WWW_PATH}html/backup.tar.gz ${BACK_PATH}backup.tar.gz
+    ln -s ${BACK_PATH}backup.tar.gz ${WWW_PATH}html/backup.tar.gz
     echo "你现在可以通过默认的网页服务器访问 http://your_address/backup.tar.gz 来获取您的备份"
 fi
