@@ -183,7 +183,8 @@ if [[ -n "$ENABLE_REMOVE" && -z "$ONLY_INSTALL" ]]; then
     then 
         echo "恢复已被取消!" 
         exit 0
-    fi 
+    fi
+    echo ""
     echo "正在删除将被覆盖的文件..."
     rmPath "$WWW_PATH"
     rmPath "$MYSQL_PATH"
