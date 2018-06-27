@@ -258,5 +258,17 @@ tar -zxp${VERBOSE}f $FILE -C /
 if [[ -n "$MYSQL_PATH" ]]; then
     mysql -uroot -p${MYSQL_PASSWORD} < $MYSQL_PATH
 fi
+if [[ -n "$NGINX_PATH" ]]; then
+    service nginx restart
+fi
+if [[ -n "$PHP_PATH" ]]; then
+    service php7.0-fpm restart
+fi
+if [[ -n "$POST_PATH" ]]; then
+    service postfix restart
+fi
+if [[ -n "$DOVE_PATH" ]]; then
+    service dovecot restart
+fi
 
 exit 0
