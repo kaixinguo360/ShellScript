@@ -26,7 +26,7 @@ if [[ $1 = "-h" || $1 = "--help" ]];then
     echo -e "      -f --file         备份归档文件路径"
     echo -e "      -u --url          备份归档文件URl"
     echo -e "      -r --remove       直接删除冲突的文件"
-    echo -e "      -c --copy         先复制归档文件到/tmp目录, 避免被-r选项删除"
+    echo -e "      -m --move         先移动归档文件到/tmp/backup目录, 避免被-r选项删除"
     echo -e "      -p --passwd       MYSQL的ROOT密码, 用于导入整个数据库"
     echo -e "      -v --verbose      输出详细信息"
     echo -e "      -i --install      只安装缺少的包"
@@ -52,8 +52,8 @@ fi
 
 # 命令行读取输入参数
 TEMP=`getopt \
-    -o f:u:rcp:vil \
---long file:,url:,remove,copy,passwd:,install,list \
+    -o f:u:rmp:vil \
+--long file:,url:,remove,move,passwd:,install,list \
     -n "$0" -- "$@"`
 if [ $? != 0 ] ; then echo "Terminating..." >&2 ; exit 1 ; fi
 eval set -- "$TEMP"
@@ -72,7 +72,7 @@ while true ; do
             ENABLE_REMOVE='y'
             shift 1
             ;;
-        -c|--copy)
+        -m|--move)
             ENABLE_COPY='y'
             shift 1
             ;;
@@ -127,8 +127,13 @@ fi
 
 if [[ $FILE != "/tmp/backup/backup.tar.gz" && -n "$ENABLE_COPY" ]]; then
     mkdir -p /tmp/backup/
-    cp $FILE "/tmp/backup/backup.tar.gz"
-    FILE="/tmp/backup/backup.tar.gz"
+    mv $FILE "/tmp/backup/backup.tar.gz"
+    if [[ -f "/tmp/backup/backup.tar.gz" ]] then
+        FILE="/tmp/backup/backup.tar.gz"
+    else
+        echo "移动文件出错!"
+        exit 1
+    fi
 fi
     
 
@@ -136,8 +141,7 @@ fi
 # 还原备份 #
 ############
 
-# 读取配置文件
-
+# 清空变量
 WWW_PATH=""
 MYSQL_PATH=""
 CLOUD_PATH=""
@@ -149,10 +153,12 @@ PHP_PATH=""
 POST_PATH=""
 DOVE_PATH=""
 
+# 读取配置文件
 LIST_PATH="tmp/backup/list"
 tar -zxpf $FILE $LIST_PATH -C /
 eval $(cat /$LIST_PATH | awk '{printf("%s_PATH=%s;",$1,$2);}')
 
+# 列出归档文件清单
 echo "归档内的内容:"
 echo "WWW_PATH: $WWW_PATH"
 echo "MYSQL_PATH: $MYSQL_PATH"
@@ -166,12 +172,18 @@ echo "POST_PATH: $POST_PATH"
 echo "DOVE_PATH: $DOVE_PATH"
 echo "可能还会有用户添加的其他文件..."
 
+# 若设定了-l参数则在此处退出
 if [[ -n "$ONLY_LIST" ]]; then
     exit 0
 fi
 
-
+# 若设定了-r参数则删除列出的文件
 if [[ -n "$ENABLE_REMOVE" && -z "$ONLY_INSTALL" ]]; then
+    if read -t 5 -p "将在5秒后删除以上列出的文件, 按任意键取消..." INPUT 
+    then 
+        echo "恢复已被取消!" 
+        exit 0
+    fi 
     echo "正在删除将被覆盖的文件..."
     rmPath "$WWW_PATH"
     rmPath "$MYSQL_PATH"
@@ -185,6 +197,7 @@ if [[ -n "$ENABLE_REMOVE" && -z "$ONLY_INSTALL" ]]; then
     rmPath "$DOVE_PATH"
 fi
 
+# 安装缺失的软件
 if [[ -n "$WWW_PATH" ]]; then
     echo "找到 WWW 备份"
 fi
@@ -231,13 +244,16 @@ if [[ -n "$DOVE_PATH" ]]; then
     echo "找到 DOVE 备份"
 fi
 
+# 若设定了-i参数则在此处退出
 if [[ -n "$ONLY_INSTALL" ]]; then
     exit 0
 fi
 
+# 解压归档文件
 echo "正在解压归档文件..."
 tar -zxp${VERBOSE}f $FILE -C /
 
+# 导入MySQL数据库
 if [[ -n "$MYSQL_PATH" ]]; then
     mysql -uroot -p${MYSQL_PASSWORD} < $MYSQL_PATH
 fi
