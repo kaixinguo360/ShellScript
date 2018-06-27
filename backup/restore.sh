@@ -111,6 +111,7 @@ if [ -n "$URL" ];then
 fi
 
 if [[ $FILE != "/tmp/backup/backup.tar.gz" && -n "$ENABLE_COPY" ]]; then
+    mkdir /tmp/backup/
     cp $FILE "/tmp/backup/backup.tar.gz"
     FILE="/tmp/backup/backup.tar.gz"
 fi
