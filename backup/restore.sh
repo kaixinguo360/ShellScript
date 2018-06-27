@@ -155,7 +155,7 @@ DOVE_PATH=""
 
 # 读取配置文件
 LIST_PATH="tmp/backup/list"
-tar -zxpf -C / $FILE $LIST_PATH
+tar -zxpf $FILE -C / $LIST_PATH
 eval $(cat /$LIST_PATH | awk '{printf("%s_PATH=%s;",$1,$2);}')
 
 # 列出归档文件清单
