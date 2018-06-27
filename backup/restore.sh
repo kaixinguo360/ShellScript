@@ -81,7 +81,7 @@ while true ; do
             shift 2
             ;;
         -v|--verbose)
-            VERBOSE='y'
+            VERBOSE='v'
             shift 1
             ;;
         -i|--install)
@@ -236,7 +236,7 @@ if [[ -n "$ONLY_INSTALL" ]]; then
 fi
 
 echo "正在解压归档文件..."
-tar -zxpvf $FILE -C /
+tar -zxp${VERBOSE}f $FILE -C /
 
 if [[ -n "$MYSQL_PATH" ]]; then
     mysql -uroot -p${MYSQL_PASSWORD} < $MYSQL_PATH
