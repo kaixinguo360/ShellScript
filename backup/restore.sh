@@ -128,7 +128,7 @@ fi
 if [[ $FILE != "/tmp/backup/backup.tar.gz" && -n "$ENABLE_COPY" ]]; then
     mkdir -p /tmp/backup/
     mv $FILE "/tmp/backup/backup.tar.gz"
-    if [[ -f "/tmp/backup/backup.tar.gz" ]] then
+    if [[ -f "/tmp/backup/backup.tar.gz" ]]; then
         FILE="/tmp/backup/backup.tar.gz"
     else
         echo "移动文件出错!"
