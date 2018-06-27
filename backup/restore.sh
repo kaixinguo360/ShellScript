@@ -28,6 +28,9 @@ if [[ $1 = "-h" || $1 = "--help" ]];then
     echo -e "      -r --remove       直接删除冲突的文件"
     echo -e "      -c --copy         先复制归档文件到/tmp目录, 避免被-r选项删除"
     echo -e "      -p --passwd       MYSQL的ROOT密码, 用于导入整个数据库"
+    echo -e "      -v --verbose      输出详细信息"
+    echo -e "      -i --install      只安装缺少的包"
+    echo -e "      -l --list         列出归档文件的内容"
     exit 0
 fi
 
@@ -49,8 +52,8 @@ fi
 
 # 命令行读取输入参数
 TEMP=`getopt \
-    -o f:u:rcp: \
---long file:,url:,remove,copy,passwd: \
+    -o f:u:rcp:vil \
+--long file:,url:,remove,copy,passwd:,install,list \
     -n "$0" -- "$@"`
 if [ $? != 0 ] ; then echo "Terminating..." >&2 ; exit 1 ; fi
 eval set -- "$TEMP"
@@ -76,6 +79,18 @@ while true ; do
         -p|--passwd)
             MYSQL_PASSWORD=$2
             shift 2
+            ;;
+        -v|--verbose)
+            VERBOSE='y'
+            shift 1
+            ;;
+        -i|--install)
+            ONLY_INSTALL='y'
+            shift 1
+            ;;
+        -l|--list)
+            ONLY_LIST='y'
+            shift 1
             ;;
         --)
             shift
@@ -138,7 +153,25 @@ LIST_PATH="tmp/backup/list"
 tar -zxpf $FILE $LIST_PATH -C /
 eval $(cat /$LIST_PATH | awk '{printf("%s_PATH=%s;",$1,$2);}')
 
-if [[ -n "$ENABLE_REMOVE" ]]; then
+echo "归档内的内容:"
+echo "WWW_PATH: $WWW_PATH"
+echo "MYSQL_PATH: $MYSQL_PATH"
+echo "CLOUD_PATH: $CLOUD_PATH"
+echo "MYHOME_PATH: $MYHOME_PATH"
+echo "ACME_PATH: $ACME_PATH"
+echo "MYCA_PATH: $MYCA_PATH"
+echo "NGINX_PATH: $NGINX_PATH"
+echo "PHP_PATH: $PHP_PATH"
+echo "POST_PATH: $POST_PATH"
+echo "DOVE_PATH: $DOVE_PATH"
+echo "可能还会有用户添加的其他文件..."
+
+if [[ -n "$ONLY_LIST" ]]; then
+    exit 0
+fi
+
+
+if [[ -n "$ENABLE_REMOVE" && -z "$ONLY_INSTALL" ]]; then
     echo "正在删除将被覆盖的文件..."
     rmPath "$WWW_PATH"
     rmPath "$MYSQL_PATH"
@@ -198,29 +231,15 @@ if [[ -n "$DOVE_PATH" ]]; then
     echo "找到 DOVE 备份"
 fi
 
+if [[ -n "$ONLY_INSTALL" ]]; then
+    exit 0
+fi
+
 echo "正在解压归档文件..."
 tar -zxpvf $FILE -C /
 
-if [[ -n "$WWW_PATH" ]]; then
-fi
 if [[ -n "$MYSQL_PATH" ]]; then
     mysql -uroot -p${MYSQL_PASSWORD} < $MYSQL_PATH
-fi
-if [[ -n "$CLOUD_PATH" ]]; then
-fi
-if [[ -n "$MYHOME_PATH" ]]; then
-fi
-if [[ -n "$ACME_PATH" ]]; then
-fi
-if [[ -n "$MYCA_PATH" ]]; then
-fi
-if [[ -n "$NGINX_PATH" ]]; then
-fi
-if [[ -n "$PHP_PATH" ]]; then
-fi
-if [[ -n "$POST_PATH" ]]; then
-fi
-if [[ -n "$DOVE_PATH" ]]; then
 fi
 
 exit 0
