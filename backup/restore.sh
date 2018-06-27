@@ -256,7 +256,10 @@ tar -zxp${VERBOSE}f $FILE -C /
 
 # 导入MySQL数据库
 if [[ -n "$MYSQL_PATH" ]]; then
-    mysql -uroot -p${MYSQL_PASSWORD} < $MYSQL_PATH
+mysql -uroot -p${MYSQL_PASSWORD} < $MYSQL_PATH
+mysql -uroot -p${MYSQL_PASSWORD} << HERE
+FLUSH PRIVILEGES;
+HERE
 fi
 if [[ -n "$NGINX_PATH" ]]; then
     service nginx restart
