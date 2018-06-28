@@ -236,6 +236,7 @@ if [[ -n "$PHP_PATH" ]]; then
     echo "找到 PHP 备份"
     if [[ -z `dpkg -l|grep php-fpm` ]]; then
         apt-get install php-fpm php-mysql -y
+        apt-get install php7.0-gd php7.0-json php7.0-mysql php7.0-curl php7.0-mbstring php7.0-intl php7.0-mcrypt php-imagick php7.0-xml php7.0-zip -y
     fi
 fi
 if [[ -n "$POST_PATH" ]]; then
