@@ -136,13 +136,15 @@ addPath() {
 }
 
 addInputPath() {
-    INPUT_PATH_TMP=$(readlink -f "$1")
-    if [[ -d "$INPUT_PATH_TMP" || -f "$INPUT_PATH_TMP" ]]; then
-        INPUT_PATH="$INPUT_PATH $INPUT_PATH_TMP"
-        echo "读取自定义目录 $INPUT_PATH_TMP 成功!"
-    else
-        echo "自定义目录 $INPUT_PATH_TMP 不存在!"
-        exit 1
+    if [[ -n "$1" ]]; then
+        INPUT_PATH_TMP=$(readlink -f "$1")
+        if [[ -d "$INPUT_PATH_TMP" || -f "$INPUT_PATH_TMP" ]]; then
+            INPUT_PATH="$INPUT_PATH $INPUT_PATH_TMP"
+            echo "读取自定义目录 $INPUT_PATH_TMP 成功!"
+        else
+            echo "自定义目录 $INPUT_PATH_TMP 不存在!"
+            exit 1
+        fi
     fi
 }
 
