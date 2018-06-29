@@ -185,6 +185,7 @@ while true ; do
             ONLY_LIST='y'
             ALL='y'
             shift 1
+            ;;
         --)
             shift
             break
