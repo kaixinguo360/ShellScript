@@ -27,6 +27,9 @@ if [[ $1 = "-h" || $1 = "--help" ]];then
     echo -e "      -w --web          自动链接归档文件到默认WEB服务器根目录下"
     echo -e "      -a --all          备份适用的全部数据与配置"
     echo -e "      -p --passwd       MYSQL的ROOT密码, 用于导出整个数据库"
+    echo -e "      -f --input-file   输入文件路径"
+    echo -e "      -v --verbose      输出详细信息"
+    echo -e "      -l --list         只检查并列出要被备份的文件"
     exit 0
 fi
 
@@ -34,8 +37,9 @@ fi
 # 路径设置 #
 ############
 
-# 备份临时文件路径
+# 备份文件夹路径
 BACK_PATH="/tmp/backup/"
+INPUT_FILE_PATH=${BACK_PATH}input
 
 # 清空变量
 WWW=""
@@ -116,19 +120,30 @@ log() {
 }
 
 addPath() {
-NAME=$1
-eval VALUE=\$${1}
-eval VALUE_PATH=\$${1}_PATH
-if [[ "$VALUE" == "y" ]]; then
-    section "正在检查 $2"
-    if [[ -d $VALUE_PATH || -f $VALUE_PATH ]];then
-        log "$NAME $VALUE_PATH"
-        BACKUP_PATH="$BACKUP_PATH $VALUE_PATH"
-    else
-        echo "指定目录($VALUE_PATH)不存在!"
+    NAME=$1
+    eval VALUE=\$${1}
+    eval VALUE_PATH=\$${1}_PATH
+    if [[ "$VALUE" == "y" ]]; then
+        section "正在检查 $2"
+        if [[ -d $VALUE_PATH || -f $VALUE_PATH ]];then
+            log "$NAME $VALUE_PATH"
+            BACKUP_PATH="$BACKUP_PATH $VALUE_PATH"
+        else
+            echo "指定目录($VALUE_PATH)不存在!"
+        fi
+        echo ""
     fi
-    echo ""
-fi
+}
+
+addInputPath() {
+    INPUT_PATH_TMP=$(readlink -f "$1")
+    if [[ -d "$INPUT_PATH_TMP" || -f "$INPUT_PATH_TMP" ]]; then
+        INPUT_PATH="$INPUT_PATH $INPUT_PATH_TMP"
+        echo "读取自定义目录 $INPUT_PATH_TMP 成功!"
+    else
+        echo "自定义目录 $INPUT_PATH_TMP 不存在!"
+        exit 1
+    fi
 }
 
 
@@ -138,8 +153,8 @@ fi
 
 # 命令行读取输入参数
 TEMP=`getopt \
-    -o wap: \
---long web,all,passwd \
+    -o wap:vlf: \
+--long web,all,passwd:,verbose,list,input-file: \
     -n "$0" -- "$@"`
 if [ $? != 0 ] ; then echo "Terminating..." >&2 ; exit 1 ; fi
 eval set -- "$TEMP"
@@ -158,6 +173,18 @@ while true ; do
             MYSQL_PASSWORD=$2
             shift 2
             ;;
+        -f|--input-file)
+            INPUT_FILE_PATH=$2
+            shift 2
+            ;;
+        -v|--verbose)
+            VERBOSE='v'
+            shift 1
+            ;;
+        -l|--list)
+            ONLY_LIST='y'
+            ALL='y'
+            shift 1
         --)
             shift
             break
@@ -170,15 +197,13 @@ while true ; do
 done
 
 for arg do
-    INPUT_PATH_TMP=$(readlink -f "$arg")
-    if [[ -d $INPUT_PATH_TMP || -f $INPUT_PATH_TMP  ]];then
-        INPUT_PATH="$INPUT_PATH $INPUT_PATH_TMP"
-    else
-        echo "文件 $INPUT_PATH_TMP 不存在!"
-        exit 1
-    fi
+    addInputPath "$arg"
 done
 
+INPUT_FILE_PATH=$(readlink -f "$INPUT_FILE_PATH")
+if [[ -f "$INPUT_FILE_PATH" ]]; then
+    eval $(cat $INPUT_FILE_PATH | awk '{printf("addInputPath %s;",$0);}')
+fi
 
 if [[ -z "$ALL" ]]; then
     section "数据备份设置"
@@ -202,23 +227,19 @@ getBool "MAIL" "备份Mail(Postfix+Dovecot)配置(${POST_PATH}:${DOVE_PATH})?"
 
 
 ############
-# 开始备份 #
+# 检查路径 #
 ############
 
 echo -e "\n\n"
 echo "############"
-echo "# 开始备份 #"
+echo "# 检查路径 #"
 echo "############"
 echo -e "\n"
 
-if [ -d "$BACK_PATH" ]; then
-    rm -rf "$BACK_PATH"
-    echo "删除冲突的文件夹$BACK_PATH"
+if [ ! -d "$BACK_PATH" ]; then
+    echo "创建备份文件夹$BACK_PATH"
+    mkdir -p "$BACK_PATH"
 fi
-
-echo "创建临时文件夹$BACK_PATH"
-mkdir -p "$BACK_PATH"
-
 
 addPath "WWW" "网站数据"
 if [[ -n "$MYSQL" ]]; then
@@ -240,23 +261,37 @@ if [[ "$MAIL" == "y" || -n "$ALL" ]]; then
     addPath "DOVE" "Dovecot配置"
 fi
 
+section "路径检查完毕"
+
+# 若设定了-l参数则在此处退出
+if [[ -n "$ONLY_LIST" ]]; then
+    exit 0
+fi
 
 ############
-# 完成备份 #
+# 开始备份 #
 ############
+
+echo -e "\n\n"
+echo "############"
+echo "# 开始备份 #"
+echo "############"
+echo -e "\n"
 
 echo ""
-echo "正在运行如下命令:"
-CMD="tar -czpf ${BACK_PATH}backup.tar.gz $BACKUP_PATH $INPUT_PATH ${BACK_PATH}list ${BACK_PATH}list_extra"
 
+CMD="tar -cz${VERBOSE}pf ${BACK_PATH}backup.tar.gz $BACKUP_PATH $INPUT_PATH ${BACK_PATH}list"
 if [ -n "$INPUT_PATH" ]; then
     echo -e "$INPUT_PATH" >> "${BACK_PATH}list_extra"
     CMD="$CMD ${BACK_PATH}list_extra"
 fi
 
+echo "正在运行如下命令:"
 echo $CMD
 echo ""
+
 $CMD
+
 echo "备份已完成! 归档文件保存在 ${BACK_PATH}backup.tar.gz"
 
 
