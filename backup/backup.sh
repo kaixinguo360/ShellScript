@@ -262,6 +262,12 @@ if [[ "$MAIL" == "y" || -n "$ALL" ]]; then
     addPath "DOVE" "Dovecot配置"
 fi
 
+# 自定义路径
+if [[ -n "$INPUT_PATH" ]]; then
+    section "正在检查 自定义路径"
+    echo "INPUT $INPUT_PATH"
+fi
+
 section "路径检查完毕"
 
 # 若设定了-l参数则在此处退出
@@ -287,10 +293,10 @@ echo -e "\n"
 
 echo ""
 
-CMD="tar -cz${VERBOSE}pf ${BACK_PATH}backup.tar.gz $BACKUP_PATH $INPUT_PATH ${BACK_PATH}list"
+CMD="tar -cz${VERBOSE}pf ${BACK_PATH}backup.tar.gz $BACKUP_PATH ${BACK_PATH}list"
 if [ -n "$INPUT_PATH" ]; then
     echo -e "$INPUT_PATH" >> "${BACK_PATH}list_extra"
-    CMD="$CMD ${BACK_PATH}list_extra"
+    CMD="$CMD  $INPUT_PATH ${BACK_PATH}list_extra"
 fi
 
 echo "正在运行如下命令:"
