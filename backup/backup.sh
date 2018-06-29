@@ -266,6 +266,7 @@ fi
 if [[ -n "$INPUT_PATH" ]]; then
     section "正在检查 自定义路径"
     echo "INPUT $INPUT_PATH"
+    echo ""
 fi
 
 section "路径检查完毕"
