@@ -27,7 +27,7 @@ DEFAULT_CLIENT_CERT="${HOME}/.ca/cacert.pem"
 read -p '您的网站域名: ' SERVER_NAME
 read -p '您的目标网站域名: ' TARGET_NAME
 
-SITE_NAME="${TARGET_NAME}"
+SITE_NAME="${SERVER_NAME}"
 while true :
 do
 	read -r -p "使用本默认本地配置文件:(${SITE_NAME})? [Y/n] " input
@@ -138,36 +138,39 @@ rm -rf /etc/nginx/sites-enabled/${SITE_NAME}
 rm -rf /etc/nginx/my/${SITE_NAME}
 rm -rf tmp_proxy
 
+# 设置配置文件位置
+NEW_CONF=${MY_CONF}proxy/${SITE_NAME}
+
 # 下载配置文件
 mkdir -p ${MY_CONF}proxy > /dev/null
-wget -O ${MY_CONF}proxy/${SITE_NAME} ${PROXY_CONF_URL}
+wget -O ${NEW_CONF} ${PROXY_CONF_URL}
 
 # 修改配置文件
-sed -i "s/TMP_SERVER_NAME/${SERVER_NAME}/g" ${MY_CONF}proxy/${SITE_NAME}
-sed -i "s/TMP_TARGET_NAME/${TARGET_NAME}/g" ${MY_CONF}proxy/${SITE_NAME}
+sed -i "s/TMP_SERVER_NAME/${SERVER_NAME}/g" ${NEW_CONF}
+sed -i "s/TMP_TARGET_NAME/${TARGET_NAME}/g" ${NEW_CONF}
 
 # 添加subs_filter设置
 mkdir -p ${MY_CONF}proxy_ext/subs_filter
-cat > ${MY_CONF}proxy_ext/subs_filter/${SITE_NAME} << HERE
+cat > ${MY_CONF}proxy_ext/subs_filter/${SERVER_NAME} << HERE
 subs_filter ${TARGET_NAME} ${SERVER_NAME};
 HERE
 
 # 如果使用系统自带snakeoil证书
 if [ "${SSL_TYPE}" = "n" ]; then
-sed -i "s/\/etc\/nginx\/ssl\/${SERVER_NAME}.crt/\/etc\/ssl\/certs\/ssl-cert-snakeoil.pem/g" ${MY_CONF}proxy/${SITE_NAME}
-sed -i "s/\/etc\/nginx\/ssl\/${SERVER_NAME}.key/\/etc\/ssl\/private\/ssl-cert-snakeoil.key/g" ${MY_CONF}proxy/${SITE_NAME}
+sed -i "s/\/etc\/nginx\/ssl\/${SERVER_NAME}.crt/\/etc\/ssl\/certs\/ssl-cert-snakeoil.pem/g" ${NEW_CONF}
+sed -i "s/\/etc\/nginx\/ssl\/${SERVER_NAME}.key/\/etc\/ssl\/private\/ssl-cert-snakeoil.key/g" ${NEW_CONF}
 fi
 
 # 如果使用客户端证书
 if [ "${SSL_CLIENT}" = "y" ]; then
-sed -i "s#TMP_CLIENT_CERT_PATH#${DEFAULT_CLIENT_CERT}#g" ${MY_CONF}proxy/${SITE_NAME}
-sed -i "s/#ssl_client_certificate/ssl_client_certificate/g" ${MY_CONF}proxy/${SITE_NAME}
-sed -i "s/#ssl_verify_client/ssl_verify_client/g" ${MY_CONF}proxy/${SITE_NAME}
+sed -i "s#TMP_CLIENT_CERT_PATH#${DEFAULT_CLIENT_CERT}#g" ${NEW_CONF}
+sed -i "s/#ssl_client_certificate/ssl_client_certificate/g" ${NEW_CONF}
+sed -i "s/#ssl_verify_client/ssl_verify_client/g" ${NEW_CONF}
 fi
 
 # 如果开启Cooikes
 if [ "${ENABLE_COOKIES}" = "y" ]; then
-sed -i "s/proxy_set_header Cookie/#proxy_set_header Cookie/g" ${MY_CONF}proxy/${SITE_NAME}
+sed -i "s/proxy_set_header Cookie/#proxy_set_header Cookie/g" ${NEW_CONF}
 fi
 
 # 重启Nginx服务器
