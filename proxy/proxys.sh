@@ -1,6 +1,4 @@
 #!/bin/bash
-##注意! 此脚本写的巨烂！
-##将就着用吧...
 export PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 
 # 检查是否为Root
